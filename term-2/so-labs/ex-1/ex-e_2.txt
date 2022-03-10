@@ -1,0 +1,2 @@
+Q: Ile procesów powstanie przy n-krotnym wywołaniu funkcji fork i dlaczego?
+A: Powstanie 2^n - 1 procesów potomnych bez procesu macierzystego. Z macierzystym będzie ich 2^n.
