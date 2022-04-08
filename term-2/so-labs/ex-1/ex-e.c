@@ -7,23 +7,23 @@
 void print_ids();
 
 int main() {
-  int i;
-  pid_t pid;
-
   printf("Parent process ids: \n");
   print_ids();
 
-  for (i = 0; i < 3; i++) {
-    pid = fork();
+  for (int i = 0; i < 3; i++) {
+    pid_t pid = fork();
 
     if (pid == -1) {
-      perror("fork error\n");
-      exit(1);
+      perror("fork error");
+      exit(EXIT_FAILURE);
     } else if (pid == 0) {
       printf("Child process has started running: \n");
       print_ids();
     } else {
-      wait(0);
+      if (wait(NULL) == -1) {
+        perror("wait error");
+        exit(EXIT_FAILURE);
+      }
     }
   }
 
@@ -31,17 +31,9 @@ int main() {
 }
 
 void print_ids() {
-  int PID = getpid();
+  pid_t PID = getpid();
   setpgid(PID, 0);
 
-  uid_t UID = getuid();
-  gid_t GID = getgid();
-  pid_t PPID = getppid();
-  pid_t PGID = getpgrp();
-
-  printf("UID of the current process: %d\n", UID);
-  printf("GID of the current process: %d\n", GID);
-  printf("PID of the current process: %d\n", PID);
-  printf("PPID of the current process: %d\n", PPID);
-  printf("PGID of the current process: %d\n\n", PGID);
+  printf("UID = %i GID = %i PID = %i PPID = %i PGID = %i \n", getuid(),
+         getgid(), PID, getppid(), getpgrp());
 }
