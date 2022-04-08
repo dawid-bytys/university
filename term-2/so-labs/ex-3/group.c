@@ -12,7 +12,6 @@ int main(int argc, const char *argv[]) {
     exit(EXIT_FAILURE);
   }
 
-  pid_t process_end;
   pid_t process = fork();
 
   if (process == -1) {
@@ -20,7 +19,7 @@ int main(int argc, const char *argv[]) {
     exit(EXIT_FAILURE);
   } else if (process == 0) {
     if (setpgid(process, 0) == -1) {
-      perror("failed to set lider");
+      perror("failed to set group lider");
       exit(EXIT_FAILURE);
     }
 
@@ -46,22 +45,26 @@ int main(int argc, const char *argv[]) {
     }
 
     for (int i = 0; i < 3; i++) {
-      if ((process_end = wait(NULL)) == -1) {
+      pid_t process_end;
+      int status;
+
+      if ((process_end = wait(&status)) == -1) {
         perror("wait error");
         exit(EXIT_FAILURE);
       }
 
-      printf("Process %d has been terminated\n", process_end);
+      printf("Process %d has been terminated with status %d\n", process_end,
+             status);
     }
   } else {
     sleep(1);
 
-    if (kill(-getpgid(process), 0) == -1) {
+    if (kill(-1 * getpgid(process), 0) == -1) {
       printf("Process does not exist.");
       exit(EXIT_FAILURE);
     }
 
-    if (kill(-getpgid(process), atoi(argv[2])) == -1) {
+    if (kill(-1 * getpgid(process), atoi(argv[2])) == -1) {
       printf("kill error");
       exit(EXIT_FAILURE);
     }

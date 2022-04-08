@@ -20,6 +20,7 @@ int main(int argc, char *argv[]) {
 
   if (argc == 2) {
     printf("3rd argument wasn't provided, doing default operation\n");
+
     if (signal(signal_num, SIG_DFL) == SIG_ERR) {
       perror("Signal error.");
       exit(EXIT_FAILURE);
@@ -30,18 +31,21 @@ int main(int argc, char *argv[]) {
       exit(EXIT_FAILURE);
     } else if (signal_type == 1) {
       printf("[DEFAULT SIGNAL]\n");
+
       if (signal(signal_num, SIG_DFL) == SIG_ERR) {
         perror("Signal error.");
         exit(EXIT_FAILURE);
       }
     } else if (signal_type == 2) {
       printf("[IGNORING SIGNAL]\n");
+
       if (signal(signal_num, SIG_IGN) == SIG_ERR) {
         perror("Signal error.");
         exit(EXIT_FAILURE);
       }
     } else {
-      printf("[SELF_HANDLING]\n");
+      printf("[SELF-HANDLING]\n");
+
       if (signal(signal_num, handle_signal) == SIG_ERR) {
         perror("Signal error.");
         exit(EXIT_FAILURE);
