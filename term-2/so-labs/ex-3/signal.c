@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
-void handle_signal(int signal) { printf("\nSignal: %d\n", signal); }
+void handle_signal(int signal) { printf("Signal: %d\n", signal); }
 
 void invalid_argument_error() {
   printf("Invalid arguments:\n");

@@ -65,7 +65,7 @@ int main(int argc, const char *argv[]) {
              status);
     }
   } else {
-    sleep(1);
+    sleep(3);
 
     if (kill(-1 * getpgid(process), 0) == -1) {
       perror("Process does not exist.");
