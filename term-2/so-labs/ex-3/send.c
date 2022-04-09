@@ -7,7 +7,7 @@
 #include <unistd.h>
 
 int main(int argc, const char *argv[]) {
-  if (argc != 3 && argc != 2) {
+  if (argc != 3) {
     printf("Invalid number of arguments.\n");
     exit(EXIT_FAILURE);
   }

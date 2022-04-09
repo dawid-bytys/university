@@ -36,7 +36,7 @@ run_send: $(EXEC_SEND)
 	./$(EXEC_SEND) $(signal_type) $(signal_num)
 
 run_group: $(EXEC_GROUP)
-	./$(EXEC_GROUP) $(signal_type) $(signal_num)
+	./$(EXEC_GROUP $(signal_type) $(signal_num)
 
 .PHONY: clean tar
 clean:                                                     
