@@ -22,7 +22,7 @@ int main(int argc, const char *argv[]) {
     exit(EXIT_FAILURE);
   }
 
-  while ((read_bytes = read(pipe, buffer, buff_size)) > 0) {
+  while ((read_bytes = read(stream, buffer, buff_size)) > 0) {
     printf("\nWriting from pipe:\n");
 
     if (write(STDOUT_FILENO, buffer, read_bytes) == -1) {
