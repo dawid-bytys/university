@@ -16,8 +16,8 @@ int main(int argc, const char *argv[]) {
     exit(EXIT_FAILURE);
   }
 
-  int pipe = open(argv[1], O_RDONLY);
-  if (pipe == -1) {
+  int stream = open(argv[1], O_RDONLY);
+  if (stream == -1) {
     perror("Error while opening pipe");
     exit(EXIT_FAILURE);
   }
@@ -36,7 +36,7 @@ int main(int argc, const char *argv[]) {
     }
   }
 
-  if (close(pipe) == -1) {
+  if (close(stream) == -1) {
     perror("Error while closing pipe");
     exit(EXIT_FAILURE);
   }

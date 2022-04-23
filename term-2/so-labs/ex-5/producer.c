@@ -16,8 +16,8 @@ int main(int argc, const char *argv[]) {
     exit(EXIT_FAILURE);
   }
 
-  int pipe = open(argv[1], O_WRONLY);
-  if (pipe == -1) {
+  int stream = open(argv[1], O_WRONLY);
+  if (stream == -1) {
     perror("Error while opening pipe");
     exit(EXIT_FAILURE);
   }
@@ -30,13 +30,13 @@ int main(int argc, const char *argv[]) {
       exit(EXIT_FAILURE);
     }
 
-    if (write(pipe, buffer, read_bytes) == -1) {
+    if (write(stream, buffer, read_bytes) == -1) {
       printf("Error while writing into pipe");
       exit(EXIT_FAILURE);
     }
   }
 
-  if (close(pipe) == -1) {
+  if (close(stream) == -1) {
     perror("Error while closing pipe");
     exit(EXIT_FAILURE);
   }
