@@ -1,4 +1,6 @@
+// #############################
 // Dawid Bytys Krakow 06.04.2022
+// #############################
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -67,12 +69,12 @@ int main(int argc, const char *argv[]) {
   } else {
     sleep(3);
 
-    if (kill(-1 * getpgid(process), 0) == -1) {
+    if (kill(-getpgid(process), 0) == -1) {
       perror("Process does not exist.");
       exit(EXIT_FAILURE);
     }
 
-    if (kill(-1 * getpgid(process), signal_num) == -1) {
+    if (kill(-getpgid(process), signal_num) == -1) {
       perror("kill error");
       exit(EXIT_FAILURE);
     }

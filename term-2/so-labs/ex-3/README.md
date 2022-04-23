@@ -4,21 +4,25 @@
 <br />
 <br />
 
-### O programie
-
-Zawartość:
+### O programach
 
 - send.c (program do wysyłania sygnału za pomocą funkcji kill oraz za otwierania drugiego programu przy pomocy funkcji execl)
 - signal.c (program, który handluje sygnały)
 - group.c (program, który uruchamia wątki i nadaje im lidera grupy oraz wysyła sygnały)
 
-1. Kompilacja
+### 1. Kompilacja
+
+<br />
 
 ```bash
 $ make all
 ```
 
-2. Uruchomienie
+<br />
+
+### 2. Uruchomienie
+
+<br />
 
 a) program a
 

@@ -1,4 +1,6 @@
+// #############################
 // Dawid Bytys Krakow 06.04.2022
+// #############################
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,10 +8,15 @@
 #include <unistd.h>
 
 void invalid_argument_error();
-void handle_signal(int);
-int get_signal_action(const char *);
+void handle_signal(int signal);
+int get_signal_action(const char *signal_action);
 
 int main(int argc, char *argv[]) {
+  if (argc != 3) {
+    printf("Invalid number of arguments.\n");
+    exit(EXIT_FAILURE);
+  }
+
   int signal_type = get_signal_action(argv[1]);
   int signal_num = atoi(argv[2]);
 

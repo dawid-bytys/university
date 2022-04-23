@@ -1,4 +1,6 @@
+// #############################
 // Dawid Bytys Krakow 06.04.2022
+// #############################
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>

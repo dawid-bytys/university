@@ -4,6 +4,9 @@ DIR = $(notdir $(CURDIR))
 LFLAGS = -Wall -std=c99 -pedantic -O
 CO = gcc
 
+signal_type = d
+signal_num = 5
+
 SEND = send
 SIGNAL = signal
 GROUP = group
