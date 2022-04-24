@@ -94,7 +94,7 @@ void execution_error(int argc) {
   }
 }
 
-void exit_handler(void) { sem_close(name); }
+void exit_handler(void) { semaphore_delete(name); }
 
 void signal_handler(int signal) {
   printf("Signal: %d", signal);
