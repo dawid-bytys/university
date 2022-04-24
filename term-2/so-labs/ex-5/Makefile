@@ -6,34 +6,38 @@ CO = gcc
 
 PRODUCER =  producer
 CONSUMER = consumer
-FIFO = fifo
+MAIN = main
+QUEUE = queue
+IN = in.txt
+OUT = out.txt
+BUFFER_SIZE = 5
 
 EXEC_PRODUCER = $(PRODUCER).x
 EXEC_CONSUMER = $(CONSUMER).x
-EXEC_FIFO = $(FIFO).x
+EXEC_MAIN = $(MAIN).x
 
 OBJ_PRODUCER = $(PRODUCER).o
 OBJ_CONSUMER = $(CONSUMER).o
-OBJ_FIFO = $(FIFO).o
+OBJ_MAIN = $(MAIN).o
 
 %.o: %.c
 	$(CO) $(LFLAGS) -c $<
 
 .PHONY: all
-all: $(EXEC_PRODUCER) $(EXEC_CONSUMER) $(EXEC_FIFO)
+all: $(EXEC_PRODUCER) $(EXEC_CONSUMER) $(EXEC_MAIN)
 
 $(EXEC_PRODUCER): $(OBJ_PRODUCER)
 	$(CO) -o $@ $(LFLAGS) $^
 $(EXEC_CONSUMER): $(OBJ_CONSUMER)
 	$(CO) -o $@ $(LFLAGS) $^
-$(EXEC_FIFO): $(OBJ_FIFO)
+$(EXEC_MAIN): $(OBJ_MAIN)
 	$(CO) -o $@ $(LFLAGS) $^
 
 
 .PHONY: run
 
-run: $(EXEC_FIFO)
-	./$(EXEC_FIFO) $(fifo) $(in) $(out) $(buffer_size)
+run: $(EXEC_MAIN)
+	./$(EXEC_MAIN) $(EXEC_PRODUCER) $(EXEC_CONSUMER) $(QUEUE) $(IN) $(OUT) $(BUFFER_SIZE)
 
 diff:
 	diff -s $(in) $(out)

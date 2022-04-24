@@ -1,3 +1,10 @@
+// Dawid Bytys Krakow, 24.04.2022
+// Program tworzy strumień nazwany,
+// zczytuje dane z pliku, zapisuje
+// je do strumienia, a następnie
+// pobiera je z tego strumienia i
+// zapisuje w drugim pliku
+#include "string.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
@@ -14,18 +21,19 @@ void execution_error(int arguments);
 void remove_fifo(void);
 void wait_process(void);
 unsigned random_number(unsigned min, unsigned max);
+const char *concat(const char *s1, const char *s2);
 
 int main(int argc, const char *argv[]) {
   execution_error(argc);
 
-  fifo = argv[1];
+  fifo = argv[3];
 
   if (atexit(remove_fifo) != 0) {
     perror("atexit error");
     exit(EXIT_FAILURE);
   }
 
-  if (mkfifo(argv[1], 0777) == -1) {
+  if (mkfifo(fifo, 0777) == -1) {
     perror("mkfifo error");
     exit(EXIT_FAILURE);
   }
@@ -33,11 +41,11 @@ int main(int argc, const char *argv[]) {
   // PRODUCER
   pid_t producer_process = fork();
   if (producer_process == -1) {
-    perror("fork error");
+    perror("producer fork error");
     exit(EXIT_FAILURE);
   } else if (producer_process == 0) {
-    if (execl("./producer.x", "producer.x", argv[1], argv[2], argv[4], NULL) ==
-        -1) {
+    if (execl(concat("./", argv[1]), argv[1], argv[3], argv[4], argv[6],
+              NULL) == -1) {
       perror("execl error");
       exit(EXIT_FAILURE);
     }
@@ -46,11 +54,11 @@ int main(int argc, const char *argv[]) {
   // CONSUMER
   pid_t consumer_process = fork();
   if (consumer_process == -1) {
-    perror("fork error");
+    perror("consumer fork error");
     exit(EXIT_FAILURE);
   } else if (consumer_process == 0) {
-    if (execl("./consumer.x", "consumer.x", argv[1], argv[3], argv[4], NULL) ==
-        -1) {
+    if (execl(concat("./", argv[2]), argv[2], argv[3], argv[5], argv[6],
+              NULL) == -1) {
       perror("execl error");
       exit(EXIT_FAILURE);
     }
@@ -63,8 +71,9 @@ int main(int argc, const char *argv[]) {
 }
 
 void execution_error(int argc) {
-  if (argc != 5) {
-    printf("Invalid usage. Correct: ./fifo.x <fifo> <in> <out> "
+  if (argc != 7) {
+    printf("Invalid usage. Correct: ./fifo.x <producer> <consumer> <fifo> <in> "
+           "<out> "
            "<buffer_size>\n");
     exit(EXIT_FAILURE);
   }
@@ -96,4 +105,12 @@ void wait_process(void) {
     printf("\nProcess %d has been terminated with status %d", process_end,
            status);
   }
+}
+
+const char *concat(const char *s1, const char *s2) {
+  char *ns = malloc(strlen(s1) + strlen(s2) + 1);
+  ns[0] = '\0';
+  strcat(ns, s1);
+  strcat(ns, s2);
+  return ns;
 }
