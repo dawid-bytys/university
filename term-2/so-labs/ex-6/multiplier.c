@@ -8,13 +8,16 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+// Global semaphore name variable
 const char *name = "semaphore";
 
 void execution_error(int argc);
 void exit_handler(void);
 void signal_handler(int signal);
 const char *concat(const char *s1, const char *s2);
-void wait_process(void);
+void wait_process(int processes_count);
+void state_verification(int processes_count, int critical_sections_count);
+void close_storage(int storage);
 
 int main(int argc, const char *argv[]) {
   // Handle exit function
@@ -26,31 +29,32 @@ int main(int argc, const char *argv[]) {
   // Handle execution error
   execution_error(argc);
 
+  // Convert arguments
   int processes_count = atoi(argv[2]);
   int critical_sections_count = atoi(argv[3]);
 
   // Open a file to store semaphore state
-  int number_storage = open("number.txt", O_RDWR | O_CREAT | O_TRUNC, 0777);
-  if (number_storage == -1) {
+  int storage = open("store.txt", O_RDWR | O_CREAT | O_TRUNC, 0777);
+  if (storage == -1) {
     perror("Failed to open a number storage.");
     exit(EXIT_FAILURE);
   }
 
   // Write a initial state value to the file
-  if (write(number_storage, "0", sizeof(char)) == -1) {
+  if (write(storage, "0", sizeof(char *)) == -1) {
     perror("Failed to write into number storage.");
     exit(EXIT_FAILURE);
   }
 
-  // Create a sepahore
+  // Create a sepahore, get its value and print info
   sem_id new_semaphore = semaphore_create(name, 1);
   int new_semaphore_value = semaphore_value(new_semaphore);
   printf("The new semaphore's address: %p", new_semaphore);
   printf("The new semaphore's value: %d", new_semaphore_value);
 
-  // Handle own signal
+  // Handle CTRL-C
   if (signal(SIGINT, signal_handler) == SIG_ERR) {
-    perror("Failed to ignore the signal.");
+    perror("Failed to handle the signal.");
     exit(EXIT_FAILURE);
   }
 
@@ -70,7 +74,14 @@ int main(int argc, const char *argv[]) {
     }
   }
 
-  wait_process();
+  // Wait for the processes to end
+  wait_process(processes_count);
+
+  // Verify the states
+  state_verification(processes_count, critical_sections_count);
+
+  // Close the storage
+  close_storage(storage);
 
   return 0;
 }
@@ -98,8 +109,8 @@ const char *concat(const char *s1, const char *s2) {
   return ns;
 }
 
-void wait_process(void) {
-  for (int i = 0; i < PROCESSES_COUNT; i++) {
+void wait_process(int processes_count) {
+  for (int i = 0; i < processes_count; i++) {
     pid_t process_end;
     int status;
 
@@ -111,4 +122,30 @@ void wait_process(void) {
     printf("\nProcess %d has been terminated with status %d", process_end,
            status);
   }
+}
+
+void state_verification(int processes_count, int critical_sections_count) {
+  FILE *file;
+  int state;
+  if ((file = fopen("state.txt", "r")) == NULL) {
+    perror("Failed to open the state.txt file.");
+    exit(EXIT_FAILURE);
+  }
+
+  if ((state = fscanf(file, "%i", &state)) == -1) {
+    perror("Failed to read data from the state.txt file.");
+    exit(EXIT_FAILURE);
+  }
+
+  printf("State from the end: %d\n State from the start: %d\n", state,
+         processes_count * critical_sections_count);
+}
+
+void close_storage(int storage) {
+  if (close(storage) == -1) {
+    perror("Failed to close the storage.");
+    exit(EXIT_FAILURE);
+  }
+
+  free(storage);
 }
