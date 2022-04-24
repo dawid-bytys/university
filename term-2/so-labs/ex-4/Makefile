@@ -5,10 +5,14 @@ LFLAGS = -Wall -std=c99 -pedantic -O
 CO = gcc
 
 MAIN =  main
+UTILS = utils
+IN = in.txt
+OUT = out.txt
 
 EXEC_MAIN = $(MAIN).x
 
 OBJ_MAIN = $(MAIN).o
+OBJ_UTILS = $(UTILS).o
 
 %.o: %.c
 	$(CO) $(LFLAGS) -c $<
@@ -16,17 +20,17 @@ OBJ_MAIN = $(MAIN).o
 .PHONY: all
 all: $(EXEC_MAIN)
 
-$(EXEC_MAIN): $(OBJ_MAIN)
+$(EXEC_MAIN): $(OBJ_MAIN) $(OBJ_UTILS)
 	$(CO) -o $@ $(LFLAGS) $^
 
 
 .PHONY: run
 
 run: $(EXEC_MAIN)
-	./$(EXEC_MAIN) $(in) $(out)
+	./$(EXEC_MAIN) $(IN) $(OUT)
 
 diff:
-	diff -s $(in) $(out)
+	diff -s $(IN) $(OUT)
 
 .PHONY: clean tar
 clean:                                                     

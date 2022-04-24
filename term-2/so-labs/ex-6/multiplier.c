@@ -1,4 +1,5 @@
 #include "sem.h"
+#include "utils.h"
 #include <fcntl.h>
 #include <signal.h>
 #include <stdio.h>
@@ -11,13 +12,7 @@
 // Global semaphore name variable
 const char *name = "semaphore";
 
-void execution_error(int argc);
 void exit_handler(void);
-void signal_handler(int signal);
-const char *concat(const char *s1, const char *s2);
-void wait_process(int processes_count);
-void state_verification(int processes_count, int critical_sections_count);
-void close_storage(int storage);
 
 int main(int argc, const char *argv[]) {
   // Handle exit function
@@ -37,13 +32,13 @@ int main(int argc, const char *argv[]) {
   int storage = open("store.txt", O_RDWR | O_CREAT | O_TRUNC, 0777);
   if (storage == -1) {
     perror("Failed to open a number storage.");
-    exit(EXIT_FAILURE);
+    _exit(EXIT_FAILURE);
   }
 
   // Write a initial state value to the file
   if (write(storage, "0", sizeof(char *)) == -1) {
     perror("Failed to write into number storage.");
-    exit(EXIT_FAILURE);
+    _exit(EXIT_FAILURE);
   }
 
   // Create a sepahore, get its value and print info
@@ -55,7 +50,7 @@ int main(int argc, const char *argv[]) {
   // Handle CTRL-C
   if (signal(SIGINT, signal_handler) == SIG_ERR) {
     perror("Failed to handle the signal.");
-    exit(EXIT_FAILURE);
+    _exit(EXIT_FAILURE);
   }
 
   // Create new processes
@@ -69,7 +64,7 @@ int main(int argc, const char *argv[]) {
       if (execl(concat("./", argv[1]), processes_count, critical_sections_count,
                 NULL) == -1) {
         perror("Failed to exec a program.");
-        exit(EXIT_FAILURE);
+        _exit(EXIT_FAILURE);
       }
     }
   }
@@ -86,66 +81,4 @@ int main(int argc, const char *argv[]) {
   return 0;
 }
 
-void execution_error(int argc) {
-  if (argc != 4) {
-    printf("Invalud usage.\n Correct: ./multiplier.x ./main.x "
-           "<processes_count> <critical_sections_count>");
-    exit(EXIT_FAILURE);
-  }
-}
-
 void exit_handler(void) { semaphore_delete(name); }
-
-void signal_handler(int signal) {
-  printf("Signal: %d", signal);
-  exit(EXIT_SUCCESS);
-}
-
-const char *concat(const char *s1, const char *s2) {
-  char *ns = malloc(strlen(s1) + strlen(s2) + 1);
-  ns[0] = '\0';
-  strcat(ns, s1);
-  strcat(ns, s2);
-  return ns;
-}
-
-void wait_process(int processes_count) {
-  for (int i = 0; i < processes_count; i++) {
-    pid_t process_end;
-    int status;
-
-    if ((process_end = wait(&status)) == -1) {
-      perror("wait error");
-      exit(EXIT_FAILURE);
-    }
-
-    printf("\nProcess %d has been terminated with status %d", process_end,
-           status);
-  }
-}
-
-void state_verification(int processes_count, int critical_sections_count) {
-  FILE *file;
-  int state;
-  if ((file = fopen("state.txt", "r")) == NULL) {
-    perror("Failed to open the state.txt file.");
-    exit(EXIT_FAILURE);
-  }
-
-  if ((state = fscanf(file, "%i", &state)) == -1) {
-    perror("Failed to read data from the state.txt file.");
-    exit(EXIT_FAILURE);
-  }
-
-  printf("State from the end: %d\n State from the start: %d\n", state,
-         processes_count * critical_sections_count);
-}
-
-void close_storage(int storage) {
-  if (close(storage) == -1) {
-    perror("Failed to close the storage.");
-    exit(EXIT_FAILURE);
-  }
-
-  free(storage);
-}

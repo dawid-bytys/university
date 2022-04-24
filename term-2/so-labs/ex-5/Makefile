@@ -7,6 +7,7 @@ CO = gcc
 PRODUCER =  producer
 CONSUMER = consumer
 MAIN = main
+UTILS = utils
 QUEUE = queue
 IN = in.txt
 OUT = out.txt
@@ -19,6 +20,7 @@ EXEC_MAIN = $(MAIN).x
 OBJ_PRODUCER = $(PRODUCER).o
 OBJ_CONSUMER = $(CONSUMER).o
 OBJ_MAIN = $(MAIN).o
+OBJ_UTILS = $(UTILS).o
 
 %.o: %.c
 	$(CO) $(LFLAGS) -c $<
@@ -30,9 +32,8 @@ $(EXEC_PRODUCER): $(OBJ_PRODUCER)
 	$(CO) -o $@ $(LFLAGS) $^
 $(EXEC_CONSUMER): $(OBJ_CONSUMER)
 	$(CO) -o $@ $(LFLAGS) $^
-$(EXEC_MAIN): $(OBJ_MAIN)
+$(EXEC_MAIN): $(OBJ_MAIN) $(OBJ_UTILS)
 	$(CO) -o $@ $(LFLAGS) $^
-
 
 .PHONY: run
 
@@ -40,7 +41,7 @@ run: $(EXEC_MAIN)
 	./$(EXEC_MAIN) $(EXEC_PRODUCER) $(EXEC_CONSUMER) $(QUEUE) $(IN) $(OUT) $(BUFFER_SIZE)
 
 diff:
-	diff -s $(in) $(out)
+	diff -s $(IN) $(OUT)
 
 .PHONY: clean tar
 clean:                                                     
