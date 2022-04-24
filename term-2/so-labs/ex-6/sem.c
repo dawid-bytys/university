@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
-void semaphore_create(const char *name, int value) {
+sem_id semaphore_create(const char *name, int value) {
   printf("Creating a new semaphore...\n");
 
   sem_t *sem = sem_open(name, O_CREAT | O_EXCL, 0666, value);
@@ -41,43 +41,45 @@ int semaphore_value(sem_id sem) {
 }
 
 void semaphore_close(sem_id sem) {
+  printf("Closing the semaphore...\n");
+
   if (sem_close(sem) == -1) {
     perror("Failed to close the semaphore.");
     exit(EXIT_FAILURE);
   }
 
-  printf("The semaphore has been closed.");
+  printf("The semaphore has been closed.\n");
 }
 
 void semaphore_drop(sem_id sem) {
-  printf("Dropping the semaphore...");
+  printf("Dropping the semaphore...\n");
 
   if (sem_wait(sem) == -1) {
     perror("Failed to drop the semaphore.");
     exit(EXIT_FAILURE);
   }
 
-  printf("The semaphore has been successfully dropped.");
+  printf("The semaphore has been successfully dropped.\n");
 }
 
 void semaphore_lift(sem_id sem) {
-  printf("Lifting the semaphore...");
+  printf("Lifting the semaphore...\n");
 
   if (sem_post(sem) == -1) {
     perror("Failed to lift the semaphore.");
     exit(EXIT_FAILURE);
   }
 
-  printf("The semaphore has been successfully lifted.");
+  printf("The semaphore has been successfully lifted.\n");
 }
 
 void semaphore_delete(const char *name) {
-  printf("Deleting the semaphore...");
+  printf("Deleting the semaphore...\n");
 
   if (sem_unlink(name) == -1) {
     perror("Failed to delete the semaphore.");
     exit(EXIT_FAILURE);
   }
 
-  printf("The semaphore has been successfully deleted.");
+  printf("The semaphore has been successfully deleted.\n");
 }
