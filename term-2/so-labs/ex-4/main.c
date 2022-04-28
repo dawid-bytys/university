@@ -39,15 +39,15 @@ int main(int argc, char *argv[]) {
     producer(fd_storage[1], argv[1], BUFF_SIZE_PRODUCER);
     close_storage(fd_storage[1]);
   } else {
+    close_storage(fd_storage[1]);
+    consumer(fd_storage[0], argv[2], BUFF_SIZE_CONSUMER);
+    close_storage(fd_storage[0]);
+
     // Wait for the child to end
     if (wait(&wait_status) == -1) {
       perror("wait error");
       exit(wait_status);
     }
-
-    close_storage(fd_storage[1]);
-    consumer(fd_storage[0], argv[2], BUFF_SIZE_CONSUMER);
-    close_storage(fd_storage[0]);
   }
 
   return 0;

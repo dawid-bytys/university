@@ -58,7 +58,6 @@ int main(int argc, const char *argv[]) {
     }
   }
 
-  sleep(random_number(1, 5));
   wait_process(PROCESSES_COUNT);
 
   return 0;

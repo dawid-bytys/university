@@ -40,15 +40,17 @@ void wait_process(int processes_count) {
 }
 
 void state_verification(int processes_count, int critical_sections_count) {
+  void *buffer = malloc(sizeof(char *));
+
   int storage = open("state.txt", O_RDONLY);
   if (storage == -1) {
     perror("Failed to open the state.txt file.");
     _exit(EXIT_FAILURE);
   }
 
-  if (fscanf(file, "%i", &state) == -1) {
-    perror("Failed to read data from the state.txt file.");
-    exit(EXIT_FAILURE);
+  if (read("state.txt", buffer, sizeof(char *)) == -1) {
+    perror("Failed to read the data from the state.txt file.");
+    _exit(EXIT_FAILURE);
   }
 
   printf("State from the end: %d\n State from the start: %d\n", state,

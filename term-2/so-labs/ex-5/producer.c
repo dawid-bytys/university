@@ -1,3 +1,4 @@
+#include "utils.h"
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,8 +23,14 @@ int main(int argc, const char *argv[]) {
     exit(EXIT_FAILURE);
   }
 
-  while ((read_bytes = read(in_storage, buffer, buff_size)) > 0) {
-    printf("\nWriting into pipe:\n");
+  while ((read_bytes = read(in_storage, buffer, buff_size))) {
+    if (read_bytes == -1) {
+      perror("Error while reading from storage");
+      exit(EXIT_FAILURE);
+    }
+
+    sleep(random_number(1, 3));
+    printf("\n[PRODUCER] - Writing into pipe:\n");
 
     if (write(STDOUT_FILENO, buffer, read_bytes) == -1) {
       perror("Error while writing into console");
@@ -36,15 +43,8 @@ int main(int argc, const char *argv[]) {
     }
   }
 
-  if (close(stream) == -1) {
-    perror("Error while closing pipe");
-    exit(EXIT_FAILURE);
-  }
-
-  if (close(in_storage) == -1) {
-    perror("Error while closing in storage");
-    exit(EXIT_FAILURE);
-  }
+  close_storage(stream);
+  close_storage(in_storage);
 
   free(buffer);
 
