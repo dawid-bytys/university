@@ -14,7 +14,12 @@ void producer(int fd_storage, const char *file, int buffer_size) {
     exit(EXIT_FAILURE);
   }
 
-  while ((read_bytes = read(in_storage, buffer, buffer_size)) > 0) {
+  while ((read_bytes = read(in_storage, buffer, buffer_size))) {
+    if (read_bytes == -1) {
+      perror("Error while reading from storage");
+      exit(EXIT_FAILURE);
+    }
+
     printf("\n[PRODUCER] - Writing into pipe:\n");
     sleep(random_number(1, 3));
 
@@ -29,11 +34,7 @@ void producer(int fd_storage, const char *file, int buffer_size) {
     }
   }
 
-  if (close(in_storage) == -1) {
-    perror("Error while closing");
-    exit(EXIT_FAILURE);
-  }
-
+  close_storage(in_storage);
   free(buffer);
 }
 
@@ -47,7 +48,12 @@ void consumer(int fd_storage, const char *file, int buffer_size) {
     exit(EXIT_FAILURE);
   }
 
-  while ((read_bytes = read(fd_storage, buffer, buffer_size)) > 0) {
+  while ((read_bytes = read(fd_storage, buffer, buffer_size))) {
+    if (read_bytes == -1) {
+      perror("Error while reading from storage");
+      exit(EXIT_FAILURE);
+    }
+
     printf("\n[CONSUMER] - Writing from pipe:\n");
     sleep(random_number(1, 3));
 
@@ -62,11 +68,7 @@ void consumer(int fd_storage, const char *file, int buffer_size) {
     }
   }
 
-  if (close(out_storage) == -1) {
-    perror("Error while closing");
-    exit(EXIT_FAILURE);
-  }
-
+  close_storage(out_storage);
   free(buffer);
 }
 
