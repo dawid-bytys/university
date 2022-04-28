@@ -1,3 +1,4 @@
+#include "utils.h"
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,7 +15,8 @@ void producer(int fd_storage, const char *file, int buffer_size) {
   }
 
   while ((read_bytes = read(in_storage, buffer, buffer_size)) > 0) {
-    printf("\nWriting into pipe:\n");
+    printf("\n[PRODUCER] - Writing into pipe:\n");
+    sleep(random_number(1, 3));
 
     if (write(STDOUT_FILENO, buffer, read_bytes) == -1) {
       perror("Error while writing into console");
@@ -41,12 +43,13 @@ void consumer(int fd_storage, const char *file, int buffer_size) {
 
   int out_storage = open(file, O_WRONLY);
   if (out_storage == -1) {
-    perror("Error while opening 'out_storage'");
+    perror(" Error while opening 'out_storage'");
     exit(EXIT_FAILURE);
   }
 
   while ((read_bytes = read(fd_storage, buffer, buffer_size)) > 0) {
-    printf("\nWriting from pipe:\n");
+    printf("\n[CONSUMER] - Writing from pipe:\n");
+    sleep(random_number(1, 3));
 
     if (write(STDOUT_FILENO, buffer, read_bytes) == -1) {
       perror("Error while writing into console");
@@ -65,6 +68,12 @@ void consumer(int fd_storage, const char *file, int buffer_size) {
   }
 
   free(buffer);
+}
+
+void close_storage(int file_desc) {
+  if (close(file_desc) == -1) {
+    exit(EXIT_FAILURE);
+  }
 }
 
 unsigned random_number(unsigned min, unsigned max) {

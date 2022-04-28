@@ -20,7 +20,7 @@ $ make all
 $ make run in=<plik_wejscia.txt> out=<plik_wyjscia.txt>
 ```
 
-3. Porównanie
+3. Porównanie zgodności plików
 
 ```bash
 $ make diff in=<plik_wejscia.txt> out=<plik_wyjscia.txt>

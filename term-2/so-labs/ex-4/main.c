@@ -9,41 +9,45 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#define BUFF_SIZE 5
+#define BUFF_SIZE_PRODUCER 15
+#define BUFF_SIZE_CONSUMER 10
 
 int main(int argc, char *argv[]) {
+  // Check arguments count
   if (argc != 3) {
     printf("Invalid arguments\n");
     printf("Usage: ./main.x <in> <out>\n");
     exit(EXIT_FAILURE);
   }
 
+  // Create a file descriptor storage
   int fd_storage[2];
   if (pipe(fd_storage) == -1) {
-    printf("pipe error");
+    printf("Error while creating a file descriptor storage");
     exit(EXIT_FAILURE);
   }
 
+  // Create a new process
   pid_t process = fork();
   int wait_status;
 
   if (process == -1) {
-    perror("fork error");
+    perror("Error while creating a new process");
     exit(EXIT_FAILURE);
   } else if (process == 0) {
-    close(fd_storage[0]);
-    producer(fd_storage[1], argv[1], BUFF_SIZE);
-    close(fd_storage[1]);
+    close_storage(fd_storage[0]);
+    producer(fd_storage[1], argv[1], BUFF_SIZE_PRODUCER);
+    close_storage(fd_storage[1]);
   } else {
-    sleep(random_number(1, 5));
-    close(fd_storage[1]);
-    consumer(fd_storage[0], argv[2], BUFF_SIZE);
-    close(fd_storage[0]);
-
+    // Wait for the child to end
     if (wait(&wait_status) == -1) {
       perror("wait error");
       exit(wait_status);
     }
+
+    close_storage(fd_storage[1]);
+    consumer(fd_storage[0], argv[2], BUFF_SIZE_CONSUMER);
+    close_storage(fd_storage[0]);
   }
 
   return 0;
