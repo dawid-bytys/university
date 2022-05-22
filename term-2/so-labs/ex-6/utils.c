@@ -1,6 +1,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 void execution_error(int argc) {
@@ -39,29 +40,38 @@ void wait_process(int processes_count) {
   }
 }
 
-void state_verification(int processes_count, int critical_sections_count) {
-  void *buffer = malloc(sizeof(char *));
-
-  int storage = open("state.txt", O_RDONLY);
-  if (storage == -1) {
-    perror("Failed to open the state.txt file.");
-    _exit(EXIT_FAILURE);
-  }
-
-  if (read("state.txt", buffer, sizeof(char *)) == -1) {
-    perror("Failed to read the data from the state.txt file.");
-    _exit(EXIT_FAILURE);
-  }
-
-  printf("State from the end: %d\n State from the start: %d\n", state,
-         processes_count * critical_sections_count);
-}
-
 void close_storage(int storage) {
   if (close(storage) == -1) {
     perror("Failed to close the storage.");
     exit(EXIT_FAILURE);
   }
+}
 
-  free(storage);
+void state_verification(const char *file, int processes_count,
+                        int critical_sections_count) {
+  char value[2];
+
+  int storage = open(file, O_RDONLY);
+  if (storage == -1) {
+    perror("Failed to open the state.txt file.");
+    _exit(EXIT_FAILURE);
+  }
+
+  if (read(storage, value, sizeof(char *)) == -1) {
+    perror("Failed to read the data from the state.txt file.");
+    _exit(EXIT_FAILURE);
+  }
+
+  printf("State from the end: %d\n State from the start: %d\n", atoi(value),
+         processes_count * critical_sections_count);
+
+  if (atoi(value) == (processes_count * critical_sections_count)) {
+    printf("States match!\n");
+  } else {
+    printf("States do not match!\n");
+  }
+}
+
+unsigned random_number(unsigned min, unsigned max) {
+  return min + rand() / (RAND_MAX / (max - min + 1) + 1);
 }

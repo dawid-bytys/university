@@ -22,14 +22,16 @@ int main(int argc, const char *argv[]) {
 
   fifo = argv[3];
 
+  // Remove fifo on exit
   if (atexit(remove_fifo) != 0) {
     perror("atexit error");
     exit(EXIT_FAILURE);
   }
 
+  // Create a fifo with all permisions
   if (mkfifo(fifo, 0777) == -1) {
     perror("mkfifo error");
-    exit(EXIT_FAILURE);
+    _exit(EXIT_FAILURE);
   }
 
   // PRODUCER
@@ -58,6 +60,7 @@ int main(int argc, const char *argv[]) {
     }
   }
 
+  // Wait for the processes to end
   wait_process(PROCESSES_COUNT);
 
   return 0;

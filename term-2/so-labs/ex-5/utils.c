@@ -30,6 +30,7 @@ void wait_process(int processes_count) {
 
 void close_storage(int file_desc) {
   if (close(file_desc) == -1) {
+    perror("Error while closing the storage");
     exit(EXIT_FAILURE);
   }
 }

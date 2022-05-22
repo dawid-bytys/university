@@ -11,7 +11,7 @@ UTILS = utils
 QUEUE = queue
 IN = in.txt
 OUT = out.txt
-BUFFER_SIZE = 5
+BUFFER_SIZE = 10
 
 EXEC_PRODUCER = $(PRODUCER).x
 EXEC_CONSUMER = $(CONSUMER).x
