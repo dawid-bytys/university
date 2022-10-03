@@ -1,5 +1,3 @@
-#include "sem.h"
-#include "utils.h"
 #include <fcntl.h>
 #include <signal.h>
 #include <stdio.h>
@@ -8,6 +6,9 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
+
+#include "sem.h"
+#include "utils.h"
 
 // Global semaphore name variable
 const char *name = "semaphore";
