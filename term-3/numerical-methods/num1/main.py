@@ -26,7 +26,7 @@ def draw_plot(x: float, h: float, fn: Callable, D_fn: Callable, filename: str) -
     error_a = absolute_error(lambda i: approximate_derivative_a(i, h, fn), D_fn, x)
     error_b = absolute_error(lambda i: approximate_derivative_b(i, h, fn), D_fn, x)
 
-    fig = plt.figure(dpi=800)
+    fig = plt.figure(dpi=300)
     axes = fig.gca()
 
     plt.plot(h, error_a, linewidth=1.5, color="red", label="Method (A)")
@@ -46,8 +46,8 @@ def draw_plot(x: float, h: float, fn: Callable, D_fn: Callable, filename: str) -
 if __name__ == "__main__":
     x_1 = np.float32(0.2)
     x_2 = np.float64(0.2)
-    h_1 = np.float32(np.logspace(-16, 3, 1000))
-    h_2 = np.float64(np.logspace(-32, 3, 1000))
+    h_1 = np.float32(np.logspace(-14, 1, 1000))
+    h_2 = np.float64(np.logspace(-24, 1, 1000))
 
     """sin(x)"""
     draw_plot(x_1, h_1, np.sin, np.cos, "./float32_sin.png")
