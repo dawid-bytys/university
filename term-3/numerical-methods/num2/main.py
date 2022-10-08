@@ -45,7 +45,7 @@ cond_A_1 = np.linalg.cond(matrix_A_1)
 cond_A_2 = np.linalg.cond(matrix_A_2)
 
 if __name__ == "__main__":
-    print("Norm 1: ", norm_1)
-    print("Norm 2: ", norm_2)
-    print("Condition number of A_1: ", cond_A_1)
-    print("Condition number of A_2: ", cond_A_2)
+    print(f"Norm 1: {norm_1}")
+    print(f"Norm 2: {norm_2}")
+    print(f"Condition number of A_1: {cond_A_1}")
+    print(f"Condition number of A_2: {cond_A_2}")
