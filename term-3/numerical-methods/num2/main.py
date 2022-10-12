@@ -20,6 +20,7 @@ matrix_A_2 = np.array(
     ]
 )
 
+# A non-disturbed vector
 vector_b = np.array(
     [
         3.55652063354463,
@@ -30,22 +31,27 @@ vector_b = np.array(
     ]
 ).transpose()
 
+# A disturbed vector
 vector_b_prim = np.add(vector_b, np.array([1e-5, 0, 0, 0, 0]).transpose())
 
+# Non-disturbed results
 y_1 = np.linalg.solve(matrix_A_1, vector_b)
 y_2 = np.linalg.solve(matrix_A_2, vector_b)
 
+# Disturbed results
 y_1_prim = np.linalg.solve(matrix_A_1, vector_b_prim)
 y_2_prim = np.linalg.solve(matrix_A_2, vector_b_prim)
 
-norm_1 = np.linalg.norm(y_1 - y_1_prim)
-norm_2 = np.linalg.norm(y_2 - y_2_prim)
+# Norms of results' differences between the disturbed and non-disturbed results
+norm_1 = np.linalg.norm(np.subtract(y_1, y_1_prim))
+norm_2 = np.linalg.norm(np.subtract(y_2, y_2_prim))
 
+# Condition numbers of the given matrixes
 cond_A_1 = np.linalg.cond(matrix_A_1)
 cond_A_2 = np.linalg.cond(matrix_A_2)
 
 if __name__ == "__main__":
-    print(f"Norm 1: {norm_1}")
-    print(f"Norm 2: {norm_2}")
-    print(f"Condition number of A_1: {cond_A_1}")
-    print(f"Condition number of A_2: {cond_A_2}")
+    print(f"Norm || y_1 - y_1_prim ||: {norm_1}")
+    print(f"Norm || y_2 - y_2_prim ||: {norm_2}")
+    print(f"Condition number of a matrix A_1: {cond_A_1}")
+    print(f"Condition number of a matrix A_2: {cond_A_2}")
