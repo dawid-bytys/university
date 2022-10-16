@@ -82,8 +82,10 @@ public class ComplexNumber {
      */
     public final void multiply(ComplexNumber complexNumber) {
         double tempReal = this.real;
-        this.real = (tempReal * complexNumber.getReal()) - (this.imaginary * complexNumber.getImaginary());
-        this.imaginary = (tempReal * complexNumber.getImaginary()) + (this.imaginary * complexNumber.getReal());
+        double real = complexNumber.getReal();
+        double imaginary = complexNumber.getImaginary();
+        this.real = (tempReal * real) - (this.imaginary * imaginary);
+        this.imaginary = (tempReal * imaginary) + (this.imaginary * real);
     }
 
     /**
@@ -100,11 +102,9 @@ public class ComplexNumber {
      */
     public final void divide(ComplexNumber complexNumber) {
         double tempReal = this.real;
-        this.real = ((tempReal * complexNumber.getReal()) + (this.imaginary * complexNumber.getImaginary()))
-                / ((complexNumber.getReal() * complexNumber.getReal())
-                        + (complexNumber.getImaginary() * complexNumber.getImaginary()));
-        this.imaginary = ((this.imaginary * complexNumber.getReal()) - (tempReal * complexNumber.getImaginary()))
-                / ((complexNumber.getReal() * complexNumber.getReal())
-                        + (complexNumber.getImaginary() * complexNumber.getImaginary()));
+        double real = complexNumber.getReal();
+        double imaginary = complexNumber.getImaginary();
+        this.real = ((tempReal * real) + (this.imaginary * imaginary)) / ((real * real) + (imaginary * imaginary));
+        this.imaginary = ((this.imaginary * real) - (tempReal * imaginary)) / ((real * real) + (imaginary * imaginary));
     }
 }
