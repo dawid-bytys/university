@@ -51,7 +51,7 @@ cond_A_1 = np.linalg.cond(matrix_A_1)
 cond_A_2 = np.linalg.cond(matrix_A_2)
 
 if __name__ == "__main__":
-    print(f"Norm || y_1 - y_1_prim ||: {norm_1}")
-    print(f"Norm || y_2 - y_2_prim ||: {norm_2}")
+    print(f"Norm ||y_1 - y_1_prim||: {norm_1}")
+    print(f"Norm ||y_2 - y_2_prim||: {norm_2}")
     print(f"Condition number of a matrix A_1: {cond_A_1}")
     print(f"Condition number of a matrix A_2: {cond_A_2}")
