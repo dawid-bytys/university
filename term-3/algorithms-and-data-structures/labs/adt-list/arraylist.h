@@ -1,7 +1,6 @@
 #ifndef ARRAYLIST_H
 #define ARRAYLIST_H
 
-#include <cassert>
 #include <iostream>
 
 // ArrayList is a simple implementation of a dynamic memory container
@@ -47,7 +46,7 @@ class ArrayList {
   int size() const;
 
   // returns the maximum number of elements in the list
-  int max_size() const { return msize; }
+  int max_size() const;
 
   // adds an element to the beginning of the list
   void push_front(const T& item);
