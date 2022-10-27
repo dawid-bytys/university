@@ -6,9 +6,10 @@
 #include "cassert"
 
 int main() {
+  ArrayList<int> list(10);
+
   // create an array list of integers
   std::cout << "(1) push_back()" << std::endl;
-  ArrayList<int> list(10);
   assert(list.empty());
   for (int i = 0; i < 10; ++i) {
     list.push_back(i);

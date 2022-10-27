@@ -117,13 +117,13 @@ void ArrayList<T>::push_back(T&& item) {
 }
 
 template <typename T>
-T& ArrayList<T>::front() {
+const T& ArrayList<T>::front() {
   assert(!empty());
   return tab[0];
 }
 
 template <typename T>
-T& ArrayList<T>::back() {
+const T& ArrayList<T>::back() {
   assert(!empty());
   return tab[last - 1];
 }

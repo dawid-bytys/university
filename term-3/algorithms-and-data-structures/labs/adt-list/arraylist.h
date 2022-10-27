@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-// ArrayList is a simple implementation of a dynamic memory container
+// ArrayList is a simple collection of elements of type T
 template <typename T>
 class ArrayList {
  private:
@@ -36,6 +36,18 @@ class ArrayList {
   // move assignment operator
   ArrayList& operator=(ArrayList&& other);
 
+  // returns the element at the given position (array notation)
+  T& operator[](const int index);
+
+  // returns the element at the given position (array notation)
+  const T& operator[](const int index) const;
+
+  // returns the first element of the list
+  const T& front();
+
+  // returns the last element of the list
+  const T& back();
+
   // checks if the list is empty
   bool empty() const;
 
@@ -48,6 +60,9 @@ class ArrayList {
   // returns the maximum number of elements in the list
   int max_size() const;
 
+  // returns the position of the first occurrence of the given element
+  int index(const T& item) const;
+
   // adds an element to the beginning of the list
   void push_front(const T& item);
 
@@ -59,12 +74,6 @@ class ArrayList {
 
   // adds an element to the end of the list
   void push_back(T&& item);
-
-  // returns the first element of the list
-  T& front();
-
-  // returns the last element of the list
-  T& back();
 
   // removes the first element of the list
   void pop_front();
@@ -87,17 +96,8 @@ class ArrayList {
   // merges two sorted lists
   void merge(ArrayList& other);
 
-  // returns the element at the given position (array notation)
-  T& operator[](const int index);
-
-  // returns the element at the given position (array notation)
-  const T& operator[](const int index) const;
-
   // removes the element at the given position
   void erase(const int index);
-
-  // returns the position of the first occurrence of the given element
-  int index(const T& item) const;
 
   // inserts an element at the given position
   void insert(const int index, const T& item);
