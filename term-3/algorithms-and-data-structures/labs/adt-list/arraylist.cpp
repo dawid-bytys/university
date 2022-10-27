@@ -225,7 +225,6 @@ int ArrayList<T>::index(const T& item) const {
 
 template <typename T>
 void ArrayList<T>::insert(const int index, const T& item) {
-  assert(!full());
   assert(index >= 0 && index <= last);
   if (index == 0) {
     return push_front(item);
@@ -233,7 +232,8 @@ void ArrayList<T>::insert(const int index, const T& item) {
   if (index == last) {
     return push_back(item);
   }
-  for (int i = last + 1; i > index - 1; --i) {
+  assert(!full());
+  for (int i = last; i > index; --i) {
     tab[i] = tab[i - 1];
   }
   tab[index] = item;
@@ -242,7 +242,6 @@ void ArrayList<T>::insert(const int index, const T& item) {
 
 template <typename T>
 void ArrayList<T>::insert(const int index, T&& item) {
-  assert(!full());
   assert(index >= 0 && index <= last);
   if (index == 0) {
     return push_front(std::move(item));
@@ -250,7 +249,8 @@ void ArrayList<T>::insert(const int index, T&& item) {
   if (index == last) {
     return push_back(std::move(item));
   }
-  for (int i = last + 1; i > index - 1; --i) {
+  assert(!full());
+  for (int i = last; i > index; --i) {
     tab[i] = tab[i - 1];
   }
   tab[index] = std::move(item);
