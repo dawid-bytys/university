@@ -19,7 +19,7 @@ class ArrayList {
  public:
   // default constructor
   ArrayList() = default;
-  explicit ArrayList(int size);
+  explicit ArrayList(const int size);
 
   // copy constructor
   ArrayList(const ArrayList& other);
@@ -75,38 +75,39 @@ class ArrayList {
   // removes all elements from the list
   void clear();
 
-  // returns the element at the given position
-  void display();
-
   // reverses the order of elements in the list
   void reverse();
 
   // sorts the elements in the list
   void sort();
 
+  // resizes the list to the given size
+  void resize(const int new_size);
+
   // merges two sorted lists
   void merge(ArrayList& other);
 
   // returns the element at the given position (array notation)
-  T& operator[](int pos);
+  T& operator[](const int index);
 
   // returns the element at the given position (array notation)
-  const T& operator[](int pos) const;
+  const T& operator[](const int index) const;
 
   // removes the element at the given position
-  void erase(int pos);
+  void erase(const int index);
 
   // returns the position of the first occurrence of the given element
-  int index(const T& item);
+  int index(const T& item) const;
 
   // inserts an element at the given position
-  void insert(int pos, const T& item);
+  void insert(const int index, const T& item);
 
   // inserts an element at the given position
-  void insert(int pos, T&& item);
+  void insert(const int index, T&& item);
 
   // prints the list to the given stream
-  friend std::ostream& operator<<(std::ostream& os, const ArrayList& L);
+  template <typename U>
+  friend std::ostream& operator<<(std::ostream& os, const ArrayList<U>& list);
 };
 
 #endif
