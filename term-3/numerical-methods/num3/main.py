@@ -37,7 +37,7 @@ class BandMatrix:
 
     def get_band_position(self, row: int, column: int) -> tuple[int, int] | None:
         """Returns the band and position of the given coordinates or None if the position is out of bounds."""
-        assert row > 0 and column > 0
+        assert row >= 0 and column >= 0
         assert row < self._size and column < self._size
 
         diff = row - column
@@ -73,7 +73,7 @@ class BandMatrix:
 
 
 def lu_decomposition(matrix: BandMatrix) -> tuple[BandMatrix, BandMatrix]:
-    """Returns lower and upper triangular matrices
+    """Returns lower and upper triangular matrices.
 
     Unnecessary calculations and memory-efficient storage are taken into account.
     """
@@ -109,10 +109,7 @@ def lu_decomposition(matrix: BandMatrix) -> tuple[BandMatrix, BandMatrix]:
         for j in range(i + 1, size):
             # skip if the element is zero to avoid unnecessary calculations
             if matrix.at(j, i) != 0.0:
-                # avoid division by zero
-                if upper.at(i, i) == 0.0:
-                    raise ValueError("Division by zero")
-
+                assert upper.at(i, i) != 0.0
                 local_sum = sum([lower.at(j, k) * upper.at(k, i) for k in range(i)])
                 lower.update(j, i, (matrix.at(j, i) - local_sum) / upper.at(i, i))
 
