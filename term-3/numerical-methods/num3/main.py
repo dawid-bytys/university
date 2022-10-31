@@ -11,13 +11,16 @@ class BandMatrix:
         lower_bandwidth: int,
         upper_bandwidth: int,
     ) -> None:
+        if len(bands) != lower_bandwidth + upper_bandwidth + 1:
+            raise ValueError("Invalid number of bands.")
+
+        if size != len(bands[lower_bandwidth]):
+            raise ValueError("Invalid size.")
+
         self._bands = bands
         self._size = size
         self._lower_bandwidth = lower_bandwidth
         self._upper_bandwidth = upper_bandwidth
-
-        assert len(bands) == lower_bandwidth + upper_bandwidth + 1
-        assert size == len(bands[lower_bandwidth])
 
     @property
     def bands(self) -> list[list[float]]:
@@ -35,13 +38,15 @@ class BandMatrix:
     def upper_bandwidth(self) -> int:
         return self._upper_bandwidth
 
+    def __str__(self) -> str:
+        return str(self._bands)
+
     def get_band_position(self, row: int, column: int) -> tuple[int, int] | None:
         """Returns the band and position of the given coordinates or None if the position is out of bounds."""
-        assert row >= 0 and column >= 0
-        assert row < self._size and column < self._size
+        if row < 0 or row >= self._size or column < 0 or column >= self._size:
+            raise ValueError("Invalid position.")
 
-        diff = row - column
-        if diff > self._lower_bandwidth or -diff > self._upper_bandwidth:
+        if not self.is_band_required(row, column):
             return None
 
         diagonal_band = max(self._bands, key=len)
@@ -64,6 +69,13 @@ class BandMatrix:
             band, position = band_position
             self._bands[band][position] = value
 
+    def is_band_required(self, row: int, column: int) -> bool:
+        """Returns True if the given position is required for the LU decomposition."""
+        return not (
+            (column < row - self._lower_bandwidth)
+            or (column > row + self._upper_bandwidth)
+        )
+
     def print(self) -> None:
         """Prints the matrix in a human-readable format."""
         for row in range(self._size):
@@ -71,56 +83,70 @@ class BandMatrix:
                 print(self.at(row, column), end=" ")
             print()
 
+    def lu_decomposition(self) -> tuple["BandMatrix", "BandMatrix"]:
+        """Returns lower and upper triangular matrices.
 
-def lu_decomposition(matrix: BandMatrix) -> tuple[BandMatrix, BandMatrix]:
-    """Returns lower and upper triangular matrices.
+        Unnecessary calculations and memory-efficient storage are taken into account.
+        """
+        # allocate memory for the lower and upper matrices
+        lower = BandMatrix(
+            bands=[
+                [1.0] * (self._size - i) for i in range(self._lower_bandwidth, -1, -1)
+            ],
+            size=self._size,
+            lower_bandwidth=self._lower_bandwidth,
+            upper_bandwidth=0,
+        )
+        upper = BandMatrix(
+            bands=[[0.0] * (self._size - i) for i in range(self._upper_bandwidth + 1)],
+            size=self._size,
+            lower_bandwidth=0,
+            upper_bandwidth=self._upper_bandwidth,
+        )
 
-    Unnecessary calculations and memory-efficient storage are taken into account.
-    """
-    size = matrix.size
-    lower_bandwidth = matrix.lower_bandwidth
-    upper_bandwidth = matrix.upper_bandwidth
+        # Modified Crout's algorithm
+        for i in range(self._size):
+            for j in range(i, self._size):
+                # skip unnecessary calculations
+                if not self.is_band_required(i, j):
+                    continue
 
-    # allocate memory for the lower and upper matrices
-    lower = BandMatrix(
-        bands=[[0.0] * (size - i) for i in range(lower_bandwidth, -1, -1)],
-        size=size,
-        lower_bandwidth=lower_bandwidth,
-        upper_bandwidth=0,
-    )
-    upper = BandMatrix(
-        bands=[[0.0] * (size - i) for i in range(upper_bandwidth + 1)],
-        size=size,
-        lower_bandwidth=0,
-        upper_bandwidth=upper_bandwidth,
-    )
+                # skip unnecessary calculations by reducing the range of summation
+                local_sum = 0
+                for k in range(max(i - self._lower_bandwidth, 0), j):
+                    local_sum += lower.at(i, k) * upper.at(k, j)
 
-    # Crout's algorithm
-    for i in range(size):
-        # fill the diagonal of the lower matrix with 1s
-        lower.update(i, i, 1.0)
+                upper.update(i, j, self.at(i, j) - local_sum)
 
-        for j in range(i, size):
-            # skip if the element is zero to avoid unnecessary calculations
-            if matrix.at(i, j) != 0.0:
-                local_sum = sum([lower.at(i, k) * upper.at(k, j) for k in range(i)])
-                upper.update(i, j, matrix.at(i, j) - local_sum)
+            for j in range(i + 1, self._size):
+                # skip unnecessary calculations
+                if not self.is_band_required(j, i):
+                    continue
 
-        for j in range(i + 1, size):
-            # skip if the element is zero to avoid unnecessary calculations
-            if matrix.at(j, i) != 0.0:
-                assert upper.at(i, i) != 0.0
-                local_sum = sum([lower.at(j, k) * upper.at(k, i) for k in range(i)])
-                lower.update(j, i, (matrix.at(j, i) - local_sum) / upper.at(i, i))
+                # avoid division by zero
+                if upper.at(i, i) == 0:
+                    raise ValueError("Division by zero.")
 
-    return lower, upper
+                # skip unnecessary calculations by reducing the range of summation
+                local_sum = 0
+                for k in range(max(j - self._upper_bandwidth, 0), i):
+                    local_sum += lower.at(j, k) * upper.at(k, i)
+
+                lower.update(j, i, (self.at(j, i) - local_sum) / upper.at(i, i))
+
+        return lower, upper
 
 
-def solve_equation(lower: BandMatrix, upper: BandMatrix, b: list[float]) -> list[float]:
+def solve_for_banded(
+    lower: BandMatrix, upper: BandMatrix, b: list[float]
+) -> tuple[list[float]]:
     """Returns the solution of the equation Ax = b.
 
     The solution is calculated using the forward and backward substitution reducing unnecessary calculations.
     """
+    if lower.size != upper.size or lower.size != len(b) or lower.size != upper.size:
+        raise ValueError("Invalid size.")
+
     size = lower.size
 
     # allocate memory for the solution
@@ -129,14 +155,31 @@ def solve_equation(lower: BandMatrix, upper: BandMatrix, b: list[float]) -> list
 
     # forward substitution
     for i in range(size):
-        y[i] = b[i] - sum([lower.at(i, k) * y[k] for k in range(i)])
+        if i == 0:
+            y[i] = b[i]
+        else:
+            local_sum = 0
+            # skip unnecessary calculations by reducing the range of summation
+            for j in range(max(0, i - lower.lower_bandwidth), i):
+                local_sum += lower.at(i, j) * y[j]
+
+            y[i] = b[i] - local_sum
 
     # backward substitution
     for i in range(size - 1, -1, -1):
-        assert upper.at(i, i) != 0.0
-        x[i] = (
-            y[i] - sum([upper.at(i, k) * x[k] for k in range(i + 1, size)])
-        ) / upper.at(i, i)
+        # avoid division by zero
+        if upper.at(i, i) == 0.0:
+            raise ValueError("Division by zero.")
+
+        if i == size - 1:
+            x[i] = y[i] / upper.at(i, i)
+        else:
+            local_sum = 0
+            # skip unnecessary calculations by reducing the range of summation
+            for j in range(i + 1, min(size, i + upper.upper_bandwidth + 1)):
+                local_sum += upper.at(i, j) * x[j]
+
+            x[i] = (y[i] - local_sum) / upper.at(i, i)
 
     return x
 
@@ -158,8 +201,8 @@ if __name__ == "__main__":
     # create the matrix A of size N x N
     matrix_A = BandMatrix(
         bands=[
-            [0.2 for _ in range(N - 1)],
-            [1.2 for _ in range(N)],
+            [0.2] * (N - 1),
+            [1.2] * N,
             [(0.1) / i for i in range(1, N)],
             [(0.4) / pow(i, 2) for i in range(1, N - 1)],
         ],
@@ -171,8 +214,19 @@ if __name__ == "__main__":
     # create the vector x of size N
     vector_x = [i for i in range(1, N + 1)]
 
-    lower, upper = lu_decomposition(matrix_A)
-    vector_y = solve_equation(lower, upper, vector_x)
+    # LU decomposition
+    lower, upper = matrix_A.lu_decomposition()
+
+    # solve the equation Ay = x
+    vector_y = solve_for_banded(lower, upper, vector_x)
+
+    # calculate the determinant of the matrix A
     determinant = lu_determinant(upper)
+
+    # print the results
+    print(f"Matrix A: {matrix_A}", end="\n\n")
+    print(f"Vector x: {vector_x}", end="\n\n")
+    print(f"Vector y: {vector_y}", end="\n\n")
+    print(f"Determinant: {determinant}")
 
     sys.exit(0)
