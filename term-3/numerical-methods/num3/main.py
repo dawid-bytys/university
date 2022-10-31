@@ -133,9 +133,7 @@ def solve_equation(lower: BandMatrix, upper: BandMatrix, b: list[float]) -> list
 
     # backward substitution
     for i in range(size - 1, -1, -1):
-        if upper.at(i, i) == 0.0:
-            raise ValueError("Division by zero")
-
+        assert upper.at(i, i) != 0.0
         x[i] = (
             y[i] - sum([upper.at(i, k) * x[k] for k in range(i + 1, size)])
         ) / upper.at(i, i)
