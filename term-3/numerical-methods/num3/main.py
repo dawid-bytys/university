@@ -1,4 +1,9 @@
+import sys
+
+
 class BandMatrix:
+    """A memory-efficient implementation of a square banded matrix."""
+
     def __init__(
         self,
         bands: list[list[float]],
@@ -10,6 +15,9 @@ class BandMatrix:
         self._size = size
         self._lower_bandwidth = lower_bandwidth
         self._upper_bandwidth = upper_bandwidth
+
+        assert len(bands) == lower_bandwidth + upper_bandwidth + 1
+        assert size == len(bands[lower_bandwidth])
 
     @property
     def bands(self) -> list[list[float]]:
@@ -28,8 +36,9 @@ class BandMatrix:
         return self._upper_bandwidth
 
     def get_band_position(self, row: int, column: int) -> tuple[int, int] | None:
-        if row < 0 or row >= self._size or column < 0 or column >= self._size:
-            raise IndexError("Index out of bounds")
+        """Returns the band and position of the given coordinates or None if the position is out of bounds."""
+        assert row > 0 and column > 0
+        assert row < self._size and column < self._size
 
         diff = row - column
         if diff > self._lower_bandwidth or -diff > self._upper_bandwidth:
@@ -40,6 +49,7 @@ class BandMatrix:
         return column - row + diagonal_idx, min(row, column)
 
     def at(self, row: int, column: int) -> float:
+        """Returns the value at the given position."""
         band_position = self.get_band_position(row, column)
         if band_position is not None:
             band, position = band_position
@@ -48,12 +58,14 @@ class BandMatrix:
         return 0.0
 
     def update(self, row: int, column: int, value: float) -> None:
+        """Updates the matrix with the given function value."""
         band_position = self.get_band_position(row, column)
         if band_position is not None:
             band, position = band_position
             self._bands[band][position] = value
 
     def print(self) -> None:
+        """Prints the matrix in a human-readable format."""
         for row in range(self._size):
             for column in range(self._size):
                 print(self.at(row, column), end=" ")
@@ -61,6 +73,10 @@ class BandMatrix:
 
 
 def lu_decomposition(matrix: BandMatrix) -> tuple[BandMatrix, BandMatrix]:
+    """Returns lower and upper triangular matrices
+
+    Unnecessary calculations and memory-efficient storage are taken into account.
+    """
     size = matrix.size
     lower_bandwidth = matrix.lower_bandwidth
     upper_bandwidth = matrix.upper_bandwidth
@@ -104,6 +120,10 @@ def lu_decomposition(matrix: BandMatrix) -> tuple[BandMatrix, BandMatrix]:
 
 
 def solve_equation(lower: BandMatrix, upper: BandMatrix, b: list[float]) -> list[float]:
+    """Returns the solution of the equation Ax = b.
+
+    The solution is calculated using the forward and backward substitution reducing unnecessary calculations.
+    """
     size = lower.size
 
     # allocate memory for the solution
@@ -127,6 +147,10 @@ def solve_equation(lower: BandMatrix, upper: BandMatrix, b: list[float]) -> list
 
 
 def lu_determinant(upper: BandMatrix) -> float:
+    """Returns the determinant of the matrix.
+
+    The determinant is calculated using the diagonal elements of the upper matrix.
+    """
     from functools import reduce
 
     return reduce(lambda x, y: x * y, [upper.at(i, i) for i in range(upper.size)])
@@ -155,3 +179,5 @@ if __name__ == "__main__":
     lower, upper = lu_decomposition(matrix_A)
     vector_y = solve_equation(lower, upper, vector_x)
     determinant = lu_determinant(upper)
+
+    sys.exit(0)
