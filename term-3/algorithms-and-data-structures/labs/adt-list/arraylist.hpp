@@ -1,7 +1,121 @@
-#include "arraylist.h"
+/*
+Dodałem do klasy ArrayList metodę resize(), ponieważ w przypadku gdy tablica
+jest pełna, a chcemy dodać kolejny element, to nie możemy tego zrobić, ponieważ
+nie mamy miejsca, lub w przypadku mergowania dwóch tablic, gdy jedna z nich
+jest pełna.
+*/
+#ifndef ARRAYLIST_H
+#define ARRAYLIST_H
 
 #include <cassert>
 #include <iostream>
+
+// ArrayList is a simple collection of elements of type T
+template <typename T>
+class ArrayList {
+ private:
+  // tab is a pointer to the array
+  T* tab;
+
+  // msize is the maximum size of the array
+  int msize;
+
+  // last is the first free position in the array
+  int last;
+
+ public:
+  // default constructor
+  ArrayList() = default;
+  explicit ArrayList(const int size);
+
+  // copy constructor
+  ArrayList(const ArrayList& other);
+
+  // move constructor
+  ArrayList(ArrayList&& other);
+
+  // destructor
+  ~ArrayList();
+
+  // copy assignment operator
+  ArrayList& operator=(const ArrayList& other);
+
+  // move assignment operator
+  ArrayList& operator=(ArrayList&& other);
+
+  // returns the element at the given position (array notation)
+  T& operator[](const int index);
+
+  // returns the element at the given position (array notation)
+  const T& operator[](const int index) const;
+
+  // returns the first element of the list
+  const T& front();
+
+  // returns the last element of the list
+  const T& back();
+
+  // checks if the list is empty
+  bool empty() const;
+
+  // checks if the list is full
+  bool full() const;
+
+  // returns the number of elements in the list
+  int size() const;
+
+  // returns the maximum number of elements in the list
+  int max_size() const;
+
+  // returns the position of the first occurrence of the given element
+  int index(const T& item) const;
+
+  // adds an element to the beginning of the list
+  void push_front(const T& item);
+
+  // adds an element to the beginning of the list
+  void push_front(T&& item);
+
+  // adds an element to the end of the list
+  void push_back(const T& item);
+
+  // adds an element to the end of the list
+  void push_back(T&& item);
+
+  // removes the first element of the list
+  void pop_front();
+
+  // removes the last element of the list
+  void pop_back();
+
+  // removes all elements from the list
+  void clear();
+
+  // reverses the order of elements in the list
+  void reverse();
+
+  // sorts the elements in the list
+  void sort();
+
+  // resizes the list to the given size
+  void resize(const int new_size);
+
+  // merges two sorted lists
+  void merge(ArrayList& other);
+
+  // removes the element at the given position
+  void erase(const int index);
+
+  // inserts an element at the given position
+  void insert(const int index, const T& item);
+
+  // inserts an element at the given position
+  void insert(const int index, T&& item);
+
+  // prints the list to the given stream
+  template <typename U>
+  friend std::ostream& operator<<(std::ostream& os, const ArrayList<U>& list);
+};
 
 template <typename T>
 ArrayList<T>::ArrayList(const int size) : msize(size), last(0) {
@@ -264,3 +378,5 @@ std::ostream& operator<<(std::ostream& os, const ArrayList<U>& list) {
   }
   return os;
 }
+
+#endif

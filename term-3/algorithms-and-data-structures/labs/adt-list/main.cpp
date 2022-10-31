@@ -1,8 +1,7 @@
 #include <iostream>
 #include <string>
 
-#include "arraylist.cpp"
-#include "arraylist.h"
+#include "arraylist.hpp"
 #include "cassert"
 
 int main() {
