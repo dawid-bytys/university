@@ -113,9 +113,7 @@ class BandMatrix:
 
                 # skip unnecessary calculations by reducing the range of summation
                 reduced_range = range(max(i - self._lower_bandwidth, 0), j)
-                local_sum = sum(
-                    [lower.at(i, k) * upper.at(k, j) for k in reduced_range]
-                )
+                local_sum = sum(lower.at(i, k) * upper.at(k, j) for k in reduced_range)
                 upper.update(i, j, self.at(i, j) - local_sum)
 
             for j in range(i + 1, self._size):
