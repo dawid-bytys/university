@@ -21,6 +21,10 @@ void merge(Iterator &begin, Iterator &middle, Iterator &end) {
     sorted.push_back(*left++);
   }
 
+  while (right != end) {
+    sorted.push_back(*right++);
+  }
+
   std::copy(sorted.begin(), sorted.end(), begin);
 }
 
