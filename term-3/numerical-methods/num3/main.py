@@ -104,7 +104,7 @@ class BandMatrix:
             upper_bandwidth=self._upper_bandwidth,
         )
 
-        # Modified Crout's algorithm
+        # Modified Doolitle's algorithm
         for i in range(self._size):
             for j in range(i, self._size):
                 # skip unnecessary calculations
@@ -112,10 +112,10 @@ class BandMatrix:
                     continue
 
                 # skip unnecessary calculations by reducing the range of summation
-                local_sum = 0
-                for k in range(max(i - self._lower_bandwidth, 0), j):
-                    local_sum += lower.at(i, k) * upper.at(k, j)
-
+                reduced_range = range(max(i - self._lower_bandwidth, 0), j)
+                local_sum = sum(
+                    [lower.at(i, k) * upper.at(k, j) for k in reduced_range]
+                )
                 upper.update(i, j, self.at(i, j) - local_sum)
 
             for j in range(i + 1, self._size):
@@ -128,10 +128,8 @@ class BandMatrix:
                     raise ValueError("Division by zero.")
 
                 # skip unnecessary calculations by reducing the range of summation
-                local_sum = 0
-                for k in range(max(j - self._upper_bandwidth, 0), i):
-                    local_sum += lower.at(j, k) * upper.at(k, i)
-
+                reduced_range = range(max(j - self._upper_bandwidth, 0), i)
+                local_sum = sum(lower.at(j, k) * upper.at(k, i) for k in reduced_range)
                 lower.update(j, i, (self.at(j, i) - local_sum) / upper.at(i, i))
 
         return lower, upper
@@ -158,11 +156,9 @@ def solve_for_banded(
         if i == 0:
             y[i] = b[i]
         else:
-            local_sum = 0
             # skip unnecessary calculations by reducing the range of summation
-            for j in range(max(0, i - lower.lower_bandwidth), i):
-                local_sum += lower.at(i, j) * y[j]
-
+            reduced_range = range(max(0, i - lower.lower_bandwidth), i)
+            local_sum = sum(lower.at(i, j) * y[j] for j in reduced_range)
             y[i] = b[i] - local_sum
 
     # backward substitution
@@ -174,11 +170,9 @@ def solve_for_banded(
         if i == size - 1:
             x[i] = y[i] / upper.at(i, i)
         else:
-            local_sum = 0
             # skip unnecessary calculations by reducing the range of summation
-            for j in range(i + 1, min(size, i + upper.upper_bandwidth + 1)):
-                local_sum += upper.at(i, j) * x[j]
-
+            reduced_range = range(i + 1, min(size, i + upper.upper_bandwidth + 1))
+            local_sum = sum(upper.at(i, j) * x[j] for j in reduced_range)
             x[i] = (y[i] - local_sum) / upper.at(i, i)
 
     return x
