@@ -194,7 +194,7 @@ def lu_determinant(upper: BandMatrix) -> float:
     return reduce(lambda x, y: x * y, [upper.at(i, i) for i in range(upper.size)])
 
 
-if __name__ == "__main__":
+def main():
     # size of the matrix
     N = 100
 
@@ -230,3 +230,7 @@ if __name__ == "__main__":
     print(f"Determinant: {determinant}")
 
     sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()
