@@ -1,11 +1,14 @@
 import sys
+from functools import reduce
+
+from typing_extensions import Self
 
 
 class BandMatrix:
     """A memory-efficient implementation of a square banded matrix."""
 
     def __init__(
-        self,
+        self: Self,
         bands: list[list[float]],
         size: int,
         lower_bandwidth: int,
@@ -21,27 +24,28 @@ class BandMatrix:
         self._size = size
         self._lower_bandwidth = lower_bandwidth
         self._upper_bandwidth = upper_bandwidth
+        self._diagonal_idx = self._bands.index(max(self._bands, key=len))
 
     @property
-    def bands(self) -> list[list[float]]:
+    def bands(self: Self) -> list[list[float]]:
         return self._bands
 
     @property
-    def size(self) -> int:
+    def size(self: Self) -> int:
         return self._size
 
     @property
-    def lower_bandwidth(self) -> int:
+    def lower_bandwidth(self: Self) -> int:
         return self._lower_bandwidth
 
     @property
-    def upper_bandwidth(self) -> int:
+    def upper_bandwidth(self: Self) -> int:
         return self._upper_bandwidth
 
-    def __str__(self) -> str:
+    def __str__(self: Self) -> str:
         return str(self._bands)
 
-    def get_band_position(self, row: int, column: int) -> tuple[int, int] | None:
+    def get_band_position(self: Self, row: int, column: int) -> tuple[int, int] | None:
         """Returns the band and position of the given coordinates or None if the position is out of bounds."""
         if row < 0 or row >= self._size or column < 0 or column >= self._size:
             raise ValueError("Invalid position.")
@@ -49,11 +53,9 @@ class BandMatrix:
         if not self.is_band_required(row, column):
             return None
 
-        diagonal_band = max(self._bands, key=len)
-        diagonal_idx = self._bands.index(diagonal_band)
-        return column - row + diagonal_idx, min(row, column)
+        return column - row + self._diagonal_idx, min(row, column)
 
-    def at(self, row: int, column: int) -> float:
+    def at(self: Self, row: int, column: int) -> float:
         """Returns the value at the given position."""
         band_position = self.get_band_position(row, column)
         if band_position is not None:
@@ -62,28 +64,28 @@ class BandMatrix:
 
         return 0.0
 
-    def update(self, row: int, column: int, value: float) -> None:
+    def update(self: Self, row: int, column: int, value: float) -> None:
         """Updates the matrix with the given function value."""
         band_position = self.get_band_position(row, column)
         if band_position is not None:
             band, position = band_position
             self._bands[band][position] = value
 
-    def is_band_required(self, row: int, column: int) -> bool:
+    def is_band_required(self: Self, row: int, column: int) -> bool:
         """Returns True if the given position is required for the LU decomposition."""
         return not (
             (column < row - self._lower_bandwidth)
             or (column > row + self._upper_bandwidth)
         )
 
-    def print(self) -> None:
+    def print(self: Self) -> None:
         """Prints the matrix in a human-readable format."""
         for row in range(self._size):
             for column in range(self._size):
                 print(self.at(row, column), end=" ")
             print()
 
-    def lu_decomposition(self) -> tuple["BandMatrix", "BandMatrix"]:
+    def lu_decomposition(self: Self) -> tuple[Self, Self]:
         """Returns lower and upper triangular matrices.
 
         Unnecessary calculations and memory-efficient storage are taken into account.
@@ -181,8 +183,6 @@ def lu_determinant(upper: BandMatrix) -> float:
 
     The determinant is calculated using the diagonal elements of the upper matrix.
     """
-    from functools import reduce
-
     return reduce(lambda x, y: x * y, [upper.at(i, i) for i in range(upper.size)])
 
 
