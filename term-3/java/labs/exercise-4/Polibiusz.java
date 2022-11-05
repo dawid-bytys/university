@@ -35,7 +35,7 @@ public class Polibiusz implements Algorithm {
             final char currentChar = capitalizedInputWord.charAt(i);
             if (!isCharValid(currentChar)) {
                 outputWord += currentChar;
-                i -= 1;
+                i--;
                 continue;
             }
 
