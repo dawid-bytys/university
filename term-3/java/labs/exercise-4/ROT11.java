@@ -12,7 +12,7 @@ public class ROT11 implements Algorithm {
                 continue;
             }
 
-            final int index = alphabet.indexOf(inputWord.charAt(i));
+            final int index = alphabet.indexOf(currentChar);
             final int newIndex = (index + shift) % alphabetSize;
             outputWord += alphabet.charAt(newIndex);
         }
