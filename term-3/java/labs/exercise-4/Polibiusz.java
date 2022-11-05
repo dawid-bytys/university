@@ -22,7 +22,7 @@ public class Polibiusz implements Algorithm {
                 continue;
             }
 
-            final int[] coordinates = getCoordinates(currentChar);
+            final int[] coordinates = getPolybiusCoordinates(currentChar);
             outputWord += coordinates[0] + "" + coordinates[1];
         }
         return outputWord;
@@ -39,18 +39,18 @@ public class Polibiusz implements Algorithm {
                 continue;
             }
 
-            final int row = Character.getNumericValue(currentChar);
-            final int column = Character.getNumericValue(capitalizedInputWord.charAt(i + 1));
+            final int row = Character.getNumericValue(currentChar) - 1;
+            final int column = Character.getNumericValue(capitalizedInputWord.charAt(i + 1)) - 1;
             outputWord += polybiusSquare[row][column];
         }
         return outputWord;
     }
 
-    private static final int[] getCoordinates(char c) {
+    private static final int[] getPolybiusCoordinates(char c) {
         for (int i = 0; i < polybiusSquare.length; i++) {
             for (int j = 0; j < polybiusSquare[i].length; j++) {
                 if (polybiusSquare[i][j] == c) {
-                    return new int[] { i, j };
+                    return new int[] { i + 1, j + 1 };
                 }
             }
         }
