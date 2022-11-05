@@ -1,5 +1,8 @@
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 public class Main {
-    private static void validateArguments(String[] args) throws IllegalArgumentException {
+    public static void validateArguments(String[] args) throws IllegalArgumentException {
         if (args.length != 4) {
             throw new IllegalArgumentException("Invalid number of arguments");
         }
@@ -17,22 +20,32 @@ public class Main {
         }
     }
 
+    public static Algorithm getAlgorithm(String algorithmName) throws IllegalArgumentException {
+        if (algorithmName.equals("Polibiusz")) {
+            return new Polibiusz();
+        }
+        if (algorithmName.equals("rot")) {
+            return new ROT11();
+        }
+        throw new IllegalArgumentException("Invalid algorithm");
+    }
+
+    public static void performOperation(String operation, String path_to_file_in, String path_to_file_out,
+            Algorithm algorithm) throws IOException, IllegalArgumentException, FileNotFoundException {
+        if (operation.equals("crypt")) {
+            Cryptographer.cryptfile(path_to_file_in, path_to_file_out, algorithm);
+        } else if (operation.equals("decrypt")) {
+            Cryptographer.decryptfile(path_to_file_in, path_to_file_out, algorithm);
+        } else {
+            throw new IllegalArgumentException("Invalid operation");
+        }
+    }
+
     public static void main(String[] args) {
         try {
             validateArguments(args);
-
-            Algorithm algorithm = null;
-            if (args[3].equals("Polibiusz")) {
-                // algorithm = new Polibiusz();
-            } else {
-                algorithm = new ROT11();
-            }
-
-            if (args[2].equals("crypt")) {
-                Cryptographer.cryptfile(args[0], args[1], algorithm);
-            } else {
-                Cryptographer.decryptfile(args[0], args[1], algorithm);
-            }
+            Algorithm algorithm = getAlgorithm(args[3]);
+            performOperation(args[2], args[0], args[1], algorithm);
 
             System.out.println("Done!");
             System.exit(0);

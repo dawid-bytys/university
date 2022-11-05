@@ -30,9 +30,9 @@ public class Cryptographer {
                 }
             }
         } catch (FileNotFoundException e) {
-            throw new FileNotFoundException("File not found");
+            throw new FileNotFoundException(e.getMessage());
         } catch (IOException e) {
-            throw new IOException("Error while reading/writing");
+            throw new IOException(e.getMessage());
         } finally {
             try {
                 if (readBuffer != null) {
@@ -42,7 +42,7 @@ public class Cryptographer {
                     writeBuffer.close();
                 }
             } catch (IOException e) {
-                throw new IOException("Error while closing file");
+                throw new IOException(e.getMessage());
             }
         }
     }
@@ -71,9 +71,9 @@ public class Cryptographer {
                 }
             }
         } catch (FileNotFoundException e) {
-            throw new FileNotFoundException("File not found");
+            throw new FileNotFoundException(e.getMessage());
         } catch (IOException e) {
-            throw new IOException("Error while reading/writing");
+            throw new IOException(e.getMessage());
         } finally {
             try {
                 if (readBuffer != null) {
@@ -83,7 +83,7 @@ public class Cryptographer {
                     writeBuffer.close();
                 }
             } catch (IOException e) {
-                throw new IOException("Error while closing file");
+                throw new IOException(e.getMessage());
             }
         }
     }
