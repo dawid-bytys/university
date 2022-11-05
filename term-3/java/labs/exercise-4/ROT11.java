@@ -6,13 +6,15 @@ public class ROT11 implements Algorithm {
     public String crypt(String inputWord) {
         String outputWord = "";
         for (int i = 0; i < inputWord.length(); i++) {
-            if (alphabet.indexOf(inputWord.charAt(i)) == -1) {
-                outputWord += inputWord.charAt(i);
-            } else {
-                final int index = alphabet.indexOf(inputWord.charAt(i));
-                final int newIndex = (index + shift) % alphabetSize;
-                outputWord += alphabet.charAt(newIndex);
+            final char currentChar = inputWord.charAt(i);
+            if (!isCharValid(currentChar)) {
+                outputWord += currentChar;
+                continue;
             }
+
+            final int index = alphabet.indexOf(inputWord.charAt(i));
+            final int newIndex = (index + shift) % alphabetSize;
+            outputWord += alphabet.charAt(newIndex);
         }
         return outputWord;
     }
@@ -20,13 +22,15 @@ public class ROT11 implements Algorithm {
     public String decrypt(String inputWord) {
         String outputWord = "";
         for (int i = 0; i < inputWord.length(); i++) {
-            if (alphabet.indexOf(inputWord.charAt(i)) == -1) {
-                outputWord += inputWord.charAt(i);
-            } else {
-                final int index = alphabet.indexOf(inputWord.charAt(i));
-                final int newIndex = (index - shift + alphabetSize) % alphabetSize;
-                outputWord += alphabet.charAt(newIndex);
+            final char currentChar = inputWord.charAt(i);
+            if (!isCharValid(currentChar)) {
+                outputWord += currentChar;
+                continue;
             }
+
+            final int index = alphabet.indexOf(currentChar);
+            final int newIndex = (index - shift + alphabetSize) % alphabetSize;
+            outputWord += alphabet.charAt(newIndex);
         }
         return outputWord;
     }
