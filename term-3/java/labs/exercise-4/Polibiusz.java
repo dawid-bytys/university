@@ -33,15 +33,15 @@ public class Polibiusz implements Algorithm {
         String outputWord = "";
         for (int i = 0; i < inputWord.length(); i += 2) {
             final char currentChar = capitalizedInputWord.charAt(i);
-            final char nextChar = capitalizedInputWord.charAt(i + 1);
-            if (!isCharValid(currentChar) || !isCharValid(nextChar)) {
-                outputWord += currentChar + "" + nextChar;
+            if (!isCharValid(currentChar)) {
+                outputWord += currentChar;
+                i -= 1;
                 continue;
             }
 
-            final int firstIndex = Character.getNumericValue(currentChar) - 1;
-            final int secondIndex = Character.getNumericValue(nextChar) - 1;
-            outputWord += polybiusSquare[firstIndex][secondIndex];
+            final int row = Character.getNumericValue(currentChar);
+            final int column = Character.getNumericValue(capitalizedInputWord.charAt(i + 1));
+            outputWord += polybiusSquare[row][column];
         }
         return outputWord;
     }
