@@ -37,7 +37,7 @@ public class Polibiusz implements Algorithm {
         String outputWord = "";
         for (int i = 0; i < inputWord.length(); ++i) {
             final char currentChar = inputWord.charAt(i);
-            if (isDigit(currentChar)) {
+            if (isCharDigit(currentChar)) {
                 continue;
             }
             if (!isCharDigitOrLetter(currentChar)) {
@@ -54,7 +54,7 @@ public class Polibiusz implements Algorithm {
         String outputWord = "";
         for (int i = 0; i < inputWord.length(); ++i) {
             final char currentChar = inputWord.charAt(i);
-            if (!isDigit(currentChar)) {
+            if (!isCharDigit(currentChar)) {
                 outputWord += currentChar;
                 continue;
             }
@@ -70,7 +70,7 @@ public class Polibiusz implements Algorithm {
         return outputWord;
     }
 
-    private boolean isDigit(char c) {
+    private boolean isCharDigit(char c) {
         return Character.isDigit(c);
     }
 }
