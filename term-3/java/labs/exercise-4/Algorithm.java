@@ -3,7 +3,7 @@ public interface Algorithm {
 
     public String decrypt(String inputWord);
 
-    default boolean isCharValid(char c) {
+    default boolean isCharDigitOrLetter(char c) {
         return Character.isLetter(c) || Character.isDigit(c);
     }
 }

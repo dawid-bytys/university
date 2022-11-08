@@ -5,9 +5,9 @@ public class ROT11 implements Algorithm {
 
     public String crypt(String inputWord) {
         String outputWord = "";
-        for (int i = 0; i < inputWord.length(); i++) {
+        for (int i = 0; i < inputWord.length(); ++i) {
             final char currentChar = inputWord.charAt(i);
-            if (!isCharValid(currentChar)) {
+            if (!isCharDigitOrLetter(currentChar)) {
                 outputWord += currentChar;
                 continue;
             }
@@ -21,9 +21,9 @@ public class ROT11 implements Algorithm {
 
     public String decrypt(String inputWord) {
         String outputWord = "";
-        for (int i = 0; i < inputWord.length(); i++) {
+        for (int i = 0; i < inputWord.length(); ++i) {
             final char currentChar = inputWord.charAt(i);
-            if (!isCharValid(currentChar)) {
+            if (!isCharDigitOrLetter(currentChar)) {
                 outputWord += currentChar;
                 continue;
             }

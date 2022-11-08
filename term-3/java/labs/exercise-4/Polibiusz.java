@@ -1,59 +1,76 @@
+import java.util.HashMap;
+import java.util.Map;
+
 public class Polibiusz implements Algorithm {
-    // Nie jestem pewny czy chodzi o rozróżnianie I i J, czy o L i J, ponieważ
-    // wszędzie widzę, że to I i J są nierozróżnialne. Ponadto wynik mojego szyfru
-    // rózni sie od tego na stronie, bo nie do konca wiem, jak wyglada ta tabliczka
-    // u Doktora, wiec dobrałem taką, która mi się wydaje sensowna.
-    private static final char[][] polybiusSquare = {
-            { 'A', 'B', 'C', 'D', 'E', 'F' },
-            { 'G', 'H', 'I', 'J', 'K', 'L' },
-            { 'M', 'N', 'O', 'P', 'Q', 'R' },
-            { 'S', 'T', 'U', 'V', 'W', 'X' },
-            { 'Y', 'Z', '0', '1', '2', '3' },
-            { '4', '5', '6', '7', '8', '9' }
+    private static final Map<Character, String> polybiusSquare = new HashMap<Character, String>() {
+        {
+            put('A', "11");
+            put('B', "12");
+            put('C', "13");
+            put('D', "14");
+            put('E', "15");
+            put('F', "21");
+            put('G', "22");
+            put('H', "23");
+            put('I', "24");
+            put('J', "24");
+            put('K', "25");
+            put('L', "31");
+            put('M', "32");
+            put('N', "33");
+            put('O', "34");
+            put('P', "35");
+            put('Q', "41");
+            put('R', "42");
+            put('S', "43");
+            put('T', "44");
+            put('U', "45");
+            put('V', "51");
+            put('W', "52");
+            put('X', "53");
+            put('Y', "54");
+            put('Z', "55");
+        }
     };
 
     public String crypt(String inputWord) {
-        String capitalizedInputWord = inputWord.toUpperCase();
         String outputWord = "";
-        for (int i = 0; i < inputWord.length(); i++) {
-            final char currentChar = capitalizedInputWord.charAt(i);
-            if (!isCharValid(currentChar)) {
+        for (int i = 0; i < inputWord.length(); ++i) {
+            final char currentChar = inputWord.charAt(i);
+            if (isDigit(currentChar)) {
+                continue;
+            }
+            if (!isCharDigitOrLetter(currentChar)) {
                 outputWord += currentChar;
                 continue;
             }
 
-            final int[] coordinates = getPolybiusCoordinates(currentChar);
-            outputWord += coordinates[0] + "" + coordinates[1];
+            outputWord += polybiusSquare.get(Character.toUpperCase(currentChar));
         }
         return outputWord;
     }
 
     public String decrypt(String inputWord) {
-        String capitalizedInputWord = inputWord.toUpperCase();
         String outputWord = "";
-        for (int i = 0; i < inputWord.length(); i += 2) {
-            final char currentChar = capitalizedInputWord.charAt(i);
-            if (!isCharValid(currentChar)) {
+        for (int i = 0; i < inputWord.length(); ++i) {
+            final char currentChar = inputWord.charAt(i);
+            if (!isDigit(currentChar)) {
                 outputWord += currentChar;
-                i--;
                 continue;
             }
 
-            final int row = Character.getNumericValue(currentChar) - 1;
-            final int column = Character.getNumericValue(capitalizedInputWord.charAt(i + 1)) - 1;
-            outputWord += polybiusSquare[row][column];
+            for (Map.Entry<Character, String> entry : polybiusSquare.entrySet()) {
+                if (entry.getValue().equals(inputWord.substring(i, i + 2))) {
+                    outputWord += entry.getKey();
+                    ++i;
+                    break;
+                }
+            }
         }
         return outputWord;
     }
 
-    private static final int[] getPolybiusCoordinates(char c) {
-        for (int i = 0; i < polybiusSquare.length; i++) {
-            for (int j = 0; j < polybiusSquare[i].length; j++) {
-                if (polybiusSquare[i][j] == c) {
-                    return new int[] { i + 1, j + 1 };
-                }
-            }
-        }
-        return null;
+    private boolean isDigit(char c) {
+        return Character.isDigit(c);
     }
 }
