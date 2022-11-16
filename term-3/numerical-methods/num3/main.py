@@ -106,7 +106,7 @@ class BandMatrix:
             upper_bandwidth=self._upper_bandwidth,
         )
 
-        # Modified Doolitle's algorithm
+        # Modified Doolittle's algorithm
         for i in range(self._size):
             for j in range(i, self._size):
                 # skip unnecessary calculations
