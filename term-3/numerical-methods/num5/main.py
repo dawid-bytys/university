@@ -82,7 +82,7 @@ def print_vector(x: list[float] | ndarray) -> None:
     if isinstance(x, ndarray):
         x = x.tolist()
     if len(x) > 10:
-        print(x[:3], "...", x[-3:])
+        print(f"[{x[0]}, {x[1]}, {x[2]}, ..., {x[-3]}, {x[-2]}, {x[-1]}]")
     else:
         print(x)
 
