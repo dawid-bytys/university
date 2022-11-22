@@ -1,8 +1,10 @@
-from band import BandMatrix
-from matplotlib import pyplot as plt
-import numpy as np
 import sys
+
+import numpy as np
+from matplotlib import pyplot as plt
 from numpy import ndarray
+
+from band import BandMatrix
 
 
 def jacobi(
@@ -189,10 +191,8 @@ def get_errors(
     gauss_error = []
     for N in range(1, iterations + 1):
         jacobi_sol = jacobi(A, b, x0, max_iter=N)
-        jacobi_error.append(get_vector_error(jacobi_sol, exact_sol))
-
-    for N in range(1, iterations + 1):
         gauss_sol = gauss_seidel(A, b, x0, max_iter=N)
+        jacobi_error.append(get_vector_error(jacobi_sol, exact_sol))
         gauss_error.append(get_vector_error(gauss_sol, exact_sol))
 
     return jacobi_error, gauss_error, list(range(1, iterations + 1))
