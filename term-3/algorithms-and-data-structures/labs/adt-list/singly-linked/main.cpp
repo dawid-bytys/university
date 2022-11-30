@@ -1,4 +1,4 @@
-#include "tests.hpp"
+#include "tests.cpp"
 
 int main() {
   test_move_constructor();
@@ -16,6 +16,5 @@ int main() {
   test_pop_back();
   test_clear();
   test_reverse();
-
   return 0;
 }
