@@ -11,6 +11,7 @@
 // implementation of a deque
 template <typename T>
 class MyDeque {
+ private:
   // the node type
   T* tab;
 
