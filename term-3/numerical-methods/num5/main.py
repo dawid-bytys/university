@@ -28,8 +28,8 @@ def jacobi(
         x_new = np.zeros_like(x)
         for i in range(N):
             x_new[i] = b[i]
-            for j in range(N):
-                if i != j:
+            for j in range(max(0, i - 2), min(N, i + 3)):
+                if j != i:
                     x_new[i] -= A.at(i, j) * x[j]
             x_new[i] /= A.at(i, i)
         if np.linalg.norm(x_new - np.array(x)) < tol:
@@ -60,7 +60,7 @@ def gauss_seidel(
         x_new = np.zeros_like(x)
         for i in range(N):
             x_new[i] = b[i]
-            for j in range(N):
+            for j in range(max(0, i - 2), min(N, i + 3)):
                 if j < i:
                     x_new[i] -= A.at(i, j) * x_new[j]
                 elif j > i:
@@ -226,8 +226,8 @@ def main():
     print("Exact solution:")
     print_vector(x_exact)
 
-    # jacobi_error, gauss_error, iterations = get_errors(A, x0, b, x_exact, 300)
-    # draw_error_plot(jacobi_error, gauss_error, iterations)
+    jacobi_error, gauss_error, iterations = get_errors(A, x0, b, x_exact, 300)
+    draw_error_plot(jacobi_error, gauss_error, iterations)
 
     sys.exit(0)
 
