@@ -75,7 +75,7 @@ Poly<T>::Poly() {
 template <class T>
 Poly<T>::Poly(const T* coeffs, const unsigned degree) {
   if (degree < 0) {
-    throw std::invalid_argument("Degree must be non-negative");
+    throw std::out_of_range("Degree must be non-negative");
   }
   this->coeffs = new T[degree + 1];
   this->degree = degree;
@@ -107,9 +107,9 @@ unsigned Poly<T>::get_degree() const {
 
 template <class T>
 T Poly<T>::evaluate(const T& point) const {
-  T result = 0;
-  for (int i = 0; i <= degree; ++i) {
-    result += coeffs[i] * std::pow(point, i);
+  T result = coeffs[degree];
+  for (int i = degree - 1; i >= 0; --i) {
+    result = result * point + coeffs[i];
   }
   return result;
 }
@@ -167,13 +167,8 @@ bool Poly<T>::operator!=(const Poly<T>& poly) const {
 
 template <class T>
 T& Poly<T>::operator[](const unsigned degree) const {
-  if (degree < 0) {
-    throw std::invalid_argument("Degree must be non-negative");
-  }
-  if (degree > this->degree) {
-    throw std::invalid_argument(
-        "Degree must be less than or equal to the "
-        "degree of the polynomial");
+  if (degree < 0 || degree > this->degree) {
+    throw std::out_of_range("Degree is out of range");
   }
   return coeffs[degree];
 }
