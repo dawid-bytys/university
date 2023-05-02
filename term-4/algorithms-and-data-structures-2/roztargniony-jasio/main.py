@@ -1,42 +1,46 @@
-def read_input_file(input_file):
-    with open(input_file, "r") as file:
-        n = int(file.readline().strip())
-        keys = [int(line.strip()) for line in file.readlines()]
-    return n, keys
+from collections import defaultdict
+
+from typing_extensions import Self
 
 
-def find_cycles(n, keys):
-    visited = [False] * (n + 1)
-    cycles = []
+class Graph:
+    def __init__(self: Self) -> None:
+        self._vertices_count = 0
+        self._adjacency_list = defaultdict(set)
 
-    for i in range(n):
-        if not visited[i + 1]:
-            current = i + 1
-            cycle = []
-            while not visited[current]:
-                visited[current] = True
-                cycle.append(current)
-                current = keys[current - 1]
-            cycles.append(cycle)
+    def get_connected_vertices(self: Self) -> tuple[set, int]:
+        visited = [False] * (self._vertices_count + 1)
+        connected_vertices = set()
+        for vertex in self._adjacency_list:
+            if not visited[vertex]:
+                connected_vertices.add(vertex)
+                self._dfs(vertex, visited)
+        return connected_vertices, len(connected_vertices)
 
-    return cycles
+    def add_edge(self: Self, start_vertex: int, end_vertex: int) -> None:
+        self._adjacency_list[start_vertex].add(end_vertex)
+        self._adjacency_list[end_vertex].add(start_vertex)
 
+    def read_from_file(self: Self, filepath: str) -> None:
+        try:
+            with open(filepath, "r") as file:
+                self._vertices_count = int(file.readline())
+                for idx, line in enumerate(file, start=1):
+                    vertex = int(line)
+                    self.add_edge(vertex, idx)
+        except FileNotFoundError:
+            print("File not found!")
 
-def min_piggy_banks_to_break_and_example(n, keys):
-    cycles = find_cycles(n, keys)
-    result = len(cycles) - 1
-    example = [cycle[0] for cycle in cycles]
-
-    return result, example
-
-
-def main():
-    input_file = "input.txt"
-    n, keys = read_input_file(input_file)
-    result, example = min_piggy_banks_to_break_and_example(n, keys)
-    print(f"Minimum number of piggy banks to break: {result}")
-    print(f"Example of piggy banks to break: {example}")
+    def _dfs(self: Self, vertex: int, visited: list) -> None:
+        visited[vertex] = True
+        for neighbour in self._adjacency_list[vertex]:
+            if not visited[neighbour]:
+                self._dfs(neighbour, visited)
 
 
 if __name__ == "__main__":
-    main()
+    graph = Graph()
+    graph.read_from_file("input.txt")
+    connected_vertices, connected_vertices_count = graph.get_connected_vertices()
+    print(f"Minimalna liczba skarbonek do zbicia: {connected_vertices_count}")
+    print(f"Numery skarbonek do zbicia: {connected_vertices}")
