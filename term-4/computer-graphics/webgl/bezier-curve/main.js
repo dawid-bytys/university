@@ -43,52 +43,16 @@ function main() {
       e.clientY - rect.top
     );
 
-    const vertices = [x, y];
-
-    for (let i = 0; i <= 360; i += 0.1) {
-      const rad = (i * Math.PI) / 180;
-      vertices.push(x + 0.05 * Math.cos(rad));
-      vertices.push(y + 0.05 * Math.sin(rad));
-    }
-
-    points.push(vertices);
+    const point = pointVertices(x, y, 0.03);
+    points.push(point);
 
     for (let i = 0; i < points.length; ++i) {
-      const buffer = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-      gl.bufferData(
-        gl.ARRAY_BUFFER,
-        new Float32Array(points[i]),
-        gl.STATIC_DRAW
-      );
-
-      const position = gl.getAttribLocation(program, "a_position");
-      gl.enableVertexAttribArray(position);
-      gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
-      gl.drawArrays(gl.TRIANGLE_FAN, 0, points[i].length / 2);
+      drawPoint(gl, program, points[i]);
     }
 
     if (points.length > 1) {
-      const vertices = [];
-
-      for (let i = 0; i <= 1; i += 0.01) {
-        const [x, y] = deCasteljau(points, i);
-        vertices.push(x);
-        vertices.push(y);
-      }
-
-      const buffer = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-      gl.bufferData(
-        gl.ARRAY_BUFFER,
-        new Float32Array(vertices),
-        gl.STATIC_DRAW
-      );
-
-      const position = gl.getAttribLocation(program, "a_position");
-      gl.enableVertexAttribArray(position);
-      gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
-      gl.drawArrays(gl.LINE_STRIP, 0, vertices.length / 2);
+      const newPoint = updatedPointVertices(points);
+      drawLine(gl, program, newPoint);
     }
   });
 }
@@ -99,16 +63,31 @@ function canvasResize(gl, width, height) {
   gl.viewport(0, 0, canvas.width, canvas.height);
 }
 
-function drawCircle(gl, canvas, program, x, y, radius) {
-  const [glX, glY] = canvasToWebglCoordinates(canvas, x, y);
-  const vertices = [glX, glY];
+function pointVertices(x, y, radius) {
+  const vertices = [x, y];
 
-  for (let i = 0; i <= 360; i += 0.01) {
+  for (let i = 0; i <= 360; i += 0.1) {
     const rad = (i * Math.PI) / 180;
-    vertices.push(glX + radius * Math.cos(rad));
-    vertices.push(glY + radius * Math.sin(rad));
+    vertices.push(x + radius * Math.cos(rad));
+    vertices.push(y + radius * Math.sin(rad));
   }
 
+  return vertices;
+}
+
+function updatedPointVertices(points) {
+  const vertices = [];
+
+  for (let i = 0; i <= 1; i += 0.01) {
+    const [x, y] = deCasteljau(points, i);
+    vertices.push(x);
+    vertices.push(y);
+  }
+
+  return vertices;
+}
+
+function drawPoint(gl, program, vertices) {
   const buffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
@@ -117,6 +96,17 @@ function drawCircle(gl, canvas, program, x, y, radius) {
   gl.enableVertexAttribArray(position);
   gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
   gl.drawArrays(gl.TRIANGLE_FAN, 0, vertices.length / 2);
+}
+
+function drawLine(gl, program, vertices) {
+  const buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+  const position = gl.getAttribLocation(program, "a_position");
+  gl.enableVertexAttribArray(position);
+  gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+  gl.drawArrays(gl.LINE_STRIP, 0, vertices.length / 2);
 }
 
 function initShaderProgram(gl, vertexShaderSource, fragmentShaderSource) {
