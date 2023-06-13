@@ -31,7 +31,7 @@ class Graph:
         except FileNotFoundError:
             print("File not found!")
 
-    def _dfs(self: Self, vertex: int, visited: list) -> None:
+    def _dfs(self: Self, vertex: int, visited: list[bool]) -> None:
         visited[vertex] = True
         for neighbour in self._adjacency_list[vertex]:
             if not visited[neighbour]:
