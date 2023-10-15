@@ -4,8 +4,8 @@ import unittest
 # Podać sposób wyświetlania napisu word tak, aby jego znaki były rozdzielone znakiem podkreślenia.
 
 
-def add_delimiter(text: str, delimeter: str) -> str:
-    return delimeter.join(text)
+def add_delimiter(text: str, delimiter: str) -> str:
+    return delimiter.join(text)
 
 
 class Tests(unittest.TestCase):
