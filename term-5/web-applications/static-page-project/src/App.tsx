@@ -1,7 +1,15 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Home } from '@/pages/Home';
+
 export function App() {
   return (
-    <div>
-      <h1>Hello</h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route
+          index
+          element={<Home />}
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
