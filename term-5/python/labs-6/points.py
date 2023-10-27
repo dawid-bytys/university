@@ -82,6 +82,11 @@ class Tests(unittest.TestCase):
     def test_hash(self) -> None:
         self.assertEqual(hash(self.p1), hash(self.p3))
 
+    def tearDown(self) -> None:
+        del self.p1
+        del self.p2
+        del self.p3
+
 
 if __name__ == "__main__":
     unittest.main()
