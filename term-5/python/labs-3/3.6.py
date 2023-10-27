@@ -13,7 +13,7 @@ Napisać program rysujący prostokąt zbudowany z małych kratek. Należy zbudow
 """
 
 
-def create_grid(cols: int, rows: int) -> None:
+def create_grid(cols: int, rows: int) -> str:
     if cols < 1 or rows < 1:
         raise ValueError("Cols and rows values must be greater than zero.")
 
