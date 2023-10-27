@@ -1,4 +1,4 @@
-import { TickIcon } from '../../Icons/TickIcon';
+import { TickIcon } from '../../../Icons/TickIcon';
 
 export function NoCreditCardInfo() {
   return (

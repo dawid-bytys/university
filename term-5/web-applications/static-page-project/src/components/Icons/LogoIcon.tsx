@@ -5,7 +5,7 @@ export function LogoIcon({ width, height }: IconProps) {
     <svg
       width={width || '26'}
       height={height || '27'}
-      viewBox="0 0 26 27"
+      viewBox={`0 0 ${width || '26'} ${height || '27'}`}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >

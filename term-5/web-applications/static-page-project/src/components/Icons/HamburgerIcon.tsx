@@ -5,7 +5,7 @@ export function HamburgerIcon({ width, height }: IconProps) {
     <svg
       width={width || '28'}
       height={height || '28'}
-      viewBox="0 0 28 28"
+      viewBox={`0 0 ${width || '28'} ${height || '28'}`}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
