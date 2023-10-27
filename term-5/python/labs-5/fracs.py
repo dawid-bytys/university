@@ -222,9 +222,9 @@ class Tests(unittest.TestCase):
         self.assertEqual(frac_to_float([1, 6]), 1 / 6)
 
     def tearDown(self) -> None:
-        self.zero = None
-        self.one = None
-        self.minus_one = None
+        del self.zero
+        del self.one
+        del self.minus_one
 
 
 if __name__ == "__main__":
