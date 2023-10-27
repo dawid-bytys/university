@@ -145,7 +145,7 @@ def cmp_fracs(first_frac: list[int, int], second_frac: list[int, int]) -> int:
     if first_frac[0] == second_frac[0] and first_frac[1] == second_frac[1]:
         return 0
 
-    if first_frac[0] / first_frac[1] > second_frac[0] / second_frac[1]:
+    if frac_to_float(first_frac) > frac_to_float(second_frac):
         return 1
 
     return -1
