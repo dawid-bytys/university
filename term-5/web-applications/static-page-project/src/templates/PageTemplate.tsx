@@ -8,7 +8,7 @@ interface ChildrenProps {
 
 export function PageTemplate({ children }: ChildrenProps) {
   return (
-    <div className="h-screen w-screen bg-secondary flex flex-col font-poppins-regular">
+    <div className="h-full w-full bg-secondary flex flex-col font-poppins-regular">
       <img
         src={Particles}
         alt="particles"
