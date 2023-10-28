@@ -8,11 +8,8 @@ def fibbonacci(n: int) -> int:
     if n < 0:
         raise ValueError("Value must be greater than zero.")
 
-    if n == 0:
-        return 0
-
-    if n == 1:
-        return 1
+    if n == 0 or n == 1:
+        return n
 
     prev = 0
     curr = 1
