@@ -1,6 +1,6 @@
+import re
 import sys
 import unittest
-import re
 
 """
 Stworzyć słownik tłumaczący liczby zapisane w systemie rzymskim (z literami I, V, X, L, C, D, M) na liczby arabskie (podać kilka sposobów tworzenia takiego słownika).
