@@ -1,6 +1,6 @@
+import re
 import sys
 import unittest
-import re
 
 # Posortować wyrazy z napisu line raz alfabetycznie, a raz pod względem długości. Wskazówka: funkcja wbudowana sorted().
 

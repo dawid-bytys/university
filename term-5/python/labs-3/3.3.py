@@ -1,6 +1,8 @@
 import sys
 
-# Wypisać w pętli liczby od 0 do 30 z wyjątkiem liczb podzielnych przez 3.
+"""
+Wypisać w pętli liczby od 0 do 30 z wyjątkiem liczb podzielnych przez 3.
+"""
 
 
 if __name__ == "__main__":

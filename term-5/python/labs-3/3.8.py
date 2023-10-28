@@ -1,7 +1,11 @@
 import sys
 import unittest
 
-# Dla dwóch sekwencji liczb lub znaków znaleźć: (a) listę elementów występujących jednocześnie w obu sekwencjach (bez powtórzeń), (b) listę wszystkich elementów z obu sekwencji (bez powtórzeń).
+"""
+Dla dwóch sekwencji liczb lub znaków znaleźć:
+(a) listę elementów występujących jednocześnie w obu sekwencjach (bez powtórzeń),
+(b) listę wszystkich elementów z obu sekwencji (bez powtórzeń).
+"""
 
 
 def strings_intersection(a: str, b: str) -> list[str]:

@@ -1,7 +1,9 @@
 import sys
 import unittest
 
-# Napisać iteracyjną wersję funkcji fibonacci(n) obliczającej n-ty wyraz ciągu Fibonacciego.
+"""
+Napisać iteracyjną wersję funkcji fibonacci(n) obliczającej n-ty wyraz ciągu Fibonacciego.
+"""
 
 
 def fibbonacci(n: int) -> int:

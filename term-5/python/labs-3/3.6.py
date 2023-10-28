@@ -9,7 +9,6 @@ Napisać program rysujący prostokąt zbudowany z małych kratek. Należy zbudow
 +---+---+---+---+
 |   |   |   |   | 
 +---+---+---+---+
-
 """
 
 

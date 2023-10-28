@@ -1,6 +1,6 @@
+import math
 import sys
 import unittest
-import math
 
 """
 Stworzyć plik fracs.py i zapisać w nim funkcje do działań na ułamkach.

@@ -1,7 +1,9 @@
 import sys
 import unittest
 
-# Napisać iteracyjną wersję funkcji factorial(n) obliczającej silnię.
+"""
+Napisać iteracyjną wersję funkcji factorial(n) obliczającej silnię.
+"""
 
 
 def factorial(n: int) -> int:

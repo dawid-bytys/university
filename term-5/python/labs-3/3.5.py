@@ -1,6 +1,10 @@
 import sys
 
-# Napisać program rysujący "miarkę" o zadanej długości. Należy prawidłowo obsłużyć liczby składające się z kilku cyfr (ostatnia cyfra liczby ma znajdować się pod znakiem kreski pionowej). Należy zbudować pełny string, a potem go wypisać.
+"""
+Napisać program rysujący "miarkę" o zadanej długości.
+Należy prawidłowo obsłużyć liczby składające się z kilku cyfr (ostatnia cyfra liczby ma znajdować się pod znakiem kreski pionowej).
+Należy zbudować pełny string, a potem go wypisać.
+"""
 
 
 def draw_ruler(length: int) -> tuple[str, str]:
