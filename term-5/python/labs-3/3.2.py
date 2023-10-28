@@ -1,4 +1,6 @@
-# Co jest złego w kodzie?
+"""
+Co jest złego w kodzie?
+"""
 
 # 1. Próba przypisania wartości do zmiennej, która jest typu None.
 """
