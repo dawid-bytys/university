@@ -9,25 +9,18 @@ Mile widziany kod tłumaczący całą liczbę [funkcja roman2int()].
 
 
 def roman_to_int_dict(roman: str) -> int:
-    is_roman_valid = re.match(
-        r"^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$", roman
-    )
+    is_roman_valid = re.match(r"^[IVXLCDM]$", roman)
 
     if not is_roman_valid:
         raise ValueError("Invalid Roman numeral")
 
     roman_dict = {"I": 1, "V": 5, "X": 10, "L": 50, "C": 100, "D": 500, "M": 1000}
 
-    if roman in roman_dict:
-        return roman_dict[roman]
-
-    raise ValueError("Invalid Roman numeral")
+    return roman_dict[roman]
 
 
 def roman_to_int_if(roman: str) -> int:
-    is_roman_valid = re.match(
-        r"^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$", roman
-    )
+    is_roman_valid = re.match(r"^[IVXLCDM]$", roman)
 
     if not is_roman_valid:
         raise ValueError("Invalid Roman numeral")
@@ -47,13 +40,9 @@ def roman_to_int_if(roman: str) -> int:
     elif roman == "M":
         return 1000
 
-    raise ValueError("Invalid Roman numeral")
-
 
 def roman_to_int_list(roman: str) -> int:
-    is_roman_valid = re.match(
-        r"^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$", roman
-    )
+    is_roman_valid = re.match(r"^[IVXLCDM]$", roman)
 
     if not is_roman_valid:
         raise ValueError("Invalid Roman numeral")
@@ -61,8 +50,7 @@ def roman_to_int_list(roman: str) -> int:
     roman_numerals = ("I", "V", "X", "L", "C", "D", "M")
     values = (1, 5, 10, 50, 100, 500, 1000)
 
-    if roman in roman_numerals:
-        return values[roman_numerals.index(roman)]
+    return values[roman_numerals.index(roman)]
 
 
 def roman_to_int(roman: str) -> int:
