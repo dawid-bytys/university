@@ -1,7 +1,7 @@
 import random
 import sys
 import unittest
-from typing import Literal
+from typing import Iterator, Literal
 
 """
 Stworzyć następujące iteratory nieskończone:
@@ -11,18 +11,18 @@ Stworzyć następujące iteratory nieskończone:
 """
 
 
-def iterator_a() -> iter[Literal[0, 1]]:
+def iterator_a() -> Iterator[Literal[0, 1]]:
     while True:
         yield 0
         yield 1
 
 
-def iterator_b() -> iter[Literal["N", "E", "S", "W"]]:
+def iterator_b() -> Iterator[Literal["N", "E", "S", "W"]]:
     while True:
         yield random.choice(["N", "E", "S", "W"])
 
 
-def iterator_c() -> iter[Literal[0, 1, 2, 3, 4, 5, 6]]:
+def iterator_c() -> Iterator[Literal[0, 1, 2, 3, 4, 5, 6]]:
     while True:
         for i in range(7):
             yield i
