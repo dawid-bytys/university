@@ -1,6 +1,6 @@
 import sys
 import unittest
-from typing import TypeVar
+from typing import Self
 
 from points import Point
 
@@ -10,35 +10,36 @@ Prostokąt jest określony przez podanie dwóch wierzchołków, lewego dolnego i
 Napisać kod testujący moduł rectangles. 
 """
 
-Rectangle = TypeVar("Rectangle", bound="str")
-
 
 class Rectangle:
     """Class representing a rectangle in 2D space."""
 
-    def __init__(self, x1: float, y1: float, x2: float, y2: float) -> None:
+    def __init__(self: Self, x1: float, y1: float, x2: float, y2: float) -> None:
         self.pt1 = Point(x1, y1)
         self.pt2 = Point(x2, y2)
 
-    def __str__(self) -> None:
+    def __str__(self: Self) -> str:
         return f"[({self.pt1.x}, {self.pt1.y}), ({self.pt2.x}, {self.pt2.y})]"
 
-    def __repr__(self) -> None:
+    def __repr__(self: Self) -> str:
         return f"Rectangle({self.pt1.x}, {self.pt1.y}, {self.pt2.x}, {self.pt2.y})"
 
-    def __eq__(self, other: Rectangle) -> bool:
+    def __eq__(self: Self, other: object) -> bool:
+        if not isinstance(other, Rectangle):
+            return False
+
         return self.pt1 == other.pt1 and self.pt2 == other.pt2
 
-    def __ne__(self, other: Rectangle) -> bool:
+    def __ne__(self: Self, other: object) -> bool:
         return not self == other
 
-    def center(self) -> Point:
-        return Point((self.pt1.x + self.pt2.x) / 2, (self.pt1.y + self.pt2.y) / 2)
+    def center(self: Self) -> Self:
+        return Point((self.pt1.x + self.pt2.x) / 2, (self.pt1.y + self.pt2.y) / 2)  # type: ignore
 
-    def area(self) -> float:
+    def area(self: Self) -> float:
         return (self.pt2.x - self.pt1.x) * (self.pt2.y - self.pt1.y)
 
-    def move(self, x, y) -> None:
+    def move(self: Self, x: int, y: int) -> None:
         self.pt1.x += x
         self.pt1.y += y
         self.pt2.x += x

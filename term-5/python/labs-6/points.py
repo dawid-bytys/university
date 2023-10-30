@@ -1,6 +1,6 @@
 import sys
 import unittest
-from typing import TypeVar
+from typing import Self
 
 """
 W pliku points.py zdefiniować klasę Point wraz z potrzebnymi metodami.
@@ -8,84 +8,85 @@ Punkty są traktowane jak wektory zaczepione w początku układu współrzędnyc
 Napisać kod testujący moduł points.
 """
 
-Point = TypeVar("Point", bound="str")
-
 
 class Point:
     """Class representing a point in 2D space."""
 
-    def __init__(self, x: float, y: float) -> None:
+    def __init__(self: Self, x: float, y: float) -> None:
         self.x = x
         self.y = y
 
-    def __str__(self) -> str:
+    def __str__(self: Self) -> str:
         return f"({self.x}, {self.y})"
 
-    def __repr__(self) -> str:
+    def __repr__(self: Self) -> str:
         return f"Point({self.x}, {self.y})"
 
-    def __eq__(self, other: Point) -> bool:
+    def __eq__(self: Self, other: object) -> bool:
+        if not isinstance(other, Point):
+            return False
+
         return self.x == other.x and self.y == other.y
 
-    def __ne__(self, other: Point) -> bool:
+    def __ne__(self: Self, other: object) -> bool:
         return not self == other
 
-    def __add__(self, other: Point) -> Point:
-        return Point(self.x + other.x, self.y + other.y)
+    def __add__(self: Self, other: Self) -> Self:
+        return Point(self.x + other.x, self.y + other.y)  # type: ignore
 
-    def __sub__(self, other: Point) -> Point:
-        return Point(self.x - other.x, self.y - other.y)
+    def __sub__(self: Self, other: Self) -> Self:
+        return Point(self.x - other.x, self.y - other.y)  # type: ignore
 
-    def __mul__(self, other: Point) -> float:
+    def __mul__(self: Self, other: Self) -> float:
         return self.x * other.x + self.y * other.y
 
-    def cross(self, other: Point) -> float:
+    def __hash__(self: Self) -> int:
+        return hash((self.x, self.y))
+
+    def cross(self: Self, other: Self) -> float:
         return self.x * other.y - self.y * other.x
 
-    def length(self) -> float:
+    def length(self: Self) -> float:
         return (self.x**2 + self.y**2) ** 0.5
-
-    def __hash__(self) -> int:
-        return hash((self.x, self.y))
 
 
 class Tests(unittest.TestCase):
-    def setUp(self) -> None:
+    def setUp(self: Self) -> None:
         self.p1 = Point(1, 2)
         self.p2 = Point(3, 4)
         self.p3 = Point(1, 2)
 
-    def test_str(self) -> None:
+    def test_str(self: Self) -> None:
         self.assertEqual(str(self.p1), "(1, 2)")
 
-    def test_repr(self) -> None:
+    def test_repr(self: Self) -> None:
         self.assertEqual(repr(self.p1), "Point(1, 2)")
 
-    def test_eq(self) -> None:
+    def test_eq(self: Self) -> None:
         self.assertTrue(self.p1 == self.p3)
 
-    def test_ne(self) -> None:
+    def test_ne(self: Self) -> None:
         self.assertTrue(self.p1 != self.p2)
 
-    def test_add(self) -> None:
+    def test_add(self: Self) -> None:
         self.assertEqual(self.p1 + self.p2, Point(4, 6))
 
-    def test_sub(self) -> None:
+    def test_sub(self: Self) -> None:
         self.assertEqual(self.p1 - self.p2, Point(-2, -2))
 
-    def test_mul(self) -> None:
+    def test_mul(self: Self) -> None:
         self.assertEqual(self.p1 * self.p2, 11)
 
-    def test_cross(self) -> None:
+    def test_cross(self: Self) -> None:
         self.assertEqual(self.p1.cross(self.p2), -2)
 
-    def test_length(self) -> None:
+    def test_length(self: Self) -> None:
         self.assertEqual(self.p1.length(), 5**0.5)
 
-    def test_hash(self) -> None:
+    def test_hash(self: Self) -> None:
         self.assertEqual(hash(self.p1), hash(self.p3))
 
-    def tearDown(self) -> None:
+    def tearDown(self: Self) -> None:
         del self.p1
         del self.p2
         del self.p3
