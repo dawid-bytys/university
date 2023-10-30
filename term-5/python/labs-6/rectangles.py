@@ -47,32 +47,32 @@ class Rectangle:
 
 
 class Tests(unittest.TestCase):
-    def setUp(self) -> None:
+    def setUp(self: Self) -> None:
         self.r1 = Rectangle(1, 2, 3, 4)
         self.r2 = Rectangle(1, 2, 3, 4)
         self.r3 = Rectangle(1, 2, 3, 5)
 
-    def test_str(self) -> None:
+    def test_str(self: Self) -> None:
         self.assertEqual(str(self.r1), "[(1, 2), (3, 4)]")
 
-    def test_repr(self) -> None:
+    def test_repr(self: Self) -> None:
         self.assertEqual(repr(self.r1), "Rectangle(1, 2, 3, 4)")
 
-    def test_eq(self) -> None:
+    def test_eq(self: Self) -> None:
         self.assertEqual(self.r1, self.r2)
         self.assertNotEqual(self.r1, self.r3)
 
-    def test_center(self) -> None:
+    def test_center(self: Self) -> None:
         self.assertEqual(self.r1.center(), Point(2, 3))
 
-    def test_area(self) -> None:
+    def test_area(self: Self) -> None:
         self.assertEqual(self.r1.area(), 4)
 
-    def test_move(self) -> None:
+    def test_move(self: Self) -> None:
         self.r1.move(1, 1)
         self.assertEqual(self.r1, Rectangle(2, 3, 4, 5))
 
-    def tearDown(self) -> None:
+    def tearDown(self: Self) -> None:
         del self.r1
         del self.r2
         del self.r3
