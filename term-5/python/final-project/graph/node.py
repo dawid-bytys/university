@@ -6,18 +6,19 @@ class Node:
         self._index = index
         self._value = value
 
-    @property
     def index(self: Self) -> int:
         return self._index
 
-    @property
     def value(self: Self) -> Any:
         return self._value
 
     def __lt__(self: Self, other: Self) -> bool:
         return self._index < other._index
 
-    def __eq__(self: Self, other: Self) -> bool:
+    def __eq__(self: Self, other: object) -> bool:
+        if not isinstance(other, Node):
+            return False
+
         return self._index == other._index
 
     def __hash__(self: Self) -> int:
