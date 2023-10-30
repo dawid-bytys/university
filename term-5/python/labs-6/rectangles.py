@@ -1,5 +1,6 @@
 import sys
 import unittest
+from typing import TypeVar
 
 from points import Point
 
@@ -8,6 +9,8 @@ W pliku rectangles.py zdefiniować klasę Rectangle wraz z potrzebnymi metodami.
 Prostokąt jest określony przez podanie dwóch wierzchołków, lewego dolnego i prawego górnego.
 Napisać kod testujący moduł rectangles. 
 """
+
+Rectangle = TypeVar("Rectangle", bound="str")
 
 
 class Rectangle:
@@ -23,10 +26,10 @@ class Rectangle:
     def __repr__(self) -> None:
         return f"Rectangle({self.pt1.x}, {self.pt1.y}, {self.pt2.x}, {self.pt2.y})"
 
-    def __eq__(self, other: "Rectangle") -> bool:
+    def __eq__(self, other: Rectangle) -> bool:
         return self.pt1 == other.pt1 and self.pt2 == other.pt2
 
-    def __ne__(self, other: "Rectangle") -> bool:
+    def __ne__(self, other: Rectangle) -> bool:
         return not self == other
 
     def center(self) -> Point:

@@ -1,11 +1,14 @@
 import sys
 import unittest
+from typing import TypeVar
 
 """
 W pliku points.py zdefiniować klasę Point wraz z potrzebnymi metodami.
 Punkty są traktowane jak wektory zaczepione w początku układu współrzędnych, o końcu w położeniu (x, y).
 Napisać kod testujący moduł points.
 """
+
+Point = TypeVar("Point", bound="str")
 
 
 class Point:
@@ -21,22 +24,22 @@ class Point:
     def __repr__(self) -> str:
         return f"Point({self.x}, {self.y})"
 
-    def __eq__(self, other: "Point") -> bool:
+    def __eq__(self, other: Point) -> bool:
         return self.x == other.x and self.y == other.y
 
-    def __ne__(self, other: "Point") -> bool:
+    def __ne__(self, other: Point) -> bool:
         return not self == other
 
-    def __add__(self, other: "Point") -> "Point":
+    def __add__(self, other: Point) -> Point:
         return Point(self.x + other.x, self.y + other.y)
 
-    def __sub__(self, other: "Point") -> "Point":
+    def __sub__(self, other: Point) -> Point:
         return Point(self.x - other.x, self.y - other.y)
 
-    def __mul__(self, other: "Point") -> float:
+    def __mul__(self, other: Point) -> float:
         return self.x * other.x + self.y * other.y
 
-    def cross(self, other: "Point") -> float:
+    def cross(self, other: Point) -> float:
         return self.x * other.y - self.y * other.x
 
     def length(self) -> float:
