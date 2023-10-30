@@ -33,8 +33,8 @@ class Rectangle:
     def __ne__(self: Self, other: object) -> bool:
         return not self == other
 
-    def center(self: Self) -> Self:
-        return Point((self.pt1.x + self.pt2.x) / 2, (self.pt1.y + self.pt2.y) / 2)  # type: ignore
+    def center(self: Self) -> Point:
+        return Point((self.pt1.x + self.pt2.x) / 2, (self.pt1.y + self.pt2.y) / 2)
 
     def area(self: Self) -> float:
         return (self.pt2.x - self.pt1.x) * (self.pt2.y - self.pt1.y)
