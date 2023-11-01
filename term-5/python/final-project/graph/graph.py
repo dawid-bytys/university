@@ -144,6 +144,10 @@ class Graph:
 
     def bfs(self: Self, start_node_idx: int) -> Iterator[Node]:
         start_node = self.get_node(start_node_idx)
+
+        if not start_node:
+            raise KeyError("Invalid node index.")
+
         visited: set[Node] = set()
         queue: list[Node] = [start_node]
 
@@ -159,6 +163,10 @@ class Graph:
 
     def dfs(self: Self, start_node_idx: int) -> Iterator[Node]:
         start_node = self.get_node(start_node_idx)
+
+        if not start_node:
+            raise KeyError("Invalid node index.")
+
         visited: set[Node] = set()
         stack: list[Node] = [start_node]
 
