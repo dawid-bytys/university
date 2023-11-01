@@ -178,3 +178,61 @@ def test_graph_adjacent_nodes() -> None:
     assert len(list(graph.adjacent_nodes(2))) == 1
     assert len(list(graph.adjacent_nodes(3))) == 1
     assert len(list(graph.adjacent_nodes(4))) == 1
+
+
+def test_graph_adjacent_nodes_with_invalid_index() -> None:
+    graph = Graph(weighted=True, directed=False, first_idx=1)
+
+    graph.add_node("A")
+    graph.add_node("B")
+    graph.add_node("C")
+    graph.add_node("D")
+
+    with pytest.raises(KeyError):
+        list(graph.adjacent_nodes(5))
+
+
+def test_graph_edge_weight() -> None:
+    graph = Graph(weighted=True, directed=False, first_idx=1)
+
+    graph.add_node("A")
+    graph.add_node("B")
+    graph.add_node("C")
+    graph.add_node("D")
+
+    graph.add_edge(1, 2, 10)
+    graph.add_edge(1, 3, 20)
+    graph.add_edge(1, 4, 30)
+
+    assert graph.edge_weight(1, 2) == 10
+    assert graph.edge_weight(1, 3) == 20
+    assert graph.edge_weight(1, 4) == 30
+
+
+def test_graph_edge_weight_with_invalid_index() -> None:
+    graph = Graph(weighted=True, directed=False, first_idx=1)
+
+    graph.add_node("A")
+    graph.add_node("B")
+    graph.add_node("C")
+    graph.add_node("D")
+
+    with pytest.raises(KeyError):
+        graph.edge_weight(1, 5)
+
+
+def test_graph_is_acyclic() -> None:
+    graph = Graph(weighted=True, directed=True, first_idx=1)
+
+    graph.add_node("A")
+    graph.add_node("B")
+    graph.add_node("C")
+    graph.add_node("D")
+    graph.add_node("E")
+
+    graph.add_edge(1, 2, 10)
+    graph.add_edge(2, 3, 20)
+    graph.add_edge(3, 1, 30)
+    graph.add_edge(4, 5, 40)
+
+    assert graph.is_acyclic() is False

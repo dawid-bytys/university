@@ -20,6 +20,22 @@ class Graph:
         self._nodes: dict[int, Node] = defaultdict()
         self._edges: set[Edge] = set()
 
+    def _is_acyclic_helper(
+        self: Self, node: Node, visited: set[Node], stack: set[Node]
+    ) -> bool:
+        visited.add(node)
+        stack.add(node)
+
+        for adj_node in self.adjacent_nodes(node.index()):
+            if adj_node not in visited:
+                if self._is_acyclic_helper(adj_node, visited, stack):
+                    return True
+            elif adj_node in stack:
+                return True
+
+        stack.remove(node)
+        return False
+
     def nodes(self: Self) -> Iterator[Node]:
         return iter(self._nodes.values())
 
@@ -103,3 +119,25 @@ class Graph:
         for edge in self._edges:
             if edge.start_node() == node:
                 yield edge.end_node()
+
+    def edge_weight(self: Self, start_node_idx: int, end_node_idx: int) -> int:
+        edge = self.get_edge(start_node_idx, end_node_idx)
+
+        if not self._weighted:
+            raise ValueError("Graph is not weighted.")
+
+        return edge.weight()
+
+    def is_acyclic(self: Self) -> bool:
+        if not self._directed:
+            raise ValueError("Graph is not directed.")
+
+        visited: set[Node] = set()
+        stack: set[Node] = set()
+
+        for node in self.nodes():
+            if node not in visited:
+                if self._is_acyclic_helper(node, visited, stack):
+                    return False
+
+        return True
