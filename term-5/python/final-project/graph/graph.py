@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Any, Iterator, Literal
+from typing import Any, Literal, Iterator
 
 from typing_extensions import Self
 
@@ -141,3 +141,33 @@ class Graph:
                     return False
 
         return True
+
+    def bfs(self: Self, start_node_idx: int) -> Iterator[Node]:
+        start_node = self.get_node(start_node_idx)
+        visited: set[Node] = set()
+        queue: list[Node] = [start_node]
+
+        while queue:
+            node = queue.pop(0)
+
+            if node not in visited:
+                yield node
+                visited.add(node)
+
+                for adj_node in self.adjacent_nodes(node.index()):
+                    queue.append(adj_node)
+
+    def dfs(self: Self, start_node_idx: int) -> Iterator[Node]:
+        start_node = self.get_node(start_node_idx)
+        visited: set[Node] = set()
+        stack: list[Node] = [start_node]
+
+        while stack:
+            node = stack.pop()
+
+            if node not in visited:
+                yield node
+                visited.add(node)
+
+                for adj_node in self.adjacent_nodes(node.index()):
+                    stack.append(adj_node)
