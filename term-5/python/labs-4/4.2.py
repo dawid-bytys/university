@@ -1,5 +1,6 @@
 import sys
 import unittest
+from typing import Self
 
 """
 Rozwiązania zadań 3.5 i 3.6 z poprzedniego zestawu zapisać w postaci funkcji, które zwracają pełny string przez return.
@@ -35,7 +36,7 @@ def make_grid(cols: int, rows: int) -> str:
 
 
 class Tests(unittest.TestCase):
-    def test_make_grid(self) -> None:
+    def test_make_grid(self: Self) -> None:
         result = (
             "+---+---+---+---+"
             + "\n"
@@ -49,11 +50,11 @@ class Tests(unittest.TestCase):
         )
         self.assertEqual(make_grid(4, 2), result)
 
-    def test_make_ruler_one_digit(self) -> None:
+    def test_make_ruler_one_digit(self: Self) -> None:
         result = "|....|....|....|" + "\n" + "0    1    2    3"
         self.assertEqual(make_ruler(3), result)
 
-    def test_make_ruler_two_digits(self) -> None:
+    def test_make_ruler_two_digits(self: Self) -> None:
         result = (
             "|....|....|....|....|....|....|....|....|....|....|"
             + "\n"

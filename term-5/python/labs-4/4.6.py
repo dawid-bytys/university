@@ -1,5 +1,6 @@
 import sys
 import unittest
+from typing import Self, Sequence
 
 """
 Napisać funkcję sum_seq(sequence) obliczającą sumę liczb zawartych w sekwencji, która może zawierać zagnieżdżone podsekwencje.
@@ -7,11 +8,11 @@ Wskazówka: rozważyć wersję rekurencyjną, a sprawdzanie, czy element jest se
 """
 
 
-def sum_seq(sequence: list) -> int:
+def sum_seq(sequence: Sequence[int | Sequence]) -> int:
     result = 0
 
     for item in sequence:
-        if isinstance(item, (list, tuple)):
+        if isinstance(item, Sequence):
             result += sum_seq(item)
         else:
             result += item
@@ -20,7 +21,7 @@ def sum_seq(sequence: list) -> int:
 
 
 class Tests(unittest.TestCase):
-    def test_sum_seq(self) -> None:
+    def test_sum_seq(self: Self) -> None:
         self.assertEqual(sum_seq([1, 2, 3, 4, 5]), 15)
         self.assertEqual(sum_seq((1, 2, 3, 4, 5)), 15)
         self.assertEqual(sum_seq([1, (2, 3), [], [4, (5, 6, 7)], 8, [9]]), 45)

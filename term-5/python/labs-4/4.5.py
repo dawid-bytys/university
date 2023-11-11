@@ -1,5 +1,6 @@
 import sys
 import unittest
+from typing import Self
 
 """
 Napisać funkcję odwracanie(L, left, right) odwracającą kolejność elementów na liście od numeru left do right włącznie.
@@ -28,32 +29,32 @@ def reverse_recursive(L: list, left: int, right: int) -> None:
 
 
 class Tests(unittest.TestCase):
-    def test_reverse_iterative(self) -> None:
+    def test_reverse_iterative(self: Self) -> None:
         L = [1, 2, 3, 4, 5]
         reverse_iterative(L, 0, 4)
         self.assertEqual(L, [5, 4, 3, 2, 1])
 
-    def test_reverse_iterative_one_element(self) -> None:
+    def test_reverse_iterative_one_element(self: Self) -> None:
         L = [1]
         reverse_iterative(L, 0, 0)
         self.assertEqual(L, [1])
 
-    def test_reverse_iterative_negative(self) -> None:
+    def test_reverse_iterative_negative(self: Self) -> None:
         with self.assertRaises(ValueError):
             L = [1, 2, 3, 4, 5]
             reverse_iterative(L, 0, 5)
 
-    def test_reverse_recursive(self) -> None:
+    def test_reverse_recursive(self: Self) -> None:
         L = [1, 2, 3, 4, 5]
         reverse_recursive(L, 0, 4)
         self.assertEqual(L, [5, 4, 3, 2, 1])
 
-    def test_reverse_recursive_one_element(self) -> None:
+    def test_reverse_recursive_one_element(self: Self) -> None:
         L = [1]
         reverse_recursive(L, 0, 0)
         self.assertEqual(L, [1])
 
-    def test_reverse_recursive_negative(self) -> None:
+    def test_reverse_recursive_negative(self: Self) -> None:
         with self.assertRaises(ValueError):
             L = [1, 2, 3, 4, 5]
             reverse_recursive(L, 0, 5)

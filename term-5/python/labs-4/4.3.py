@@ -1,5 +1,6 @@
 import sys
 import unittest
+from typing import Self
 
 """
 Napisać iteracyjną wersję funkcji factorial(n) obliczającej silnię.
@@ -19,7 +20,7 @@ def factorial(n: int) -> int:
 
 
 class Tests(unittest.TestCase):
-    def test_factorial(self) -> None:
+    def test_factorial(self: Self) -> None:
         self.assertEqual(factorial(0), 1)
         self.assertEqual(factorial(1), 1)
         self.assertEqual(factorial(2), 2)
@@ -27,7 +28,7 @@ class Tests(unittest.TestCase):
         self.assertEqual(factorial(5), 120)
         self.assertEqual(factorial(10), 3628800)
 
-    def test_factorial_negative(self) -> None:
+    def test_factorial_negative(self: Self) -> None:
         with self.assertRaises(ValueError):
             factorial(-1)
 

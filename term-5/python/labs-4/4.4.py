@@ -1,5 +1,6 @@
 import sys
 import unittest
+from typing import Self
 
 """
 Napisać iteracyjną wersję funkcji fibonacci(n) obliczającej n-ty wyraz ciągu Fibonacciego.
@@ -23,7 +24,7 @@ def fibbonacci(n: int) -> int:
 
 
 class Tests(unittest.TestCase):
-    def test_fibbonacci(self) -> None:
+    def test_fibbonacci(self: Self) -> None:
         self.assertEqual(fibbonacci(0), 0)
         self.assertEqual(fibbonacci(1), 1)
         self.assertEqual(fibbonacci(2), 1)
@@ -31,7 +32,7 @@ class Tests(unittest.TestCase):
         self.assertEqual(fibbonacci(5), 5)
         self.assertEqual(fibbonacci(10), 55)
 
-    def test_fibbonacci_negative(self) -> None:
+    def test_fibbonacci_negative(self: Self) -> None:
         with self.assertRaises(ValueError):
             fibbonacci(-1)
 
