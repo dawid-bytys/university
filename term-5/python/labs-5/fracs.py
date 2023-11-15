@@ -20,13 +20,14 @@ def signum(x: int) -> int:
 
     if x < 0:
         return -1
-    elif x > 0:
+
+    if x > 0:
         return 1
 
     return 0
 
 
-def simplify_frac(frac: list[int, int]) -> list[int, int]:
+def simplify_frac(frac: list[int]) -> list[int]:
     """
     Function which simplifies fraction
 
@@ -40,9 +41,7 @@ def simplify_frac(frac: list[int, int]) -> list[int, int]:
     return [sign * abs(frac[0]) // gcd, abs(frac[1]) // gcd]
 
 
-def add_fracs(
-    first_frac: list[int, int], second_frac: list[int, int]
-) -> list[int, int]:
+def add_fracs(first_frac: list[int], second_frac: list[int]) -> list[int]:
     """
     Function which adds two fractions
 
@@ -57,9 +56,7 @@ def add_fracs(
     return simplify_frac([nominator, denominator])
 
 
-def sub_fracs(
-    first_frac: list[int, int], second_frac: list[int, int]
-) -> list[int, int]:
+def sub_fracs(first_frac: list[int], second_frac: list[int]) -> list[int]:
     """
     Function which subtracts two fractions
 
@@ -74,9 +71,7 @@ def sub_fracs(
     return simplify_frac([nominator, denominator])
 
 
-def mul_fracs(
-    first_frac: list[int, int], second_frac: list[int, int]
-) -> list[int, int]:
+def mul_fracs(first_frac: list[int], second_frac: list[int]) -> list[int]:
     """
     Function which multiplies two fractions
 
@@ -91,9 +86,7 @@ def mul_fracs(
     return simplify_frac([nominator, denominator])
 
 
-def div_fracs(
-    first_frac: list[int, int], second_frac: list[int, int]
-) -> list[int, int]:
+def div_fracs(first_frac: list[int], second_frac: list[int]) -> list[int]:
     """
     Function which divides two fractions
 
@@ -108,7 +101,7 @@ def div_fracs(
     return simplify_frac([nominator, denominator])
 
 
-def is_positive(frac: list[int, int]) -> bool:
+def is_positive(frac: list[int]) -> bool:
     """
     Function which checks if fraction is positive
 
@@ -119,7 +112,7 @@ def is_positive(frac: list[int, int]) -> bool:
     return frac[0] * frac[1] > 0
 
 
-def is_zero(frac: list[int, int]) -> bool:
+def is_zero(frac: list[int]) -> bool:
     """
     Function which checks if fraction is equal to zero
 
@@ -130,7 +123,7 @@ def is_zero(frac: list[int, int]) -> bool:
     return frac[0] == 0
 
 
-def cmp_fracs(first_frac: list[int, int], second_frac: list[int, int]) -> int:
+def cmp_fracs(first_frac: list[int], second_frac: list[int]) -> int:
     """
     Function which compares two fractions
 
@@ -151,7 +144,7 @@ def cmp_fracs(first_frac: list[int, int], second_frac: list[int, int]) -> int:
     return -1
 
 
-def frac_to_float(frac: list[int, int]) -> float:
+def frac_to_float(frac: list[int]) -> float:
     """
     Function which converts fraction to float
 
