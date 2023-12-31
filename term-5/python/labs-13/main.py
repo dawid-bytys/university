@@ -1,5 +1,9 @@
 import sys
 
+# Znaleźć wszystkie rozwiązania dla sudoku 4x4.
+# Sudoku 4x4 jest szczególnym przypadkiem kwadratu łacińskiego 4x4 o dodatkowych własnościach.
+# W czterech blokach 2x2 znaki nie mogą się powtarzać.
+
 
 def is_valid(board, row, col, num):
     for i in range(4):
