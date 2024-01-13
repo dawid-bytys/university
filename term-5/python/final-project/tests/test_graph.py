@@ -292,3 +292,32 @@ def test_graph_dfs() -> None:
 
     assert len(list(graph.dfs(1))) == 6
     assert len(list(graph.dfs(2))) == 3
+
+
+def test_graph_dijkstra() -> None:
+    graph = Graph(weighted=True, directed=False, first_idx=1)
+
+    graph.add_node("A")
+    graph.add_node("B")
+    graph.add_node("C")
+    graph.add_node("D")
+    graph.add_node("E")
+    graph.add_node("F")
+
+    graph.add_edge(1, 2, 10)
+    graph.add_edge(1, 3, 20)
+    graph.add_edge(1, 4, 30)
+    graph.add_edge(2, 5, 40)
+    graph.add_edge(3, 5, 50)
+    graph.add_edge(3, 6, 60)
+    graph.add_edge(4, 6, 70)
+    graph.add_edge(5, 6, 80)
+
+    weight, nodes = graph.dijkstra(1, 6)
+    list_nodes = list(nodes)
+
+    assert weight == 80
+    assert len(list_nodes) == 3
+    assert list_nodes[0].index() == 1
+    assert list_nodes[1].index() == 3
+    assert list_nodes[2].index() == 6

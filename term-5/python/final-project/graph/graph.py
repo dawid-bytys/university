@@ -1,7 +1,6 @@
 from collections import defaultdict
-from typing import Any, Literal, Iterator
-
-from typing_extensions import Self
+import heapq
+from typing import Any, Iterator, Literal, Self
 
 from .edge import Edge
 from .node import Node
@@ -179,3 +178,64 @@ class Graph:
 
                 for adj_node in self.adjacent_nodes(node.index()):
                     stack.append(adj_node)
+
+    def dijkstra(
+        self: Self, start_node_idx: int, end_node_idx: int
+    ) -> tuple[float, Iterator[Node]]:
+        if not self._weighted:
+            raise ValueError("Graph is not weighted.")
+
+        start_node = self.get_node(start_node_idx)
+        end_node = self.get_node(end_node_idx)
+
+        if not start_node or not end_node:
+            raise KeyError("Invalid node index.")
+
+        weights: dict[Node, float] = defaultdict(lambda: float("inf"))
+        previous_nodes: dict[Node, Node | None] = defaultdict(lambda: None)
+        weights[start_node] = 0
+        priority_queue: list[tuple[float, Node]] = [(0, start_node)]
+
+        while priority_queue:
+            _, node = heapq.heappop(priority_queue)
+
+            for adj_node in self.adjacent_nodes(node.index()):
+                new_weight = weights[node] + self.edge_weight(
+                    node.index(), adj_node.index()
+                )
+
+                if new_weight < weights[adj_node]:
+                    weights[adj_node] = new_weight
+                    previous_nodes[adj_node] = node
+                    heapq.heappush(priority_queue, (new_weight, adj_node))
+
+        path = [end_node]
+        current_node = end_node
+
+        while previous_nodes[current_node] is not None:
+            current_node = previous_nodes[current_node]  # type: ignore
+            path.append(current_node)
+
+        path.reverse()
+        return weights[end_node], iter(path)
+
+    def read_from_file(self: Self, file_path: str) -> None:
+        with open(file_path, "r") as file:
+            lines = file.readlines()
+
+            for line in lines:
+                line = line.strip()
+
+                try:
+                    if self._weighted:
+                        start_node_idx, end_node_idx, weight = map(int, line.split(" "))
+                    else:
+                        start_node_idx, end_node_idx = map(int, line.split(" "))
+
+                    self.add_node(start_node_idx)
+                    self.add_node(end_node_idx)
+                    self.add_edge(
+                        start_node_idx, end_node_idx, weight if self._weighted else 1
+                    )
+                except Exception:
+                    raise ValueError("Invalid file format.")
