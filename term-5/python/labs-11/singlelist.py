@@ -86,6 +86,7 @@ class SingleList:
             self.tail = other.tail
 
         self.length += other.length
+        other.clear()
 
     def clear(self):
         self.head = self.tail = None

@@ -109,6 +109,7 @@ def test_join_lists():
     assert slist1.head == node1
     assert slist1.tail == node2
     assert slist1.count() == 2
+    assert slist2.is_empty()
 
 
 def test_clear_list():
