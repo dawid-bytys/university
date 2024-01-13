@@ -6,9 +6,11 @@ class Node:
         self._index = index
         self._value = value
 
+    @property
     def index(self: Self) -> int:
         return self._index
 
+    @property
     def value(self: Self) -> Any:
         return self._value
 

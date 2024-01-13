@@ -15,7 +15,7 @@ This README provides an overview of the `Graph` class and its methods. The `Grap
 
 ## Initialization<a name="initialization"></a>
 
-### `__init__(directed: bool = True, weighted: bool = True, first_idx: Literal[0, 1] = 0) -> None`
+### `python__init__(directed: bool = True, weighted: bool = True, first_idx: Literal[0, 1] = 0) -> None`
 
 - Initializes a new graph.
 - Parameters:

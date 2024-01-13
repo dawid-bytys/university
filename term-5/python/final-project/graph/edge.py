@@ -10,7 +10,7 @@ class Edge:
         end_node: Node,
         directed: bool,
         weighted: bool,
-        weight: int = 1,
+        weight: float = 1.0,
     ) -> None:
         self._start_node = start_node
         self._end_node = end_node
@@ -18,13 +18,16 @@ class Edge:
         self._weighted = weighted
         self._weight = weight
 
+    @property
     def start_node(self: Self) -> Node:
         return self._start_node
 
+    @property
     def end_node(self: Self) -> Node:
         return self._end_node
 
-    def weight(self: Self) -> int:
+    @property
+    def weight(self: Self) -> float:
         return self._weight
 
     def __str__(self: Self) -> str:
