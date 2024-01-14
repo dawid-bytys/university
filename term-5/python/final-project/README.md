@@ -33,7 +33,7 @@ This README provides an overview of the `Graph` class and its methods. The `Grap
 - Parameters:
   - `value`: The value associated with the new node (default is None).
 
-### `add_edge(start_node_idx: int, end_node_idx: int, weight: int = 1) -> None`
+### `add_edge(start_node_idx: int, end_node_idx: int, weight: float = 1.0) -> None`
 
 - Adds a new edge between two nodes.
 - Parameters:
@@ -129,6 +129,20 @@ This README provides an overview of the `Graph` class and its methods. The `Grap
   - `start_node_idx`: Index of the starting node.
   - `end_node_idx`: Index of the ending node.
 - Returns a tuple containing the weight of the shortest path and an iterator over the nodes in the path.
+
+**Note:** This method assumes that the graph is weighted. If the graph is not weighted, a `ValueError` will be raised.
+
+### `has_negative_cycle() -> bool`
+
+- Checks if the directed weighted graph has a negative cycle.
+- Returns `True` if a negative cycle is detected, `False` otherwise.
+
+**Note:** This method assumes that the graph is both directed and weighted. If the graph is not directed or not weighted, a `ValueError` will be raised.
+
+### `floyd_warshall() -> list[list[float]]`
+
+- Applies the Floyd-Warshall algorithm to find the shortest paths between all pairs of nodes in a weighted graph.
+- Returns a 2D list representing the matrix of shortest path distances between nodes.
 
 **Note:** This method assumes that the graph is weighted. If the graph is not weighted, a `ValueError` will be raised.
 

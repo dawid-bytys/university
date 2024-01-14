@@ -1,5 +1,5 @@
-from collections import defaultdict
 import heapq
+from collections import defaultdict
 from typing import Any, Iterator, Literal, Self
 
 from .edge import Edge
@@ -230,21 +230,50 @@ class Graph:
         if not self._directed:
             raise ValueError("Graph is not directed.")
 
-        weights: dict[Node, float] = defaultdict(lambda: float("inf"))
-        weights[self._nodes[self._first_idx]] = 0
+        dist = [float("inf")] * len(self._edges)
+        dist[0] = 0.0
 
-        for _ in range(len(self._nodes) - 1):
+        for _ in range(len(self._edges) - 1):
             for edge in self._edges:
-                new_weight = weights[edge.start_node] + edge.weight
-                if new_weight < weights[edge.end_node]:
-                    weights[edge.end_node] = new_weight
+                u = edge.start_node.index
+                v = edge.end_node.index
+                w = edge.weight
+
+                if dist[u] + w < dist[v]:
+                    dist[v] = dist[u] + w
 
         for edge in self._edges:
-            new_weight = weights[edge.start_node] + edge.weight
-            if new_weight < weights[edge.end_node]:
+            u = edge.start_node.index
+            v = edge.end_node.index
+            w = edge.weight
+
+            if dist[u] + w < dist[v]:
                 return True
 
         return False
+
+    def floyd_warshall(self: Self) -> list[list[float]]:
+        if not self._weighted:
+            raise ValueError("Graph is not weighted.")
+
+        dist = [[float("inf")] * len(self._edges) for _ in range(len(self._edges))]
+
+        for edge in self._edges:
+            u = edge.start_node.index
+            v = edge.end_node.index
+            w = edge.weight
+
+            dist[u][v] = w
+
+        for i in range(len(self._edges)):
+            dist[i][i] = 0.0
+
+        for k in range(len(self._edges)):
+            for i in range(len(self._edges)):
+                for j in range(len(self._edges)):
+                    dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
+
+        return dist
 
     def read_from_file(self: Self, file_path: str) -> None:
         with open(file_path, "r") as file:
