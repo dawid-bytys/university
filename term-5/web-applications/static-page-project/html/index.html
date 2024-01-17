@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Enver!</title>
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="../js/shared.js"></script>
+  </head>
+  <body>
+    <shared-header></shared-header>
+    <main class="main">
+      <section class="section hero-section">
+        <div class="hero-section-left">
+          <h1 class="heading-primary">
+            <span>Build Your</span>
+            <span>Awesome</span>
+            <span>Platform</span>
+          </h1>
+          <p class="description hero-description">
+            Enver studio is a digital studio that offers several services such
+            as UI/UX Design to developers, we will provide the best service for
+            those of you who use our services.
+          </p>
+          <a href="#services" class="hero-link">
+            <p>Our Services</p>
+            <img src="../assets/svg/arrow-right-up.svg" alt="arrow" />
+          </a>
+        </div>
+        <div class="hero-section-right">
+          <img
+            src="../assets/img/hero-img.png"
+            alt="hero-img"
+            class="hero-img"
+          />
+        </div>
+      </section>
+      <section class="section">
+        <div class="video-section-container">
+          <h2 class="heading-secondary">Why Enver Is The Best Choice?</h2>
+          <p class="description">
+            Watch this one minute video so you understand why you should use our
+            services!
+          </p>
+        </div>
+        <iframe
+          src="https://www.youtube.com/embed/QyhwSYhX09s"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          class="video"
+        ></iframe>
+      </section>
+      <section id="services" class="section">
+        <h2 class="heading-secondary heading-center">
+          The Service We Provide For You
+        </h2>
+        <div class="services-container">
+          <article class="service-article">
+            <img src="../assets/svg/development.svg" alt="development" />
+            <h3 class="heading-tertiary">Development</h3>
+            <p class="description service-description">
+              Create a platform with the best and coolest quality from us.
+            </p>
+          </article>
+          <article class="service-article">
+            <img src="../assets/svg/designer.svg" alt="ui/ux designer" />
+            <h3 class="heading-tertiary">UI/UX Designer</h3>
+            <p class="description service-description">
+              We provide UI/UX Design services, and of course with the best
+              quality.
+            </p>
+          </article>
+          <article class="service-article">
+            <img src="../assets/svg/graphics.svg" alt="graphics designer" />
+            <h3 class="heading-tertiary">Graphics Designer</h3>
+            <p class="description service-description">
+              We provide Graphic Design services, with the best designers.
+            </p>
+          </article>
+          <article class="service-article">
+            <img src="../assets/svg/motion.svg" alt="motion designer" />
+            <h3 class="heading-tertiary">Motion Designer</h3>
+            <p class="description service-description">
+              Create a platform with the best and coolest quality from us.
+            </p>
+          </article>
+          <article class="service-article">
+            <img src="../assets/svg/photography.svg" alt="photography" />
+            <h3 class="heading-tertiary">Photography</h3>
+            <p class="description service-description">
+              We provide Photography services, and of course with the best
+              quality.
+            </p>
+          </article>
+          <article class="service-article">
+            <img src="../assets/svg/videography.svg" alt="videography" />
+            <h3 class="heading-tertiary">Videography</h3>
+            <p class="description service-description">
+              Create a platform with the best and coolest quality from us.
+            </p>
+          </article>
+        </div>
+      </section>
+      <section id="portfolio" class="section portfolio-section">
+        <h2 class="heading-secondary heading-center">Our Awesome Portofolio</h2>
+        <article class="portfolio-article">
+          <div id="slide" class="project-slide">
+            <img
+              src="../assets/img/music.png"
+              alt="music app"
+              class="slide-img"
+            />
+          </div>
+          <div id="slide" class="project-slide">
+            <img src="../assets/img/pet.png" alt="pet app" class="slide-img" />
+          </div>
+          <div id="slide" class="project-slide">
+            <img
+              src="../assets/img/stock.png"
+              alt="stock app"
+              class="slide-img"
+            />
+          </div>
+          <div class="slide-btns-container">
+            <button id="prev-btn" class="slide-btn">
+              <img
+                src="../assets/svg/chevron-left.svg"
+                alt="right arrow"
+                class="slide-btn-img"
+              />
+            </button>
+            <button id="next-btn" class="slide-btn">
+              <img
+                src="../assets/svg/chevron-right.svg"
+                alt="left arrow"
+                class="slide-btn-img"
+              />
+            </button>
+          </div>
+        </article>
+      </section>
+      <section id="contact" class="section contact-section">
+        <h2 class="heading-secondary heading-center">
+          Contact us for the service you want to use
+        </h2>
+        <form id="contact-form" class="contact-form">
+          <input type="text" placeholder="E-mail" class="form-input" />
+          <input type="text" placeholder="Subject" class="form-input" />
+          <textarea
+            name="message"
+            id="message"
+            cols="30"
+            rows="10"
+            placeholder="Message"
+            class="form-area"
+          ></textarea>
+          <button type="submit" class="contact-form-btn">
+            <p>Send</p>
+            <img src="../assets/svg/arrow-right-up.svg" alt="arrow" />
+          </button>
+        </form>
+      </section>
+    </main>
+    <shared-footer></shared-footer>
+    <script src="../js/main.js"></script>
+  </body>
+</html>

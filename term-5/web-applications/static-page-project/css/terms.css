@@ -1,0 +1,24 @@
+.ordered-list {
+  list-style: decimal;
+  list-style-position: inside;
+  color: #7c7c7c;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.description {
+  display: inline;
+}
+
+@media only screen and (min-width: 53rem) {
+  .main {
+    gap: 4.5rem;
+  }
+}
