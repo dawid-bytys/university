@@ -15,7 +15,7 @@ This README provides an overview of the `Graph` class and its methods. The `Grap
 
 ## Initialization<a name="initialization"></a>
 
-### `python__init__(directed: bool = True, weighted: bool = True, first_idx: Literal[0, 1] = 0) -> None`
+### `__init__(directed: bool = True, weighted: bool = True, first_idx: Literal[0, 1] = 0) -> None`
 
 - Initializes a new graph.
 - Parameters:
@@ -132,20 +132,6 @@ This README provides an overview of the `Graph` class and its methods. The `Grap
 
 **Note:** This method assumes that the graph is weighted. If the graph is not weighted, a `ValueError` will be raised.
 
-### `has_negative_cycle() -> bool`
-
-- Checks if the directed weighted graph has a negative cycle.
-- Returns `True` if a negative cycle is detected, `False` otherwise.
-
-**Note:** This method assumes that the graph is both directed and weighted. If the graph is not directed or not weighted, a `ValueError` will be raised.
-
-### `floyd_warshall() -> list[list[float]]`
-
-- Applies the Floyd-Warshall algorithm to find the shortest paths between all pairs of nodes in a weighted graph.
-- Returns a 2D list representing the matrix of shortest path distances between nodes.
-
-**Note:** This method assumes that the graph is weighted. If the graph is not weighted, a `ValueError` will be raised.
-
 ---
 
 ## File I/O<a name="file-io"></a>
@@ -172,14 +158,14 @@ graph.add_node("B")
 graph.add_edge(0, 1, weight=3)
 
 # Example 2: Performing BFS on the graph
-start_node_index = 0
-bfs_result = list(graph.bfs(start_node_index))
-print(f"BFS starting from node {start_node_index}: {bfs_result}")
+bfs_result = list(graph.bfs(0))
+print(f"BFS starting from node {0}: {bfs_result}")
 
 # Example 3: Reading a graph from a file
 file_path = "example_graph.txt"
 graph.read_from_file(file_path)
 print("Graph read from file:")
+
 for edge in graph.edges():
     print(edge)
 ```

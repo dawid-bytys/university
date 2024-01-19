@@ -321,31 +321,3 @@ def test_graph_dijkstra() -> None:
     assert list_nodes[0].index == 1
     assert list_nodes[1].index == 3
     assert list_nodes[2].index == 6
-
-
-def test_graph_has_negative_cycle() -> None:
-    graph1 = Graph(weighted=True, directed=True, first_idx=0)
-    graph2 = Graph(weighted=True, directed=True, first_idx=0)
-
-    graph1.add_node("A")
-    graph1.add_node("B")
-    graph1.add_node("C")
-    graph1.add_node("D")
-
-    graph2.add_node("A")
-    graph2.add_node("B")
-    graph2.add_node("C")
-    graph2.add_node("D")
-
-    graph1.add_edge(1, 0, 4)
-    graph1.add_edge(1, 2, 6)
-    graph1.add_edge(3, 1, 2)
-    graph1.add_edge(0, 3, 6)
-
-    graph2.add_edge(1, 0, 4)
-    graph2.add_edge(1, 2, -6)
-    graph2.add_edge(3, 1, -2)
-    graph2.add_edge(2, 3, 5)
-
-    assert graph1.has_negative_cycle() is False
-    assert graph2.has_negative_cycle() is False
