@@ -5,7 +5,11 @@ export const jobs = [
     company: 'Microsoft',
     title: 'Senior Backend Developer',
     salary: '18000 - 24000 PLN',
-    locations: ['Warsaw', 'Gdansk', 'Remote'],
+    location: {
+      city: 'Warsaw',
+      lat: 52.2319581,
+      lng: 21.0067249,
+    },
     tags: ['Node', 'TypeScript', 'MongoDB', 'Express'],
     benefits: [
       'Flexible working hours',
@@ -29,7 +33,11 @@ export const jobs = [
     company: 'Google',
     title: 'Senior Frontend Developer',
     salary: '18000 - 24000 PLN',
-    locations: ['Warsaw', 'Gdansk', 'Remote'],
+    location: {
+      city: 'Krakow',
+      lat: 50.0619474,
+      lng: 19.9368564,
+    },
     tags: ['React', 'TypeScript', 'Redux', 'GraphQL'],
     benefits: [
       'Flexible working hours',
@@ -54,7 +62,11 @@ export const jobs = [
     company: 'Amazon',
     title: 'Senior Fullstack Developer',
     salary: '18000 - 24000 PLN',
-    locations: ['Warsaw', 'Gdansk', 'Remote'],
+    location: {
+      city: 'Wroclaw',
+      lat: 51.1078852,
+      lng: 17.0385376,
+    },
     tags: ['React', 'TypeScript', 'Redux', 'GraphQL', 'Node', 'Express'],
     benefits: [
       'Flexible working hours',

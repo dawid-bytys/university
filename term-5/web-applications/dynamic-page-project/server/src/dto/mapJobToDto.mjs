@@ -3,7 +3,7 @@ export function mapJobToDto(job) {
     title: job.title,
     description: job.description,
     tags: job.tags,
-    locations: job.locations,
+    location: job.location,
     salary: job.salary,
     company: job.company,
     benefits: job.benefits,

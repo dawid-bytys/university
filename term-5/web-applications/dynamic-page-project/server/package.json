@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon src/index.mjs",
-    "seed": "node prisma/seed.mjs"
+    "db:seed": "node prisma/seed.mjs",
+    "db:clear": "node prisma/clear.mjs"
   },
   "dependencies": {
     "@prisma/client": "^5.8.1",

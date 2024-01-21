@@ -17,6 +17,6 @@ model Jobs {
   image        String
   salary       String
   company      String
-  locations    String[]
   createdAt    DateTime @default(now())
+  location     Json
 }
