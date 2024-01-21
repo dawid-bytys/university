@@ -4,7 +4,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "nodemon src/index.mjs"
+    "dev": "nodemon src/index.mjs",
+    "seed": "node prisma/seed.mjs"
   },
   "dependencies": {
     "@prisma/client": "^5.8.1",

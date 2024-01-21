@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Job {
+model Jobs {
   id           String   @id @default(uuid())
   title        String
   description  String
@@ -15,8 +15,8 @@ model Job {
   requirements String[]
   benefits     String[]
   image        String
-  salary       Int
+  salary       String
   company      String
-  location     String
+  locations    String[]
   createdAt    DateTime @default(now())
 }
