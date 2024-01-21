@@ -4,7 +4,7 @@ import { isNewOffer } from '../utils';
 export function JobOffer({ image, company, title, locations, tags, salary, createdAt }) {
   return (
     <article className="flex flex-col md:flex-row gap-5 p-5 shadow rounded-lg border-[1px] border-neutral-200">
-      <div className="aspect-square max-w-36 max-h-36 min-w-10 min-h-10">
+      <div className="aspect-square w-24 h-24 md:w-36 md:h-36">
         <img
           src={image}
           alt={company}
@@ -13,23 +13,20 @@ export function JobOffer({ image, company, title, locations, tags, salary, creat
       </div>
       <div className="flex flex-1 flex-col w-full justify-between gap-3 sm:gap-2">
         <div className="flex flex-row gap-3 items-center">
-          <p className="text-[#8395A2] text-xl">{company}</p>
+          <p className="text-[#8395A2] text-xl font-medium">{company}</p>
           {isNewOffer(createdAt) && <New />}
         </div>
         <div className="flex flex-col gap-3 sm:flex-row justify-between">
           <p className="font-medium text-xl">{title}</p>
-          <p className="flex flex-row items-center gap-2 text-xl font-semibold">
-            <span className="text-primary">
-              {salary.from / 10000} - {salary.to / 1000}k
-            </span>
-            <span className="text-[#CFD6E0]">{salary.currency}</span>
+          <p className="flex flex-row items-center gap-2 text-xl font-medium text-primary">
+            {salary}
           </p>
         </div>
         <div>
           <p className="text-[#CFD6E0]">{locations.join(', ').trimEnd()}</p>
         </div>
         <div className="flex flex-col gap-3 sm:flex-row justify-between">
-          <div className="flex flex-row gap-2">
+          <div className="flex flex-row gap-2 flex-wrap">
             {tags.map((tag, index) => (
               <Tag
                 key={index}

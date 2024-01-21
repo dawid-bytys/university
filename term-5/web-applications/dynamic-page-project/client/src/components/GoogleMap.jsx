@@ -12,7 +12,7 @@ export function GoogleMap() {
           zoomControl={false}
           streetViewControl={false}
           scaleControl={false}
-          mapTypeId="roadmap"
+          mapId={import.meta.env.VITE_GOOGLE_MAPS_MAP_ID}
         />
       </div>
     </APIProvider>
