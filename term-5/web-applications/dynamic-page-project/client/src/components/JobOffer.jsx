@@ -3,7 +3,7 @@ import { isNewOffer } from '../utils';
 
 export function JobOffer({ image, company, title, locations, tags, salary, createdAt }) {
   return (
-    <article className="flex flex-col md:flex-row gap-5 p-5 shadow rounded-lg border-[1px] border-neutral-200">
+    <article className="flex flex-col md:flex-row gap-5 p-5 shadow rounded-lg border-[1px] border-neutral-200 hover:border-primary hover:transition-colors">
       <div className="aspect-square w-24 h-24 md:w-36 md:h-36">
         <img
           src={image}

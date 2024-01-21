@@ -10,8 +10,7 @@ export function HomePage() {
   useEffect(() => {
     async function performFetching() {
       const jobs = await fetchJobs();
-      const filteredJobs = jobs.filter((job) => job.locations.includes('Warsaw'));
-      setJobs(filteredJobs);
+      setJobs(jobs);
     }
 
     performFetching();
