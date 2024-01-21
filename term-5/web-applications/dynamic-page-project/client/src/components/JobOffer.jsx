@@ -1,9 +1,25 @@
-import heartSvg from '../assets/svg/heart.svg';
 import { isNewOffer } from '../utils';
+import heartSvg from '../assets/svg/heart.svg';
+import clsx from 'clsx';
 
-export function JobOffer({ image, company, title, locations, tags, salary, createdAt }) {
+export function JobOffer({
+  image,
+  company,
+  title,
+  location,
+  tags,
+  salary,
+  createdAt,
+  isSingleOffer = false,
+}) {
   return (
-    <article className="flex flex-col md:flex-row gap-5 p-5 shadow rounded-lg border-[1px] border-neutral-200 hover:border-primary hover:transition-colors">
+    <article
+      className={clsx({
+        'flex flex-col md:flex-row gap-5 w-full': true,
+        'shadow rounded-lg border-[1px] border-neutral-200 hover:border-primary hover:transition-colors p-5':
+          !isSingleOffer,
+      })}
+    >
       <div className="aspect-square w-24 h-24 md:w-36 md:h-36">
         <img
           src={image}
@@ -23,7 +39,7 @@ export function JobOffer({ image, company, title, locations, tags, salary, creat
           </p>
         </div>
         <div>
-          <p className="text-[#CFD6E0]">{locations.join(', ').trimEnd()}</p>
+          <p className="text-[#CFD6E0]">{location.city}</p>
         </div>
         <div className="flex flex-col gap-3 sm:flex-row justify-between">
           <div className="flex flex-row gap-2 flex-wrap">
