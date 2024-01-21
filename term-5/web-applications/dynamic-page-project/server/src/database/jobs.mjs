@@ -15,7 +15,7 @@ export async function getJobs(city) {
 }
 
 export async function addJob(job) {
-  return prisma.jobs.create({ data: job });
+  await prisma.jobs.create({ data: job });
 }
 
 export async function getJobById(id) {
