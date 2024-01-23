@@ -167,7 +167,7 @@ graph.add_edge(5, 3, 5)
 graph.add_edge(4, 3, 11)
 
 # Example 2: performing a Dijkstra algorithm between node "A" and "C"
-distance, path = graph.dijstra()
+distance, path = graph.dijstra(1, 3)
 
 print(f'Distance: {distance}') # 21
 print(f'Path: {[node.value for node in path]}') # A B E C
