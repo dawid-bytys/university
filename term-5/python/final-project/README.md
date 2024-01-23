@@ -176,7 +176,7 @@ print(f'Path: {[node.value for node in path]}') # A B E C
 bfs_path = graph.bfs(1)
 print(f'BFS Path: {[node.value for node in bfs_path]}') # A B E D C
 
-# Example 4: performing a DFS algoritm
+# Example 4: performing a DFS algorithm
 dfs_path = graph.dfs(1)
 print(f'DFS Path: {[node.value for node in dfs_path]}') # A B D C E
 
