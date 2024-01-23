@@ -1,4 +1,3 @@
-import heapq
 from collections import defaultdict
 from typing import Any, Iterator, Literal, Self
 
@@ -196,32 +195,38 @@ class Graph:
             raise KeyError("Invalid node index.")
 
         weights: dict[Node, float] = defaultdict(lambda: float("inf"))
-        previous_nodes: dict[Node, Node | None] = defaultdict(lambda: None)
         weights[start_node] = 0
-        priority_queue: list[tuple[float, Node]] = [(0, start_node)]
+        previous_nodes: dict[Node, Node | None] = defaultdict(lambda: None)
+        unvisited_nodes: set[Node] = set(self.nodes)
+        visited_nodes: set[Node] = set()
 
-        while priority_queue:
-            _, node = heapq.heappop(priority_queue)
+        while end_node not in visited_nodes:
+            current_node = min(
+                unvisited_nodes,
+                key=lambda node: weights[node],
+            )
+            unvisited_nodes.remove(current_node)
 
-            for adj_node in self.adjacent_nodes(node.index):
-                new_weight = weights[node] + self.edge_weight(
-                    node.index, adj_node.index
-                )
+            for adj_node in self.adjacent_nodes(current_node.index):
+                if adj_node in unvisited_nodes:
+                    new_weight = weights[current_node] + self.edge_weight(
+                        current_node.index, adj_node.index
+                    )
+                    if new_weight < weights[adj_node]:
+                        weights[adj_node] = new_weight
+                        previous_nodes[adj_node] = current_node
 
-                if new_weight < weights[adj_node]:
-                    weights[adj_node] = new_weight
-                    previous_nodes[adj_node] = node
-                    heapq.heappush(priority_queue, (new_weight, adj_node))
+            visited_nodes.add(current_node)
 
-        path = [end_node]
+        path: list[Node] = []
         current_node = end_node
 
         while (temp := previous_nodes[current_node]) is not None:
-            current_node = temp
             path.append(current_node)
+            current_node = temp
 
-        path.reverse()
-        return weights[end_node], iter(path)
+        path.append(start_node)
+        return weights[end_node], iter(reversed(path))
 
     def read_from_file(self: Self, file_path: str) -> None:
         with open(file_path, "r") as file:

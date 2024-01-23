@@ -8,12 +8,17 @@ if __name__ == "__main__":
     graph.add_node("A")
     graph.add_node("B")
     graph.add_node("C")
+    graph.add_node("D")
+    graph.add_node("E")
 
-    graph.add_edge(1, 2, 10)
-    graph.add_edge(2, 3, 20)
-    graph.add_edge(3, 1, 30)
+    graph.add_edge(1, 2, 11)
+    graph.add_edge(2, 4, 5)
+    graph.add_edge(2, 5, 5)
+    graph.add_edge(4, 3, 11)
+    graph.add_edge(5, 3, 5)
 
-    graph.remove_node(1)
+    weight, path = graph.dijkstra(1, 3)
 
-    print(len(list(graph.nodes)))
-    print(len(list(graph.edges)))
+    dfs = graph.dfs(1)
+    dfs_path = graph.dfs(1)
+    print(f"DFS Path: {[node.value for node in dfs_path]}")

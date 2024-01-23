@@ -152,20 +152,34 @@ Here are some examples demonstrating the usage of the `Graph` class:
 
 ```python
 # Example 1: Creating a directed, weighted graph
-graph = Graph(directed=True, weighted=True)
+graph = Graph(directed=True, weighted=True, first_idx=1)
+
 graph.add_node("A")
 graph.add_node("B")
-graph.add_edge(0, 1, weight=3)
+graph.add_node("C")
+graph.add_node("D")
+graph.add_node("E")
 
-# Example 2: Performing BFS on the graph
-bfs_result = list(graph.bfs(0))
-print(f"BFS starting from node {0}: {bfs_result}")
+graph.add_edge(1, 2, 11)
+graph.add_edge(2, 4, 5)
+graph.add_edge(2, 5, 5)
+graph.add_edge(5, 3, 5)
+graph.add_edge(4, 3, 11)
 
-# Example 3: Reading a graph from a file
-file_path = "example_graph.txt"
-graph.read_from_file(file_path)
-print("Graph read from file:")
+# Example 2: performing a Dijkstra algorithm between node "A" and "C"
+distance, path = graph.dijstra()
 
-for edge in graph.edges():
-    print(edge)
+print(f'Distance: {distance}') # 21
+print(f'Path: {[node.value for node in path]}') # A B E C
+
+# Example 3: performing a BFS algorithm
+bfs_path = graph.bfs(1)
+print(f'BFS Path: {[node.value for node in bfs_path]}') # A B E D C
+
+# Example 4: performing a DFS algoritm
+dfs_path = graph.dfs(1)
+print(f'DFS Path: {[node.value for node in dfs_path]}') # A B D C E
+
+
+
 ```
