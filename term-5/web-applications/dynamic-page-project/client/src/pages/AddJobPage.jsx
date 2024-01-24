@@ -2,6 +2,7 @@ import { Formik, useFormik } from 'formik';
 import { useRef, useState } from 'react';
 import { uploadImage } from '../domain/cloudinary';
 import { Loading } from '../components/Loading';
+import clsx from 'clsx';
 
 const initialValues = {
   title: '',
@@ -28,7 +29,7 @@ export function AddJobPage() {
     validateOnBlur: false,
   });
   const imageRef = useRef(null);
-  const [isImageUploading, setIsImageUploading] = useState(false);
+  const [image, setImage] = useState(null);
 
   function handleValidation(values) {
     const errors = {};
@@ -57,7 +58,7 @@ export function AddJobPage() {
       errors.company = 'Company is required!';
     }
 
-    if (!values.image) {
+    if (!values.image && !image) {
       errors.image = 'Logo is required!';
     }
 
@@ -72,26 +73,22 @@ export function AddJobPage() {
     return errors;
   }
 
-  function handleAddRequirement(e) {
-    e.preventDefault();
+  function handleAddRequirement() {
     formikProps.setFieldValue('requirements', [...formikProps.values.requirements, '']);
   }
 
-  function handleAddBenefit(e) {
-    e.preventDefault();
+  function handleAddBenefit() {
     formikProps.setFieldValue('benefits', [...formikProps.values.benefits, '']);
   }
 
-  function handleRemoveRequirement(e, requirementIndex) {
-    e.preventDefault();
+  function handleRemoveRequirement(requirementIndex) {
     formikProps.setFieldValue(
       'requirements',
       formikProps.values.requirements.filter((_, index) => index !== requirementIndex),
     );
   }
 
-  function handleRemoveBenefit(e, benefitIndex) {
-    e.preventDefault();
+  function handleRemoveBenefit(benefitIndex) {
     formikProps.setFieldValue(
       'benefits',
       formikProps.values.benefits.filter((_, index) => index !== benefitIndex),
@@ -99,7 +96,6 @@ export function AddJobPage() {
   }
 
   function handleRequirementChange(e, requirementIndex) {
-    e.preventDefault();
     formikProps.setFieldValue(
       'requirements',
       formikProps.values.requirements.map((requirement, index) =>
@@ -109,7 +105,6 @@ export function AddJobPage() {
   }
 
   function handleBenefitChange(e, benefitIndex) {
-    e.preventDefault();
     formikProps.setFieldValue(
       'benefits',
       formikProps.values.benefits.map((benefit, index) =>
@@ -118,29 +113,53 @@ export function AddJobPage() {
     );
   }
 
+  function handleImageChange(e) {
+    const file = e.target.files[0];
+
+    const validImageTypes = ['image/jpeg', 'image/png'];
+    if (!validImageTypes.includes(file.type)) {
+      formikProps.setFieldError('image', 'File must be an image!');
+      return;
+    }
+
+    if (file.size > 5242880) {
+      formikProps.setFieldError('image', 'File size must be less than 5MB!');
+      return;
+    }
+
+    const image = new Image();
+    image.src = URL.createObjectURL(file);
+
+    image.onload = () => {
+      const { width, height } = image;
+
+      if (width < 256 || height < 256) {
+        formikProps.setFieldError('image', 'Image size must be at least 256x256px!');
+        return;
+      }
+
+      if (width !== height) {
+        formikProps.setFieldError('image', 'Image must be square!');
+        return;
+      }
+
+      setImage(file);
+      formikProps.setFieldError('image', null);
+    };
+  }
+
   async function handleSubmit() {
+    const imageUrl = await uploadImage(image);
+
     formikProps.values = {
       ...formikProps.values,
       requirements: formikProps.values.requirements.filter((requirement) => requirement !== ''),
       benefits: formikProps.values.benefits.filter((benefit) => benefit !== ''),
       tags: formikProps.values.tags.split(',').map((tag) => tag.trim()),
+      image: imageUrl,
     };
 
     console.log(formikProps.values);
-  }
-
-  async function handleImageChange(e) {
-    const file = e.target.files[0];
-
-    if (!file.type.startsWith('image/')) {
-      formikProps.setFieldError('image', 'File must be an image!');
-      return;
-    }
-
-    setIsImageUploading(true);
-    const imageUrl = await uploadImage(file);
-    setIsImageUploading(false);
-    formikProps.setFieldValue('image', imageUrl);
   }
 
   return (
@@ -149,7 +168,11 @@ export function AddJobPage() {
       <Formik formikProps={formikProps}>
         <form
           onSubmit={formikProps.handleSubmit}
-          className="flex flex-col gap-7 w-full font-medium md:w-3/4 lg:w-1/2"
+          disabled={formikProps.isSubmitting}
+          className={clsx({
+            'flex flex-col gap-7 font-medium w-full md:w-3/4 lg:w-1/2': true,
+            'opacity-50 pointer-events-none': formikProps.isSubmitting,
+          })}
         >
           <div className="flex flex-col gap-2">
             <label htmlFor="company">Company</label>
@@ -214,7 +237,7 @@ export function AddJobPage() {
                 <button
                   type="button"
                   className="rounded-md aspect-square text-center text-white bg-red-500"
-                  onClick={(e) => handleRemoveRequirement(e, index)}
+                  onClick={() => handleRemoveRequirement(index)}
                 >
                   -
                 </button>
@@ -252,7 +275,7 @@ export function AddJobPage() {
                 <button
                   type="button"
                   className="rounded-md aspect-square text-center text-white bg-red-500"
-                  onClick={(e) => handleRemoveBenefit(e, index)}
+                  onClick={() => handleRemoveBenefit(index)}
                 >
                   -
                 </button>
@@ -330,26 +353,31 @@ export function AddJobPage() {
               className="bg-neutral-100 border-2 border-gray-300 rounded-md border-dashed w-40 h-40 flex items-center justify-center hover:bg-neutral-200 transition-colors"
               onClick={() => imageRef.current.click()}
             >
-              {isImageUploading ? (
-                <Loading />
-              ) : formikProps.values.image ? (
+              {image ? (
                 <img
-                  src={formikProps.values.image}
-                  alt="Logo"
-                  className="w-40 h-40 object-contain"
+                  src={URL.createObjectURL(image)}
+                  alt="logo"
                 />
               ) : (
                 'Upload logo'
               )}
             </button>
+            <p className="text-gray-400">max. 5MB min. 256x256px</p>
             {formikProps.errors.image && <ErrorMessage message={formikProps.errors.image} />}
           </div>
           <button
             type="submit"
-            className="rounded-md px-5 py-3 text-center text-white bg-primary"
-            disabled={formikProps.isSubmitting || isImageUploading}
+            className="flex items-center justify-center rounded-md h-[48px] text-center text-white bg-primary"
           >
-            Submit
+            {formikProps.isSubmitting ? (
+              <Loading
+                spinnerWidth={20}
+                spinnerHeight={20}
+                color="#fff"
+              />
+            ) : (
+              'Submit'
+            )}
           </button>
         </form>
       </Formik>
