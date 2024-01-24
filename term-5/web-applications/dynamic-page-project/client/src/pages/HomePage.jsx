@@ -39,9 +39,7 @@ export function HomePage() {
           ))}
         </section>
       </main>
-      <aside className="hidden xl:flex xl:w-1/2 shadow">
-        <GoogleMap jobs={jobs} />
-      </aside>
+      <aside className="hidden xl:flex xl:w-1/2 shadow">{/*<GoogleMap jobs={jobs} />*/}</aside>
     </div>
   );
 }
