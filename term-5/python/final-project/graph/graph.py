@@ -18,22 +18,6 @@ class Graph:
         self._nodes: dict[int, Node] = defaultdict()
         self._edges: set[Edge] = set()
 
-    def _is_acyclic_helper(
-        self: Self, node: Node, visited: set[Node], stack: set[Node]
-    ) -> bool:
-        visited.add(node)
-        stack.add(node)
-
-        for adj_node in self.adjacent_nodes(node.index):
-            if adj_node not in visited:
-                if self._is_acyclic_helper(adj_node, visited, stack):
-                    return True
-            elif adj_node in stack:
-                return True
-
-        stack.remove(node)
-        return False
-
     @property
     def nodes(self: Self) -> Iterator[Node]:
         return iter(self._nodes.values())
@@ -129,20 +113,6 @@ class Graph:
             raise ValueError("Graph is not weighted.")
 
         return edge.weight
-
-    def is_acyclic(self: Self) -> bool:
-        if not self._directed:
-            raise ValueError("Graph is not directed.")
-
-        visited: set[Node] = set()
-        stack: set[Node] = set()
-
-        for node in self.nodes:
-            if node not in visited:
-                if self._is_acyclic_helper(node, visited, stack):
-                    return False
-
-        return True
 
     def bfs(self: Self, start_node_idx: int) -> Iterator[Node]:
         start_node = self.get_node(start_node_idx)

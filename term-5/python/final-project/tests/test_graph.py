@@ -221,41 +221,6 @@ def test_graph_edge_weight_with_invalid_index() -> None:
         graph.edge_weight(1, 5)
 
 
-def test_graph_is_acyclic() -> None:
-    graph = Graph(weighted=True, directed=True, first_idx=1)
-
-    graph.add_node("A")
-    graph.add_node("B")
-    graph.add_node("C")
-    graph.add_node("D")
-    graph.add_node("E")
-
-    graph.add_edge(1, 2, 10)
-    graph.add_edge(2, 3, 20)
-    graph.add_edge(3, 1, 30)
-    graph.add_edge(4, 5, 40)
-
-    assert graph.is_acyclic() is False
-
-
-def test_graph_is_acyclic_undirected_graph() -> None:
-    graph = Graph(weighted=True, directed=False, first_idx=1)
-
-    graph.add_node("A")
-    graph.add_node("B")
-    graph.add_node("C")
-    graph.add_node("D")
-    graph.add_node("E")
-
-    graph.add_edge(1, 2, 10)
-    graph.add_edge(2, 3, 20)
-    graph.add_edge(3, 1, 30)
-    graph.add_edge(4, 5, 40)
-
-    with pytest.raises(ValueError):
-        graph.is_acyclic()
-
-
 def test_graph_bfs() -> None:
     graph = Graph(weighted=True, directed=True, first_idx=1)
 

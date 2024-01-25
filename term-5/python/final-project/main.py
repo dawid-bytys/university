@@ -5,11 +5,11 @@ from graph import Graph
 if __name__ == "__main__":
     graph = Graph(weighted=True, directed=True, first_idx=1)
 
-    graph.add_node("A")
-    graph.add_node("B")
-    graph.add_node("C")
-    graph.add_node("D")
-    graph.add_node("E")
+    graph.add_node(1)
+    graph.add_node(2)
+    graph.add_node(3)
+    graph.add_node(4)
+    graph.add_node(5)
 
     graph.add_edge(1, 2, 11)
     graph.add_edge(2, 4, 5)
@@ -19,6 +19,10 @@ if __name__ == "__main__":
 
     weight, path = graph.dijkstra(1, 3)
 
-    dfs = graph.dfs(1)
-    dfs_path = graph.dfs(1)
-    print(f"DFS Path: {[node.value for node in dfs_path]}")
+    print(f"Weight: {weight}")
+
+    print("Path: ", end="")
+    for node in path:
+        print(node.value, end=" ")
+
+    sys.exit(0)

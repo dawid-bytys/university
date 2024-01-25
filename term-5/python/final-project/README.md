@@ -104,10 +104,6 @@ This README provides an overview of the `Graph` class and its methods. The `Grap
 
 ## Graph Algorithms<a name="graph-algorithms"></a>
 
-### `is_acyclic() -> bool`
-
-- Returns True if the directed graph is acyclic, False otherwise.
-
 ### `bfs(start_node_idx: int) -> Iterator[Node]`
 
 - Performs Breadth-First Search starting from the specified node.
