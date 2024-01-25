@@ -194,28 +194,26 @@ class Graph:
         if not start_node or not end_node:
             raise KeyError("Invalid node index.")
 
-        weights: dict[Node, float] = defaultdict(lambda: float("inf"))
-        weights[start_node] = 0
+        distances: dict[Node, float] = defaultdict(lambda: float("inf"))
+        distances[start_node] = 0
         previous_nodes: dict[Node, Node | None] = defaultdict(lambda: None)
         unvisited_nodes: set[Node] = set(self.nodes)
         visited_nodes: set[Node] = set()
 
-        while end_node not in visited_nodes:
-            current_node = min(
-                unvisited_nodes,
-                key=lambda node: weights[node],
-            )
-            unvisited_nodes.remove(current_node)
+        while unvisited_nodes:
+            current_node = min(unvisited_nodes, key=lambda node: distances[node])
 
             for adj_node in self.adjacent_nodes(current_node.index):
-                if adj_node in unvisited_nodes:
-                    new_weight = weights[current_node] + self.edge_weight(
+                if adj_node not in visited_nodes:
+                    new_distance = distances[current_node] + self.edge_weight(
                         current_node.index, adj_node.index
                     )
-                    if new_weight < weights[adj_node]:
-                        weights[adj_node] = new_weight
+
+                    if new_distance < distances[adj_node]:
+                        distances[adj_node] = new_distance
                         previous_nodes[adj_node] = current_node
 
+            unvisited_nodes.remove(current_node)
             visited_nodes.add(current_node)
 
         path: list[Node] = []
@@ -226,7 +224,7 @@ class Graph:
             current_node = temp
 
         path.append(start_node)
-        return weights[end_node], iter(reversed(path))
+        return distances[end_node], iter(reversed(path))
 
     def read_from_file(self: Self, file_path: str) -> None:
         with open(file_path, "r") as file:
