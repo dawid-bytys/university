@@ -1,17 +1,16 @@
-import { Formik, useFormik } from 'formik';
+import { Form, FieldArray, useFormik, Field, FormikProvider } from 'formik';
 import { useRef, useState } from 'react';
 import { uploadImage } from '../domain/cloudinary';
 import { Loading } from '../components/Loading';
 import clsx from 'clsx';
+import { fetchGeolocation } from '../domain/ninja';
+import { addJob } from '../domain/jobs';
+import { resizeImage } from '../utils';
 
 const initialValues = {
   title: '',
   description: '',
-  location: {
-    city: '',
-    lat: '',
-    lng: '',
-  },
+  location: '',
   salary: '',
   tags: [],
   requirements: [],
@@ -21,15 +20,20 @@ const initialValues = {
 };
 
 export function AddJobPage() {
-  const formikProps = useFormik({
+  const formik = useFormik({
     initialValues,
-    onSubmit: handleSubmit,
     validate: handleValidation,
+    onSubmit: handleSubmit,
     validateOnChange: false,
     validateOnBlur: false,
   });
+  const { setFieldError, handleBlur, isSubmitting, values, errors } = formik;
   const imageRef = useRef(null);
   const [image, setImage] = useState(null);
+  const [submittionState, setSubmittionState] = useState({
+    state: 'idle',
+    message: '',
+  });
 
   function handleValidation(values) {
     const errors = {};
@@ -42,7 +46,7 @@ export function AddJobPage() {
       errors.description = 'Description is required!';
     }
 
-    if (!values.location.city) {
+    if (!values.location) {
       errors.location = 'Location is required!';
     }
 
@@ -73,57 +77,17 @@ export function AddJobPage() {
     return errors;
   }
 
-  function handleAddRequirement() {
-    formikProps.setFieldValue('requirements', [...formikProps.values.requirements, '']);
-  }
-
-  function handleAddBenefit() {
-    formikProps.setFieldValue('benefits', [...formikProps.values.benefits, '']);
-  }
-
-  function handleRemoveRequirement(requirementIndex) {
-    formikProps.setFieldValue(
-      'requirements',
-      formikProps.values.requirements.filter((_, index) => index !== requirementIndex),
-    );
-  }
-
-  function handleRemoveBenefit(benefitIndex) {
-    formikProps.setFieldValue(
-      'benefits',
-      formikProps.values.benefits.filter((_, index) => index !== benefitIndex),
-    );
-  }
-
-  function handleRequirementChange(e, requirementIndex) {
-    formikProps.setFieldValue(
-      'requirements',
-      formikProps.values.requirements.map((requirement, index) =>
-        index === requirementIndex ? e.target.value.trim() : requirement,
-      ),
-    );
-  }
-
-  function handleBenefitChange(e, benefitIndex) {
-    formikProps.setFieldValue(
-      'benefits',
-      formikProps.values.benefits.map((benefit, index) =>
-        index === benefitIndex ? e.target.value.trim() : benefit,
-      ),
-    );
-  }
-
   function handleImageChange(e) {
     const file = e.target.files[0];
 
     const validImageTypes = ['image/jpeg', 'image/png'];
     if (!validImageTypes.includes(file.type)) {
-      formikProps.setFieldError('image', 'File must be an image!');
+      setFieldError('image', 'File must be an image!');
       return;
     }
 
     if (file.size > 5242880) {
-      formikProps.setFieldError('image', 'File size must be less than 5MB!');
+      setFieldError('image', 'File size must be less than 5MB!');
       return;
     }
 
@@ -134,217 +98,206 @@ export function AddJobPage() {
       const { width, height } = image;
 
       if (width < 256 || height < 256) {
-        formikProps.setFieldError('image', 'Image size must be at least 256x256px!');
+        setFieldError('image', 'Image size must be at least 256x256px!');
         return;
       }
 
       if (width !== height) {
-        formikProps.setFieldError('image', 'Image must be square!');
+        setFieldError('image', 'Image must be square!');
         return;
       }
 
       setImage(file);
-      formikProps.setFieldError('image', null);
     };
   }
 
   async function handleSubmit() {
-    const imageUrl = await uploadImage(image);
+    try {
+      const resizedImage = await resizeImage(image);
+      const imageUrl = await uploadImage(resizedImage);
+      const geolocation = await fetchGeolocation(values.location);
 
-    formikProps.values = {
-      ...formikProps.values,
-      requirements: formikProps.values.requirements.filter((requirement) => requirement !== ''),
-      benefits: formikProps.values.benefits.filter((benefit) => benefit !== ''),
-      tags: formikProps.values.tags.split(',').map((tag) => tag.trim()),
-      image: imageUrl,
-    };
+      const serializedValues = {
+        ...values,
+        requirements: values.requirements.filter((requirement) => requirement.trim() !== ''),
+        benefits: values.benefits.filter((benefit) => benefit.trim() !== ''),
+        tags: values.tags.split(',').map((tag) => tag.trim()),
+        image: imageUrl,
+        location: geolocation,
+      };
 
-    console.log(formikProps.values);
+      await addJob(serializedValues);
+
+      setSubmittionState({
+        state: 'success',
+        message: 'Job offer has been added successfully!',
+      });
+    } catch (err) {
+      setSubmittionState({
+        state: 'error',
+        message: 'Something went wrong, try again!',
+      });
+    }
   }
 
   return (
     <main className="flex flex-1 flex-col items-center gap-7 p-7 md:gap-10 md:p-10 lg:gap-16 lg:p-16">
       <h2 className="text-3xl font-semibold">Add a new job listing</h2>
-      <Formik formikProps={formikProps}>
-        <form
-          onSubmit={formikProps.handleSubmit}
-          disabled={formikProps.isSubmitting}
+      <FormikProvider value={formik}>
+        <Form
+          disabled={isSubmitting}
           className={clsx({
-            'flex flex-col gap-7 font-medium w-full md:w-3/4 lg:w-1/2': true,
-            'opacity-50 pointer-events-none': formikProps.isSubmitting,
+            'flex flex-col gap-7 font-medium w-full md:w-3/4 2xl:w-1/3': true,
+            'opacity-50 pointer-events-none': isSubmitting,
           })}
         >
+          {submittionState.state !== 'idle' && (
+            <SubmittionMessage
+              isError={submittionState.state === 'error'}
+              message={submittionState.message}
+            />
+          )}
           <div className="flex flex-col gap-2">
             <label htmlFor="company">Company</label>
-            <input
+            <Field
               type="text"
               name="company"
-              id="company"
               placeholder="e.g. Microsoft"
-              value={formikProps.values.company}
-              onChange={formikProps.handleChange}
-              onBlur={formikProps.handleBlur}
               className="border-2 border-gray-300 rounded-md p-3"
             />
-            {formikProps.errors.company && <ErrorMessage message={formikProps.errors.company} />}
+            {errors.company && <ErrorMessage message={errors.company} />}
           </div>
           <div className="flex flex-col gap-2">
             <label htmlFor="title">Title</label>
-            <input
+            <Field
               type="text"
               name="title"
-              id="title"
               placeholder="e.g. Senior Frontend Developer"
-              value={formikProps.values.title}
-              onChange={formikProps.handleChange}
-              onBlur={formikProps.handleBlur}
               className="border-2 border-gray-300 rounded-md p-3"
             />
-            {formikProps.errors.title && <ErrorMessage message={formikProps.errors.title} />}
+            {errors.title && <ErrorMessage message={errors.title} />}
           </div>
           <div className="flex flex-col gap-2">
             <label htmlFor="description">Description</label>
-            <textarea
+            <Field
+              as="textarea"
               name="description"
-              id="description"
               placeholder="e.g. We are looking for a Senior Frontend Developer to join our team."
-              value={formikProps.values.description}
-              onChange={formikProps.handleChange}
-              onBlur={formikProps.handleBlur}
               className="border-2 border-gray-300 rounded-md p-3 resize-none h-40"
             />
-            {formikProps.errors.description && (
-              <ErrorMessage message={formikProps.errors.description} />
-            )}
+            {errors.description && <ErrorMessage message={errors.description} />}
           </div>
           <div className="flex flex-col gap-2">
             <label htmlFor="requirements">Requirements</label>
-            {formikProps.values.requirements.map((requirement, index) => (
-              <div
-                className="flex flex-row gap-2"
-                key={`requirement-${index}`}
-              >
-                <input
-                  type="text"
-                  name="requirements"
-                  id="requirements"
-                  placeholder="e.g. 5+ years of experience"
-                  value={requirement}
-                  onChange={(e) => handleRequirementChange(e, index)}
-                  onBlur={formikProps.handleBlur}
-                  className="w-full border-2 border-gray-300 rounded-md p-3"
-                />
-                <button
-                  type="button"
-                  className="rounded-md aspect-square text-center text-white bg-red-500"
-                  onClick={() => handleRemoveRequirement(index)}
-                >
-                  -
-                </button>
-              </div>
-            ))}
-            <button
-              type="button"
-              className="rounded-md py-3 text-center text-white bg-primary"
-              onClick={handleAddRequirement}
-            >
-              +
-            </button>
-            {formikProps.errors.requirements && (
-              <ErrorMessage message={formikProps.errors.requirements} />
-            )}
+            <FieldArray name="requirements">
+              {({ remove, push }) => (
+                <>
+                  {values.requirements.map((_, index) => (
+                    <div
+                      className="flex flex-row gap-2"
+                      key={`requirement-${index}`}
+                    >
+                      <Field
+                        name={`requirements.${index}`}
+                        type="text"
+                        placeholder="e.g. 5+ years of experience"
+                        className="w-full border-2 border-gray-300 rounded-md p-3"
+                      />
+                      <button
+                        type="button"
+                        className="rounded-md aspect-square text-center text-white bg-red-500"
+                        onClick={() => remove(index)}
+                      >
+                        -
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    className="rounded-md py-3 text-center text-white bg-primary"
+                    onClick={() => push('')}
+                  >
+                    +
+                  </button>
+                </>
+              )}
+            </FieldArray>
+            {errors.requirements && <ErrorMessage message={errors.requirements} />}
           </div>
           <div className="flex flex-col gap-2">
             <label htmlFor="benefits">Benefits</label>
-            {formikProps.values.benefits.map((benefit, index) => (
-              <div
-                className="flex flex-row gap-2 w-full"
-                key={`benefit-${index}`}
-              >
-                <input
-                  key={`benefit-${index}`}
-                  type="text"
-                  name="benefits"
-                  id="benefits"
-                  placeholder="e.g. Free lunch"
-                  value={benefit}
-                  onChange={(e) => handleBenefitChange(e, index)}
-                  onBlur={formikProps.handleBlur}
-                  className="w-full border-2 border-gray-300 rounded-md p-3"
-                />
-                <button
-                  type="button"
-                  className="rounded-md aspect-square text-center text-white bg-red-500"
-                  onClick={() => handleRemoveBenefit(index)}
-                >
-                  -
-                </button>
-              </div>
-            ))}
-            <button
-              type="button"
-              className="rounded-md py-3 text-center text-white bg-primary"
-              onClick={handleAddBenefit}
-            >
-              +
-            </button>
-            {formikProps.errors.benefits && <ErrorMessage message={formikProps.errors.benefits} />}
+            <FieldArray name="benefits">
+              {({ remove, push }) => (
+                <>
+                  {values.benefits.map((_, index) => (
+                    <div
+                      className="flex flex-row gap-2"
+                      key={`benefits-${index}`}
+                    >
+                      <Field
+                        name={`benefits.${index}`}
+                        type="text"
+                        placeholder="e.g. Free lunch"
+                        className="w-full border-2 border-gray-300 rounded-md p-3"
+                      />
+                      <button
+                        type="button"
+                        className="rounded-md aspect-square text-center text-white bg-red-500"
+                        onClick={() => remove(index)}
+                      >
+                        -
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    className="rounded-md py-3 text-center text-white bg-primary"
+                    onClick={() => push('')}
+                  >
+                    +
+                  </button>
+                </>
+              )}
+            </FieldArray>
+            {errors.benefits && <ErrorMessage message={errors.benefits} />}
           </div>
           <div className="flex flex-col gap-2">
             <label htmlFor="location">Location</label>
-            <input
+            <Field
               type="text"
               name="location"
-              id="location"
-              placeholder="e.g. Berlin, Germany"
-              value={formikProps.values.location.city}
-              onChange={(e) => {
-                formikProps.setFieldValue('location', {
-                  ...formikProps.values.location,
-                  city: e.target.value,
-                });
-              }}
-              onBlur={formikProps.handleBlur}
+              placeholder="e.g. Berlin"
               className="border-2 border-gray-300 rounded-md p-3"
             />
-            {formikProps.errors.location && <ErrorMessage message={formikProps.errors.location} />}
+            {errors.location && <ErrorMessage message={errors.location} />}
           </div>
           <div className="flex flex-col gap-2">
             <label htmlFor="salary">Salary</label>
-            <input
+            <Field
               type="text"
               name="salary"
-              id="salary"
               placeholder="e.g. 60000 - 80000 EUR"
-              value={formikProps.values.salary}
-              onChange={formikProps.handleChange}
-              onBlur={formikProps.handleBlur}
               className="border-2 border-gray-300 rounded-md p-3"
             />
-            {formikProps.errors.salary && <ErrorMessage message={formikProps.errors.salary} />}
+            {errors.salary && <ErrorMessage message={errors.salary} />}
           </div>
           <div className="flex flex-col gap-2">
             <label htmlFor="tags">Tags</label>
-            <input
+            <Field
               type="text"
               name="tags"
-              id="tags"
               placeholder="e.g. frontend, react, javascript"
-              value={formikProps.values.tags}
-              onChange={formikProps.handleChange}
-              onBlur={formikProps.handleBlur}
               className="border-2 border-gray-300 rounded-md p-3"
             />
-            {formikProps.errors.tags && <ErrorMessage message={formikProps.errors.tags} />}
+            {errors.tags && <ErrorMessage message={errors.tags} />}
           </div>
           <div className="flex flex-col gap-2">
             <label htmlFor="image">Logo</label>
             <input
               type="file"
               name="image"
-              id="image"
               onChange={handleImageChange}
-              onBlur={formikProps.handleBlur}
+              onBlur={handleBlur}
               className="hidden"
               ref={imageRef}
             />
@@ -363,13 +316,13 @@ export function AddJobPage() {
               )}
             </button>
             <p className="text-gray-400">max. 5MB min. 256x256px</p>
-            {formikProps.errors.image && <ErrorMessage message={formikProps.errors.image} />}
+            {errors.image && <ErrorMessage message={errors.image} />}
           </div>
           <button
             type="submit"
             className="flex items-center justify-center rounded-md h-[48px] text-center text-white bg-primary"
           >
-            {formikProps.isSubmitting ? (
+            {isSubmitting ? (
               <Loading
                 spinnerWidth={20}
                 spinnerHeight={20}
@@ -379,8 +332,8 @@ export function AddJobPage() {
               'Submit'
             )}
           </button>
-        </form>
-      </Formik>
+        </Form>
+      </FormikProvider>
     </main>
   );
 }
@@ -390,5 +343,19 @@ function ErrorMessage({ message }) {
     <p className="text-red-500 text-sm">
       <i>{message}</i>
     </p>
+  );
+}
+
+function SubmittionMessage({ isError, message }) {
+  return (
+    <div
+      className={clsx({
+        'flex items-center justify-center rounded-md h-[48px] text-center bg-opacity-80': true,
+        'text-white bg-[#2eff7c]': !isError,
+        'text-white bg-red-500': isError,
+      })}
+    >
+      <p className="text-md">{message}</p>
+    </div>
   );
 }

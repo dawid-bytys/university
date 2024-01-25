@@ -1,3 +1,5 @@
+import Resizer from 'react-image-file-resizer';
+
 export function isNewOffer(date) {
   return new Date(date) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 }
@@ -15,4 +17,21 @@ export function randomGradient() {
   ];
 
   return gradients[Math.floor(Math.random() * gradients.length)];
+}
+
+export function resizeImage(image) {
+  return new Promise((resolve) => {
+    Resizer.imageFileResizer(
+      image,
+      256,
+      256,
+      'PNG',
+      100,
+      0,
+      (file) => {
+        resolve(file);
+      },
+      'file',
+    );
+  });
 }
