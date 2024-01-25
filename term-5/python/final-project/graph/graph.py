@@ -12,6 +12,9 @@ class Graph:
         weighted: bool = True,
         first_idx: Literal[0, 1] = 0,
     ) -> None:
+        if first_idx not in (0, 1):
+            raise ValueError("Invalid first index. It must be 0 or 1.")
+
         self._directed = directed
         self._weighted = weighted
         self._first_idx = first_idx
@@ -94,7 +97,7 @@ class Graph:
             if edge.start_node == start_node and edge.end_node == end_node:
                 return edge
 
-        raise KeyError("Invalid edge index.")
+        raise KeyError("No edge found.")
 
     def adjacent_nodes(self: Self, idx: int) -> Iterator[Node]:
         node = self._nodes.get(idx)
@@ -164,6 +167,9 @@ class Graph:
         if not start_node or not end_node:
             raise KeyError("Invalid node index.")
 
+        if start_node == end_node:
+            return 0, iter([start_node])
+
         distances: dict[Node, float] = defaultdict(lambda: float("inf"))
         distances[start_node] = 0
         previous_nodes: dict[Node, Node | None] = defaultdict(lambda: None)
@@ -192,6 +198,9 @@ class Graph:
         while (temp := previous_nodes[current_node]) is not None:
             path.append(current_node)
             current_node = temp
+
+        if not path:
+            raise ValueError("No path found.")
 
         path.append(start_node)
         return distances[end_node], iter(reversed(path))
