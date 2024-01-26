@@ -1,35 +1,38 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { GoogleMap } from '../components/GoogleMap';
 import { JobOffer } from '../components/JobOffer';
 import { Link } from 'react-router-dom';
 import { Results } from '../components/Results';
 import { Settings } from '../components/Settings';
-import { fetchJobs } from '../domain/jobs';
 import { Loading } from '../components/Loading';
+import { useFetch } from '../hooks/useFetch';
 
 export function HomePage() {
-  const [jobs, setJobs] = useState(null);
+  const [filters, setFilters] = useState({
+    location: '',
+    tags: [],
+  });
+  const { state, data, error } = useFetch({
+    method: 'GET',
+    url: 'http://localhost:3000/api/jobs',
+    filters,
+  });
 
-  useEffect(() => {
-    async function performFetching() {
-      const jobs = await fetchJobs();
-      setJobs(jobs);
-    }
-
-    performFetching();
-  }, []);
-
-  if (!jobs) {
+  if (state === 'loading') {
     return <Loading />;
+  }
+
+  if (state === 'error') {
+    return <p>Error: {error.message}</p>;
   }
 
   return (
     <div className="flex flex-1 flex-row p-5 sm:p-10 gap-10">
       <main className="flex-1 xl:w-1/2 flex flex-col gap-5">
         <Settings />
-        <Results count={jobs.length} />
+        <Results count={data.length} />
         <section className="flex flex-1 flex-col gap-5">
-          {jobs.map((job) => (
+          {data.map((job) => (
             <Link
               to={`/jobs/${job.id}`}
               key={job.id}

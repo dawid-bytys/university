@@ -126,11 +126,13 @@ export function AddJobPage() {
         location: geolocation,
       };
 
-      await addJob(serializedValues);
+      console.log(serializedValues);
+
+      const response = await addJob(serializedValues);
 
       setSubmittionState({
         state: 'success',
-        message: 'Job offer has been added successfully!',
+        message: response.message,
       });
     } catch (err) {
       setSubmittionState({
