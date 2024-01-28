@@ -1,15 +1,28 @@
 import { prisma } from './prisma.mjs';
 
-export async function getJobs(city) {
-  if (!city) {
+export async function getJobs(filters) {
+  const { city, search } = filters;
+
+  if (city === 'All cities' && search === '') {
     return prisma.jobs.findMany();
   }
 
   return prisma.jobs.findMany({
     where: {
-      locations: {
-        has: city,
-      },
+      AND: [
+        {
+          location: {
+            path: ['city'],
+            string_contains: city === 'All cities' ? '' : city,
+          },
+        },
+        {
+          title: {
+            contains: search,
+            mode: 'insensitive',
+          },
+        },
+      ],
     },
   });
 }

@@ -3,8 +3,7 @@ import { mapJobsToDto } from '../dto/mapJobsToDto.mjs';
 import { mapJobToDto } from '../dto/mapJobToDto.mjs';
 
 export async function getJobsController(req, res) {
-  const { city } = req.query;
-  const jobs = await getJobs(city);
+  const jobs = await getJobs(req.query);
   return res.json(mapJobsToDto(jobs));
 }
 

@@ -8,15 +8,19 @@ datasource db {
 }
 
 model Jobs {
-  id           String   @id @default(uuid())
-  title        String
-  description  String
-  tags         String[]
-  requirements String[]
-  benefits     String[]
-  image        String
-  salary       String
-  company      String
-  createdAt    DateTime @default(now())
-  location     Json
+  id            String   @id @default(uuid())
+  title         String
+  description   String
+  tags          String[]
+  requirements  String[]
+  benefits      String[]
+  image         String
+  company       String
+  salary        Json
+  location      Json
+  seniority     String
+  employment    String
+  operatingMode String
+  typeOfWork    String
+  createdAt     DateTime @default(now())
 }
