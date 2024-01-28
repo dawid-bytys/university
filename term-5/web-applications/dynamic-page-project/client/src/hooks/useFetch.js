@@ -11,8 +11,8 @@ export function useFetch(options) {
   useEffect(() => {
     async function fetchData() {
       try {
-        console.log(`${url}?` + new URLSearchParams(filters).toString());
-        const response = await fetch(`${url}?` + new URLSearchParams(filters).toString(), {
+        const response = await fetch(url + '?' + new URLSearchParams(filters).toString(), {
+          cache: 'no-cache',
           method,
           body: JSON.stringify(body),
         });
@@ -22,7 +22,7 @@ export function useFetch(options) {
         }
 
         const data = await response.json();
-        setFetchingState({ state: 'success', data, error: null });
+        setFetchingState({ state: 'idle', data, error: null });
       } catch (error) {
         setFetchingState({ state: 'error', data: null, error });
       }

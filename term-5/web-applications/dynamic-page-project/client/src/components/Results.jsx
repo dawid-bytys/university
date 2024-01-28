@@ -3,7 +3,7 @@ export function Results({ count, city }) {
     <div>
       <h2 className="flex flex-row gap-2 items-center text-xl font-semibold">
         <span>{count} Results</span>
-        <span className="text-[#CFD6E0]">in Poland {city && `, ${city}`}</span>
+        <span className="text-[#CFD6E0]">in Poland{city && `, ${city}`}</span>
       </h2>
     </div>
   );

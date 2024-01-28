@@ -16,7 +16,7 @@ export function JobOffer({
     <article
       className={clsx({
         'flex flex-col md:flex-row gap-5 w-full': true,
-        'shadow rounded-lg border-[1px] border-neutral-200 hover:border-primary hover:transition-colors p-5':
+        'shadow hover:border-primary hover:transition-colors border-2 border-neutral-200 p-5 rounded-xl':
           !isSingleOffer,
       })}
     >
@@ -35,7 +35,7 @@ export function JobOffer({
         <div className="flex flex-col gap-3 sm:flex-row justify-between">
           <p className="font-medium text-xl">{title}</p>
           <p className="flex flex-row items-center gap-2 text-xl font-medium text-primary">
-            {salary}
+            {salary.from} - {salary.to} {salary.currency}
           </p>
         </div>
         <div>

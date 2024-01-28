@@ -11,12 +11,20 @@ const initialValues = {
   title: '',
   description: '',
   location: '',
-  salary: '',
+  salary: {
+    from: '',
+    to: '',
+    currency: 'PLN',
+  },
   tags: [],
   requirements: [],
   benefits: [],
   company: '',
   image: '',
+  typeOfWork: 'Full-time',
+  seniority: 'Junior',
+  employment: 'B2B',
+  operatingMode: 'Remote',
 };
 
 export function AddJobPage() {
@@ -50,7 +58,7 @@ export function AddJobPage() {
       errors.location = 'Location is required!';
     }
 
-    if (!values.salary) {
+    if (!values.salary.from || !values.salary.to) {
       errors.salary = 'Salary is required!';
     }
 
@@ -162,6 +170,7 @@ export function AddJobPage() {
           <div className="flex flex-col gap-2">
             <label htmlFor="company">Company</label>
             <Field
+              id="company"
               type="text"
               name="company"
               placeholder="e.g. Microsoft"
@@ -172,6 +181,7 @@ export function AddJobPage() {
           <div className="flex flex-col gap-2">
             <label htmlFor="title">Title</label>
             <Field
+              id="title"
               type="text"
               name="title"
               placeholder="e.g. Senior Frontend Developer"
@@ -182,6 +192,7 @@ export function AddJobPage() {
           <div className="flex flex-col gap-2">
             <label htmlFor="description">Description</label>
             <Field
+              id="description"
               as="textarea"
               name="description"
               placeholder="e.g. We are looking for a Senior Frontend Developer to join our team."
@@ -191,7 +202,10 @@ export function AddJobPage() {
           </div>
           <div className="flex flex-col gap-2">
             <label htmlFor="requirements">Requirements</label>
-            <FieldArray name="requirements">
+            <FieldArray
+              name="requirements"
+              id="requirements"
+            >
               {({ remove, push }) => (
                 <>
                   {values.requirements.map((_, index) => (
@@ -228,7 +242,10 @@ export function AddJobPage() {
           </div>
           <div className="flex flex-col gap-2">
             <label htmlFor="benefits">Benefits</label>
-            <FieldArray name="benefits">
+            <FieldArray
+              name="benefits"
+              id="benefits"
+            >
               {({ remove, push }) => (
                 <>
                   {values.benefits.map((_, index) => (
@@ -266,6 +283,7 @@ export function AddJobPage() {
           <div className="flex flex-col gap-2">
             <label htmlFor="location">Location</label>
             <Field
+              id="location"
               type="text"
               name="location"
               placeholder="e.g. Berlin"
@@ -275,13 +293,121 @@ export function AddJobPage() {
           </div>
           <div className="flex flex-col gap-2">
             <label htmlFor="salary">Salary</label>
-            <Field
-              type="text"
-              name="salary"
-              placeholder="e.g. 60000 - 80000 EUR"
-              className="border-2 border-gray-300 rounded-md p-3"
-            />
+            <div className="flex flex-col xl:flex-row gap-2">
+              <FieldArray
+                name="salary"
+                id="salary"
+              >
+                <>
+                  <div className="flex flex-col xl:flex-row gap-2 flex-1">
+                    <Field
+                      type="number"
+                      name="salary.from"
+                      placeholder="from"
+                      className="border-2 border-gray-300 rounded-md p-3 xl:basis-1/2"
+                    />
+                    <Field
+                      type="number"
+                      name="salary.to"
+                      placeholder="to"
+                      className="border-2 border-gray-300 rounded-md p-3 xl:basis-1/2"
+                    />
+                  </div>
+                  <Field
+                    as="select"
+                    placeholder="from"
+                    selected="PLN"
+                    name="salary.currency"
+                    className="bg-transparent border-2 border-gray-300 rounded-md p-3"
+                  >
+                    {['PLN', 'EUR', 'USD'].map((currency) => (
+                      <option
+                        key={currency}
+                        value={currency}
+                      >
+                        {currency}
+                      </option>
+                    ))}
+                  </Field>
+                </>
+              </FieldArray>
+            </div>
             {errors.salary && <ErrorMessage message={errors.salary} />}
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="typeOfWork">Type of work</label>
+            <Field
+              id="typeOfWork"
+              as="select"
+              name="typeOfWork"
+              selected="Full-time"
+              className="bg-transparent border-2 border-gray-300 rounded-md p-3"
+            >
+              {['Full-time', 'Part-time'].map((typeOfWork) => (
+                <option
+                  key={typeOfWork}
+                  value={typeOfWork}
+                >
+                  {typeOfWork}
+                </option>
+              ))}
+            </Field>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="seniority">Seniority</label>
+            <Field
+              as="select"
+              name="seniority"
+              selected="Junior"
+              className="bg-transparent border-2 border-gray-300 rounded-md p-3"
+            >
+              {['Junior', 'Regular', 'Senior', 'Trainee'].map((seniority) => (
+                <option
+                  key={seniority}
+                  value={seniority}
+                >
+                  {seniority}
+                </option>
+              ))}
+            </Field>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="employment">Employment type</label>
+            <Field
+              id="employment"
+              as="select"
+              name="employment"
+              selected="Junior"
+              className="bg-transparent border-2 border-gray-300 rounded-md p-3"
+            >
+              {['UoP', 'UoZ', 'UoG', 'B2B'].map((employment) => (
+                <option
+                  key={employment}
+                  value={employment}
+                >
+                  {employment}
+                </option>
+              ))}
+            </Field>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="operatingMode">Operating mode</label>
+            <Field
+              id="operatingMode"
+              as="select"
+              name="operatingMode"
+              selected="Remote"
+              className="bg-transparent border-2 border-gray-300 rounded-md p-3"
+            >
+              {['Remote', 'Hybrid', 'Office'].map((operatingMode) => (
+                <option
+                  key={operatingMode}
+                  value={operatingMode}
+                >
+                  {operatingMode}
+                </option>
+              ))}
+            </Field>
           </div>
           <div className="flex flex-col gap-2">
             <label htmlFor="tags">Tags</label>

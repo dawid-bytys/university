@@ -1,5 +1,7 @@
 export async function fetchJobs() {
-  const response = await fetch('http://localhost:3000/api/jobs');
+  const response = await fetch('http://localhost:3000/api/jobs', {
+    cache: 'no-cache',
+  });
 
   if (!response.ok) {
     throw new Error(response.statusText);

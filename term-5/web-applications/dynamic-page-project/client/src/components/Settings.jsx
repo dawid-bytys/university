@@ -1,8 +1,9 @@
 import searchSvg from '../assets/svg/search.svg';
 import locationSvg from '../assets/svg/location-point.svg';
-import tuneSvg from '../assets/svg/tune-variant.svg';
+import arrowDownSvg from '../assets/svg/angle-down.svg';
 
 const cities = [
+  'All cities',
   'Warsaw',
   'Cracow',
   'Wroclaw',
@@ -17,7 +18,7 @@ const cities = [
   'Gdynia',
 ];
 
-export function Settings() {
+export function Settings({ handleFiltersChange }) {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-row rounded-md bg-neutral-100">
@@ -30,12 +31,14 @@ export function Settings() {
         </div>
         <input
           type="text"
+          name="search"
           placeholder="Search job title or keyword"
           className="w-full p-3 bg-neutral-100"
+          onChange={handleFiltersChange}
         />
       </div>
-      <div className="flex flex-row gap-3">
-        <div className="flex flex-row rounded-md border-2 border-neutral-100 basis-1/2">
+      <div className="flex">
+        <div className="flex-1 cursor-pointer flex items-center flex-row rounded-md border-2 border-neutral-100 hover:border-primary hover:transition-colors">
           <div className="flex items-center justify-center p-3">
             <img
               src={locationSvg}
@@ -43,7 +46,12 @@ export function Settings() {
               className="w-7 h-7"
             />
           </div>
-          <select className="w-full bg-transparent p-3">
+          <select
+            name="city"
+            selected="All cities"
+            onChange={handleFiltersChange}
+            className="cursor-pointer w-full bg-transparent p-3 appearance-none"
+          >
             {cities.map((city) => (
               <option
                 key={city}
@@ -53,16 +61,13 @@ export function Settings() {
               </option>
             ))}
           </select>
-        </div>
-        <div className="flex flex-row items-center rounded-md border-2 border-neutral-100 basis-1/2">
           <div className="flex items-center justify-center p-3">
             <img
-              src={tuneSvg}
-              alt="Tune"
+              src={arrowDownSvg}
+              alt="Arrow down"
               className="w-7 h-7"
             />
           </div>
-          <p className="p-3 w-full">Filters</p>
         </div>
       </div>
     </div>

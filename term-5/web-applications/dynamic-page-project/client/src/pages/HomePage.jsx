@@ -6,31 +6,42 @@ import { Results } from '../components/Results';
 import { Settings } from '../components/Settings';
 import { Loading } from '../components/Loading';
 import { useFetch } from '../hooks/useFetch';
+import { ServerDown } from '../components/ServerDown';
 
 export function HomePage() {
   const [filters, setFilters] = useState({
-    location: '',
-    tags: [],
+    city: 'All cities',
+    search: '',
   });
-  const { state, data, error } = useFetch({
+  const { state, data } = useFetch({
     method: 'GET',
     url: 'http://localhost:3000/api/jobs',
     filters,
   });
+
+  function handleFiltersChange(e) {
+    setFilters({
+      ...filters,
+      [e.target.name]: e.target.value,
+    });
+  }
 
   if (state === 'loading') {
     return <Loading />;
   }
 
   if (state === 'error') {
-    return <p>Error: {error.message}</p>;
+    return <ServerDown />;
   }
 
   return (
-    <div className="flex flex-1 flex-row p-5 sm:p-10 gap-10">
-      <main className="flex-1 xl:w-1/2 flex flex-col gap-5">
-        <Settings />
-        <Results count={data.length} />
+    <div className="flex flex-row p-5 sm:p-10 gap-10 relative">
+      <main className="flex flex-1 flex-col xl:w-1/2 gap-5 overflow-y-scroll no-scrollbar">
+        <Settings handleFiltersChange={handleFiltersChange} />
+        <Results
+          count={data.length}
+          city={filters.city !== 'All cities' ? filters.city : null}
+        />
         <section className="flex flex-1 flex-col gap-5">
           {data.map((job) => (
             <Link
@@ -42,7 +53,7 @@ export function HomePage() {
           ))}
         </section>
       </main>
-      <aside className="hidden xl:flex xl:w-1/2 shadow">{/*<GoogleMap jobs={jobs} />*/}</aside>
+      <aside className="hidden w-1/2 2xl:block shadow">{/*<GoogleMap jobs={jobs} />*/}</aside>
     </div>
   );
 }
