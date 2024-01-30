@@ -35,14 +35,14 @@ export function HomePage() {
   }
 
   return (
-    <div className="flex flex-row p-5 sm:p-10 gap-10 relative">
-      <main className="flex flex-1 flex-col xl:w-1/2 gap-5 overflow-y-scroll no-scrollbar">
+    <div className="flex flex-row p-5 sm:p-10 gap-10 overflow-hidden">
+      <main className="flex flex-col xl:w-1/2 gap-5">
         <Settings handleFiltersChange={handleFiltersChange} />
         <Results
           count={data.length}
           city={filters.city !== 'All cities' ? filters.city : null}
         />
-        <section className="flex flex-1 flex-col gap-5">
+        <section className="flex flex-1 flex-col gap-5 overflow-auto no-scrollbar">
           {data.map((job) => (
             <Link
               to={`/jobs/${job.id}`}
@@ -53,7 +53,9 @@ export function HomePage() {
           ))}
         </section>
       </main>
-      <aside className="hidden w-1/2 2xl:block shadow">{/*<GoogleMap jobs={jobs} />*/}</aside>
+      <aside className="hidden w-1/2 2xl:block shadow">
+        <GoogleMap jobs={data} />
+      </aside>
     </div>
   );
 }

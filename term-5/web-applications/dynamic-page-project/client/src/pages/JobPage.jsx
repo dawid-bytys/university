@@ -25,8 +25,8 @@ export function JobPage() {
   }
 
   return (
-    <div className="flex flex-1 flex-row p-5 sm:p-10 gap-10">
-      <main className="flex-1 xl:w-1/2 flex flex-col gap-16">
+    <div className="flex flex-1 flex-row p-5 sm:p-10 gap-10 overflow-hidden">
+      <main className="flex-1 xl:w-1/2 flex flex-col gap-16 overflow-auto no-scrollbar">
         <section>
           <div className="flex flex-col rounded-xl border-2 border-neutral-200 p-5 gap-5">
             <JobOffer
@@ -121,7 +121,7 @@ export function JobPage() {
         </section>
       </main>
       <aside className="hidden xl:flex xl:w-1/2 shadow">
-        {/*<GoogleMap
+        <GoogleMap
           jobs={[data]}
           zoom={12}
           position={{
@@ -129,7 +129,7 @@ export function JobPage() {
             lng: data.location.lng,
           }}
           isSingleOffer={true}
-        />*/}
+        />
       </aside>
     </div>
   );
