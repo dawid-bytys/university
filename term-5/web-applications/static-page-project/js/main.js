@@ -4,6 +4,9 @@ const navigationLinks = document.querySelectorAll("#navigation-link");
 const slides = document.querySelectorAll("#slide");
 const prevBtn = document.querySelector("#prev-btn");
 const nextBtn = document.querySelector("#next-btn");
+const form = document.querySelector("#contact-form");
+const modal = document.querySelector("#modal");
+const closeBtn = document.querySelector("#modal-btn");
 
 let slideIndex = 1;
 showSlides(slideIndex);
@@ -38,6 +41,18 @@ for (const link of navigationLinks) {
     }
   });
 }
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  modal.classList.toggle("active");
+  document.body.style.overflow = "hidden";
+});
+
+closeBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  modal.classList.remove("active");
+  document.body.style.overflow = "initial";
+});
 
 function showSlides(n) {
   if (n > slides.length) {

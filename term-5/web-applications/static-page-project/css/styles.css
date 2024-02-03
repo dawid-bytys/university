@@ -320,6 +320,45 @@ body {
   font-weight: 500;
 }
 
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  padding: 2rem;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.2s ease-in;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 10rem;
+  background-color: #19191b;
+  border-radius: 1rem;
+  border: 0.1rem solid #7c7c7c;
+}
+
+.modal-btn {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: #5454d4;
+  color: #fff;
+  font-weight: 500;
+}
+
+.modal-text {
+  font-size: 1.2rem;
+  text-align: center;
+}
+
 @media only screen and (min-width: 43rem) {
   .header {
     padding: 2rem 5rem 0 5rem;
@@ -425,5 +464,37 @@ body {
 
   .project-slide {
     width: 30rem;
+  }
+}
+
+@media only screen and (min-width: 80rem) {
+  .header {
+    padding: 2rem 20rem 0 20rem;
+  }
+
+  .main {
+    padding: 7rem 20rem 7rem 20rem;
+  }
+
+  .footer {
+    padding: 0 20rem 2rem 20rem;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
   }
 }

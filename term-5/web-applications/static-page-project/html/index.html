@@ -151,8 +151,13 @@
           Contact us for the service you want to use
         </h2>
         <form id="contact-form" class="contact-form">
-          <input type="text" placeholder="E-mail" class="form-input" />
-          <input type="text" placeholder="Subject" class="form-input" />
+          <input type="text" placeholder="E-mail" class="form-input" required />
+          <input
+            type="text"
+            placeholder="Subject"
+            class="form-input"
+            required
+          />
           <textarea
             name="message"
             id="message"
@@ -160,8 +165,9 @@
             rows="10"
             placeholder="Message"
             class="form-area"
+            required
           ></textarea>
-          <button type="submit" class="contact-form-btn">
+          <button id="contact-btn" type="submit" class="contact-form-btn">
             <p>Send</p>
             <img src="../assets/svg/arrow-right-up.svg" alt="arrow" />
           </button>
@@ -169,6 +175,12 @@
       </section>
     </main>
     <shared-footer></shared-footer>
+    <div id="modal" class="modal">
+      <div class="modal-inner">
+        <p class="modal-text">Your e-mail has been successfully sent!</p>
+        <button id="modal-btn" class="modal-btn">Close</button>
+      </div>
+    </div>
     <script src="../js/main.js"></script>
   </body>
 </html>
