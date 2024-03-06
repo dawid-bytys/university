@@ -4,6 +4,8 @@
 #include <string.h>
 #include <unistd.h>
 
+#define BUFFER_SIZE 1024
+
 int main(int argc, char *argv[]) {
   if (argc != 2) {
     fprintf(stderr, "Usage: %s <port>\n", argv[0]);
@@ -16,7 +18,7 @@ int main(int argc, char *argv[]) {
     exit(EXIT_FAILURE);
   }
 
-  int server_socket = socket(AF_INET, SOCK_STREAM, 0);
+  int server_socket = socket(AF_INET, SOCK_DGRAM, 0);
   if (server_socket == -1) {
     perror("Error creating socket");
     exit(EXIT_FAILURE);
@@ -35,27 +37,25 @@ int main(int argc, char *argv[]) {
     exit(EXIT_FAILURE);
   }
 
-  if (listen(server_socket, 5) == -1) {
-    perror("Error listening for connections");
-    close(server_socket);
-    exit(EXIT_FAILURE);
-  }
-
-  printf("Server listening on port %d...\n", port);
+  printf("[UDP] Server listening on port %d...\n", port);
 
   while (1) {
-    int client_socket = accept(server_socket, NULL, NULL);
-    if (client_socket == -1) {
-      perror("Error accepting connection");
+    char buffer[BUFFER_SIZE];
+    struct sockaddr_in client_address;
+    socklen_t client_address_len = sizeof(client_address);
+
+    ssize_t bytes_received =
+        recvfrom(server_socket, buffer, BUFFER_SIZE, 0,
+                 (struct sockaddr *)&client_address, &client_address_len);
+
+    if (bytes_received == -1) {
+      perror("Error receiving data");
       continue;
     }
 
     const char *business_card = "Hello, world!\r\n";
-    if (send(client_socket, business_card, strlen(business_card), 0) == -1) {
-      perror("Error sending data");
-    }
-
-    close(client_socket);
+    sendto(server_socket, business_card, strlen(business_card), 0,
+           (struct sockaddr *)&client_address, client_address_len);
   }
 
   close(server_socket);

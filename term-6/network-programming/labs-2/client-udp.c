@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
     exit(EXIT_FAILURE);
   }
 
-  int client_socket = socket(AF_INET, SOCK_STREAM, 0);
+  int client_socket = socket(AF_INET, SOCK_DGRAM, 0);
   if (client_socket == -1) {
     perror("Error creating socket");
     exit(EXIT_FAILURE);
@@ -36,27 +36,26 @@ int main(int argc, char *argv[]) {
       .sin_port = htons(port),
   };
 
-  if (connect(client_socket, (struct sockaddr *)&server_address,
-              sizeof(server_address)) == -1) {
-    perror("Error connecting to server");
+  sendto(client_socket, "", 0, 0, (struct sockaddr *)&server_address,
+         sizeof(server_address));
+
+  char buffer[BUFFER_SIZE];
+  ssize_t bytes_received =
+      recvfrom(client_socket, buffer, BUFFER_SIZE, 0, NULL, NULL);
+
+  if (bytes_received == -1) {
+    perror("Error receiving data");
     close(client_socket);
     exit(EXIT_FAILURE);
   }
 
-  char buffer[BUFFER_SIZE];
-  ssize_t bytes_received = recv(client_socket, buffer, sizeof(buffer), 0);
+  printf("Received business card: ");
 
-  if (bytes_received == -1) {
-    perror("Error receiving data");
-  } else if (bytes_received == 0) {
-    fprintf(stderr, "Connection closed by the server\n");
-  } else {
-    printf("Business card received from the server:\n");
+  for (ssize_t i = 0; i < bytes_received; ++i) {
+    const char current_char = buffer[i];
 
-    for (int i = 0; i < bytes_received; ++i) {
-      if (is_printable_or_control(buffer[i])) {
-        putchar(buffer[i]);
-      }
+    if (is_printable_or_control(current_char)) {
+      putchar(current_char);
     }
   }
 
