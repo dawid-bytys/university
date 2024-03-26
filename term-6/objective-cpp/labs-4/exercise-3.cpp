@@ -5,7 +5,7 @@ struct sum_traits;
 
 template <>
 struct sum_traits<char> {
-  typedef int sum_type;
+  using sum_type = int;
 
   static const sum_type initial_value() {
     return 0;
@@ -14,7 +14,7 @@ struct sum_traits<char> {
 
 template <>
 struct sum_traits<int> {
-  typedef long int sum_type;
+  using sum_type = long int;
 
   static const sum_type initial_value() {
     return 0;
@@ -23,7 +23,7 @@ struct sum_traits<int> {
 
 template <>
 struct sum_traits<float> {
-  typedef double sum_type;
+  using sum_type = double;
 
   static const sum_type initial_value() {
     return 0.0;
@@ -32,7 +32,7 @@ struct sum_traits<float> {
 
 template <>
 struct sum_traits<double> {
-  typedef double sum_type;
+  using sum_type = double;
 
   static const sum_type initial_value() {
     return 0.0;
