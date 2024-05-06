@@ -1,41 +1,32 @@
 import sys
-import aiohttp
-import asyncio
+import requests
 
 
-async def fetch_server_header(session, url, port):
+def fetch_server_header(url, port):
     try:
         if port == 80:
-            full_url = f"http://{url}"
+            response = requests.get(f"http://{url}", timeout=5)
         elif port == 443:
-            full_url = f"https://{url}"
+            response = requests.get(f"https://{url}", timeout=5)
+        else:
+            return "Nieprawidłowy port."
 
-        async with session.get(full_url, timeout=10) as response:
-            server_header = response.headers.get("Server", "Brak nagłówka Server")
-
-        return server_header
-    except Exception as e:
-        print(f"Wyjątek: {e}")
-        sys.exit(1)
+        return response.headers.get("Server", "Nagłówek Server nie został znaleziony.")
+    except requests.RequestException as e:
+        return f"Error: {str(e)}"
 
 
-async def main():
+def main():
     if len(sys.argv) < 2:
-        print("Podaj przynajmniej jeden adres strony internetowej.")
+        print("Podaj przynajmniej jedną nazwę domeny.")
         sys.exit(1)
 
-    async with aiohttp.ClientSession() as session:
-        for website in sys.argv[1:]:
-            print(f"{website}:")
-
-            http_server = await fetch_server_header(session, website, 80)
-            print(f"port 80: {http_server}")
-
-            https_server = await fetch_server_header(session, website, 443)
-            print(f"port 443: {https_server}\n")
-
-    sys.exit(0)
+    for website in sys.argv[1:]:
+        server_http = fetch_server_header(website, 80)
+        server_https = fetch_server_header(website, 443)
+        print(f"{website} - port 80: {server_http}")
+        print(f"{website} - port 443: {server_https}")
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
