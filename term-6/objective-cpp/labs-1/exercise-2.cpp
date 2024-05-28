@@ -1,7 +1,7 @@
 #include <iostream>
 
-template <typename ToType, typename FromType>
-ToType convert(const FromType& value) {
+template <typename To, typename From>
+To convert(const From &value) {
   return static_cast<To>(value);
 }
 

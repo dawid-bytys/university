@@ -10,13 +10,17 @@ class Expr {
 template <typename T>
 class First : public Expr<T> {
  public:
-  T operator()(T x, T y) const override { return x; }
+  T operator()(T x, T y) const override {
+    return x;
+  }
 };
 
 template <typename T>
 class Second : public Expr<T> {
  public:
-  T operator()(T x, T y) const override { return y; }
+  T operator()(T x, T y) const override {
+    return y;
+  }
 };
 
 template <typename T>
@@ -24,7 +28,9 @@ class AddExpr : public Expr<T> {
  public:
   AddExpr(const Expr<T>& lhs, const Expr<T>& rhs) : lhs_(lhs), rhs_(rhs) {}
 
-  T operator()(T x, T y) const override { return lhs_(x, y) + rhs_(x, y); }
+  T operator()(T x, T y) const override {
+    return lhs_(x, y) + rhs_(x, y);
+  }
 
  private:
   const Expr<T>& lhs_;

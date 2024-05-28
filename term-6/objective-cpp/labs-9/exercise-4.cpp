@@ -2,7 +2,9 @@
 
 class Variable {
  public:
-  double operator()(double x) const { return x; }
+  double operator()(double x) const {
+    return x;
+  }
 };
 
 class Constant {
@@ -12,7 +14,9 @@ class Constant {
  public:
   Constant(double value) : value_(value) {}
 
-  double operator()(double) const { return value_; }
+  double operator()(double) const {
+    return value_;
+  }
 };
 
 template <typename LHS, typename RHS>
@@ -24,7 +28,9 @@ class AddExpr {
  public:
   AddExpr(const LHS& lhs, const RHS& rhs) : lhs_(lhs), rhs_(rhs) {}
 
-  double operator()(double x) const { return lhs_(x) + rhs_(x); }
+  double operator()(double x) const {
+    return lhs_(x) + rhs_(x);
+  }
 };
 
 template <typename LHS, typename RHS>
@@ -51,7 +57,9 @@ class DivExpr {
  public:
   DivExpr(double lhs, const RHS& rhs) : lhs_(lhs), rhs_(rhs) {}
 
-  double operator()(double x) const { return lhs_ / rhs_(x); }
+  double operator()(double x) const {
+    return lhs_ / rhs_(x);
+  }
 };
 
 template <typename RHS>
@@ -67,7 +75,9 @@ class SinExpr {
  public:
   SinExpr(const Expr& expr) : expr_(expr) {}
 
-  double operator()(double x) const { return std::sin(expr_(x)); }
+  double operator()(double x) const {
+    return std::sin(expr_(x));
+  }
 };
 
 template <typename Expr>

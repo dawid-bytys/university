@@ -15,16 +15,16 @@ struct Promote<T, T> {
   template <>                \
   struct Promote<T1, T2> {   \
       using type = Tr;       \
-}
+  };
 
 template <typename T, typename U>
-std::vector<typename Promote<T, U>::type> operator+(const std::vector<T>& a, const std::vector<U>& b) {
-  std::vector<typename Promote<T, U>::type> result;
+std::vector<MK_PROMOTE(T, U)::type> operator+(const std::vector<T>& a, const std::vector<U>& b) {
+  std::vector<MK_PROMOTE(T, U)::type> result;
   const size_t size = std::min(a.size(), b.size());
   result.reserve(size);
 
   for (size_t i = 0; i < size; ++i) {
-      result.push_back(static_cast<typename Promote<T, U>::type>(a[i]) + static_cast<typename Promote<T, U>::type>(b[i]));
+      result.push_back(static_cast<MK_PROMOTE(T, U)::type>(a[i]) + static_cast<MK_PROMOTE(T, U)::type>(b[i]));
   }
 
   return result;

@@ -3,7 +3,9 @@
 
 class Variable {
  public:
-  double operator()(double x) const { return x; }
+  double operator()(double x) const {
+    return x;
+  }
 };
 
 class Constant {
@@ -13,7 +15,9 @@ class Constant {
  public:
   Constant(double value) : value_(value) {}
 
-  double operator()(double) const { return value_; }
+  double operator()(double) const {
+    return value_;
+  }
 };
 
 template <typename Func>

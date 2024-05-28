@@ -16,7 +16,7 @@ typename std::iterator_traits<Iterator>::value_type accumulate(Iterator start,
 
 int main() {
   std::vector<int> numbers = {1, 2, 3, 4, 5};
-  int sum = accumulate(numbers.begin(), numbers.end());
+  auto sum = accumulate(numbers.begin(), numbers.end());
   std::cout << "Sum: " << sum << std::endl;
 
   return 0;

@@ -41,7 +41,7 @@ int main() {
             << std::endl;
 
   char char_array[] = {'a', 'b', 'c', 'd', 'e'};
-  std::cout << "Sum of char_array: " << static_cast<int>(sum(char_array, char_array + 5))
+  std::cout << "Sum of char_array: " << sum(char_array, char_array + 5)
             << std::endl;
 
   float float_array[] = {1.1, 2.2, 3.3, 4.4, 5.5};

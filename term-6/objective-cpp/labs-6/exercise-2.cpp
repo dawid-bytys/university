@@ -12,7 +12,7 @@ struct has_value_type {
     static std::false_type test(...);
 
   public:
-    static constexpr bool value = decltype(test<T>(nullptr))::value;
+    static constexpr bool value = decltype(test<T>(0))::value;
 };
 
 int main() {

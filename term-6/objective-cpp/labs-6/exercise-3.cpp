@@ -1,7 +1,7 @@
 #include <iostream>
 #include <type_traits>
 
-template<typename From,typename To>
+template<typename From, typename To>
 class is_convertible {
   private:
     static char test(To) ;

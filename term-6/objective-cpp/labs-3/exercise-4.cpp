@@ -48,7 +48,7 @@ class Stack<T, size> {
 };
 
 template <typename T>
-class Stack<T, 0, std::vector<T>> {
+class Stack<T, 0, std::vector<T> > {
  private:
   std::vector<T> elements;
 

@@ -1,5 +1,6 @@
 #include <cstddef>
 #include <cstring>
+#include <iostream>
 
 template <typename T>
 T max(T a, T b) {
@@ -53,6 +54,11 @@ int main() {
   double max_double = max(double_a, double_B);
   char max_char = max(char_a, char_b);
   const char* max_str = max(str_a, str_b);
+
+  std::cout << "Max int: " << max_int << std::endl;
+  std::cout << "Max double: " << max_double << std::endl;
+  std::cout << "Max char: " << max_char << std::endl;
+  std::cout << "Max string: " << max_str << std::endl;
 
   return 0;
 }

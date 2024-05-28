@@ -2,9 +2,8 @@
 #include <stack>
 
 template <typename Stack>
-typename Stack::value_type stack_sum(const Stack& stack) {
+typename Stack::value_type stack_sum(const Stack &stack) {
   typename Stack::value_type sum = 0;
-
   Stack tempStack = stack;
 
   while (!tempStack.empty()) {

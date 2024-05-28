@@ -7,7 +7,9 @@ class sina {
  public:
   sina(double a) : a_(a) {}
 
-  double operator()(double x) const { return std::sin(a_ * x); }
+  double operator()(double x) const {
+    return std::sin(a_ * x);
+  }
 };
 
 template <typename Func>

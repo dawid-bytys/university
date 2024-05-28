@@ -2,7 +2,9 @@
 
 class Variable {
  public:
-  double operator()(double x) const { return x; }
+  double operator()(double x) const {
+    return x;
+  }
 };
 
 class Constant {
@@ -12,7 +14,9 @@ class Constant {
  public:
   Constant(double value) : value_(value) {}
 
-  double operator()(double) const { return value_; }
+  double operator()(double) const {
+    return value_;
+  }
 };
 
 template <typename LHS, typename RHS>
@@ -24,7 +28,9 @@ class AddExpr {
  public:
   AddExpr(const LHS& lhs, const RHS& rhs) : lhs_(lhs), rhs_(rhs) {}
 
-  double operator()(double x) const { return lhs_(x) + rhs_(x); }
+  double operator()(double x) const {
+    return lhs_(x) + rhs_(x);
+  }
 };
 
 template <typename LHS, typename RHS>

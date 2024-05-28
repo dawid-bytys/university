@@ -11,7 +11,7 @@ struct is_class {
     static int test(...);
 
   public:
-    static constexpr bool value = (sizeof(test<T>(nullptr)) == sizeof(char));
+    static constexpr bool value = (sizeof(test<T>(0)) == sizeof(char));
 };
 
 class MyClass {};

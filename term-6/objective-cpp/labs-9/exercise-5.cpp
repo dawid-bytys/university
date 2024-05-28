@@ -10,7 +10,9 @@ class Expr {
 template <typename T>
 class Variable : public Expr<T> {
  public:
-  T operator()(T x) const override { return x; }
+  T operator()(T x) const override {
+    return x;
+  }
 };
 
 template <typename T>
@@ -21,7 +23,9 @@ class Constant : public Expr<T> {
  public:
   Constant(T value) : value_(value) {}
 
-  T operator()(T) const override { return value_; }
+  T operator()(T) const override {
+    return value_;
+  }
 };
 
 template <typename T>
@@ -33,7 +37,9 @@ class AddExpr : public Expr<T> {
  public:
   AddExpr(const Expr<T>& lhs, const Expr<T>& rhs) : lhs_(lhs), rhs_(rhs) {}
 
-  T operator()(T x) const override { return lhs_(x) + rhs_(x); }
+  T operator()(T x) const override {
+    return lhs_(x) + rhs_(x);
+  }
 };
 
 template <typename T>
